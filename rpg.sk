@@ -345,6 +345,16 @@ command /imbue <text>:
 			player has {_items::*}:
 				remove {_items::*} from player
 				set line lastLoreLine(player's held item) of (player's held item)'s lore to "&cHealth Boost"
+				send "&dYou imbue the item in your hand with Health Boost!"
+			else:
+				send "&cYou do not have the required items for that property! Required: %{_items::*}%"
+				stop
+		if arg 1 is "mana":
+			set {_items::*} to 4 diamond and 12 gold ingot
+			player has {_items::*}:
+				remove {_items::*} from player
+				set line lastLoreLine(player's held item) of (player's held item)'s lore to "&3Mana Boost"
+				send "&dYou imbue the item in your hand with Mana Boost!"
 			else:
 				send "&cYou do not have the required items for that property! Required: %{_items::*}%"
 				stop
