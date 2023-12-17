@@ -1,0 +1,17 @@
+
+command /console <text>:
+	trigger:
+		command executor is console
+	
+		#send "&e<console>&c: &6%argument%" to console
+		broadcast "&e<console>&c: &6%argument%"
+
+command /list-attributes:
+	trigger:
+		loop all attribute types:
+			message "%loop-value%" 
+
+command /formula <number>:
+	trigger:
+		set {_ret} to 10*1.1^arg 1
+		broadcast "&eResult: %{_ret}%" 

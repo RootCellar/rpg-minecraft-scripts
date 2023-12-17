@@ -1,0 +1,618 @@
+# General
+
+on chat:
+	set the message to "&6[&8LVL %player's level%&6]&r %message%"
+	player has permission "rpg.rogue":
+		set the message to "&7[&2Rogue&7]&r %message%"
+		# stop trigger
+	player has permission "rpg.warrior":
+		set the message to "&e[&cWarrior&e]&r %message%"
+		# stop trigger
+	player has permission "rpg.wizard":
+		set the message to "&8[&3Wizard&8]&r %message%"
+		# stop trigger
+	player has permission "rpg.herobrine":
+		set the message to "&0[&4Herobrine&0]&r %message%"
+		# stop trigger
+
+function setMaxHealth(player: player):
+	set {_newMax} to 10
+	{_player} has permission "rpg.warrior":
+		set {_newMax} to 20
+	else if {_player} has permission "rpg.wizard":
+		set {_newMax} to 8
+	else if {_player} has permission "rpg.herobrine":
+		set {_newMax} to 40
+	else:
+		set {_newMax} to 10
+
+	if hasImbue({_player}, "Health Boost") is true:
+		set {_newMax} to ({_newMax} + 2 * countImbue({_player}, "Health Boost"))
+
+	if {_player}'s maximum health is not {_newMax}:
+		set {_player}'s maximum health to {_newMax}
+		send "&cYour maximum health has changed to %{_newMax}%" to {_player}
+
+function countImbue(player: player, text: text) :: number:
+	set {_c} to 0
+	if hasLore({_player}'s helmet, {_text}) is true:
+		set {_c} to {_c} + 1
+	if hasLore({_player}'s chestplate, {_text}) is true:
+		set {_c} to {_c} + 1
+	if hasLore({_player}'s leggings, {_text}) is true:
+		set {_c} to {_c} + 1
+	if hasLore({_player}'s boots, {_text}) is true:
+		set {_c} to {_c} + 1
+	return {_c}
+
+function hasImbue(player: player, text: text) :: boolean:
+	if hasLore({_player}'s helmet, {_text}) is true:
+		return true
+	if hasLore({_player}'s chestplate, {_text}) is true:
+		return true
+	if hasLore({_player}'s leggings, {_text}) is true:
+		return true
+	if hasLore({_player}'s boots, {_text}) is true:
+		return true
+	return false
+
+function hasLore(item: item, text: text) :: boolean:
+	loop lore of {_item}:
+		if loop-value contains {_text}:
+			return true
+	return false
+
+function isWearingLightOrLess(player: player) :: boolean:
+	helmet of {_player} is not (leather helmet or air):
+		return false
+	chestplate of {_player} is not (leather chestplate or air):
+		return false
+	leggings of {_player} is not (leather leggings or air):
+		return false
+	boots of {_player} is not (leather boots or air):
+		return false
+	return true
+
+function isWearingMediumOrLess(player: player) :: boolean:
+	if isWearingLightOrLess({_player}) is true:
+		return true
+	helmet of {_player} is (diamond helmet or netherite helmet):
+		return false
+	chestplate of {_player} is (diamond chestplate or netherite chestplate):
+		return false
+	leggings of {_player} is (diamond leggings or netherite leggings):
+		return false
+	boots of {_player} is (diamond boots or netherite boots):
+		return false
+	return true
+
+function isWearingHeavyOrLess(player: player) :: boolean:
+	return true
+
+command /haslore <text>:
+	executable by: players
+	trigger:
+		send "hasImbue: %hasImbue(command executor, arg 1)%"
+
+command /armorclass:
+	executable by: players
+	trigger:
+		send "Light or less: %isWearingLightOrLess(command executor)%"
+		send "Medium or less: %isWearingMediumOrLess(command executor)%"
+		send "Heavy or less: %isWearingHeavyOrLess(command executor)%"
+
+function arcaneTide():
+	{rpgSkript::arcaneTide} is not set:
+		set {_x} to a random number between 1 and 1000
+		#broadcast {_x}
+		{_x} < 7:
+			set {rpgSkript::arcaneTide} to now
+			arcaneSense("You feel reality become more intense!")
+	else:
+		if difference between now and {rpgSkript::arcaneTide} is greater than 2 minutes:
+			set {_x} to a random number between 1 and 1000
+			#broadcast {_x}
+			{_x} < 20:
+				delete {rpgSkript::arcaneTide}
+				arcaneSense("Reality settles...")
+
+function countEntities(mobs: entities) :: number:
+	set {_x} to 0
+	loop {_mobs::*}:
+		set {_x} to {_x} + 1
+	return {_x}
+
+on join:
+	setMaxHealth(the player)
+
+every 3 seconds:
+	loop all players:
+		clear loop-player's scoreboard
+		set title of loop-player's scoreboard to "&eInformation"
+		set line 15 of loop-player's scoreboard to "&a"
+		set line 14 of loop-player's scoreboard to "&3&l   RPG"
+		set line 13 of loop-player's scoreboard to "&a"
+
+		loop-player has permission "rpg.rogue":
+			set line 9 of loop-player's scoreboard to "Monsters: %countEntities(monsters within 20 meters of loop-player)%"
+			set line 8 of loop-player's scoreboard to "Animals: %countEntities(animals within 30 meters of loop-player)%"
+			set line 7 of loop-player's scoreboard to "Players: %countEntities(players within 50 meters of loop-player)%"
+			set line 6 of loop-player's scoreboard to "Items on Ground: %countEntities(dropped items within 30 meters of loop-player)%"
+
+every 2 seconds:
+
+	arcaneTide()
+
+	loop all players:
+		setMaxHealth(loop-player)
+		loop-player has permission "rpg.wizard":
+			setupMana(loop-player)
+			regenMana(loop-player)
+		loop-player has permission "rpg.warrior":
+			heal loop-player by 1
+			apply haste 2 without particles to the loop-player for 30 seconds replacing the existing effect
+			apply strength 2 without particles to the loop-player for 30 seconds replacing the existing effect
+
+on damage:
+	attacker is a player:
+		attacker has permission "rpg.rogue":
+			isWearingLightOrLess(attacker) is true
+			set the damage to the damage * 2.0
+			
+	victim is a player:
+		setMaxHealth(the victim)
+		
+		victim has permission "rpg.warrior":
+			set {_odamage} to the damage
+			set {_newdamage} to {_odamage} * 0.65
+			set the damage to {_newdamage}
+			apply slowness 1 to victim for 4 seconds replacing the existing effect
+		victim has permission "rpg.rogue":
+			isWearingLightOrLess(victim) is true
+			chance of 45%:
+				set the damage to 0
+				play sound "entity.player.attack.nodamage" at victim
+				send action bar "DODGE!" to victim
+				send "DODGE!" to the victim
+
+on target:
+	target is a player
+	target has permission "rpg.herobrine":
+		cancel the event
+	target has permission "rpg.rogue":
+		isWearingLightOrLess(target) is true
+		distance between event-entity and target is greater than 10:
+			cancel the event
+			stop
+		chance of 80%:
+			cancel the event
+
+# Warrior
+
+on right click:
+	player has permission "rpg.warrior"
+	
+	player is holding a sword:
+		apply slowness 3 to player for 6 seconds replacing the existing effect
+		loop all entities in radius 5 around player:
+			loop-entity is not a dropped item
+			loop-entity is not player
+			damage loop-entity by 2.5
+			set {_vec} to normalized vector between player and loop-entity
+			push loop-entity {_vec} with force 0.8
+			push loop-entity upwards with force 0.5
+			
+	player is holding an axe:
+		apply slowness 3 to player for 6 seconds replacing the existing effect
+		set {_loc} to the location 2 meters below and 3 meters horizontally behind the player
+		set {_vec} to normalized vector between {_loc} and player
+		loop all entities in radius 5 around player:
+			loop-entity is not a dropped item
+			loop-entity is not player
+			damage loop-entity by 1.5
+			push loop-entity {_vec} with force 1.2
+			#push loop-entity upwards with force 0.8
+
+# Rogue
+
+on death of a player:
+	if the victim has permission "rpg.rogue":
+		keep the items
+		send "&aYou may have died, but they'll never get your items!" to the victim
+
+on sprint toggle:
+	player has permission "rpg.rogue"
+	player is not sprinting:
+		isWearingLightOrLess(player) is true
+		apply swiftness 2 without particles to the player for 600 seconds replacing the existing effect
+		apply jump boost 2 without particles to the player for 600 seconds replacing the existing effect
+	player is sprinting:
+		remove swiftness from the player
+		remove jump boost from the player
+
+on sneak toggle:
+	player has permission "rpg.rogue"
+	player is not sneaking:
+		isWearingLightOrLess(player) is true
+		light level at the player is less than 11
+		apply invisibility without particles to the player for 600 seconds replacing the existing effect
+	player is sneaking:
+		remove invisibility from the player
+
+# Herobrine?
+
+every 1 seconds:
+	loop all players:
+		loop-player has permission "rpg.herobrine"
+		sunlight level at the loop-player is greater than 10
+		time in world of loop-player is not between 19:00 and 5:00
+		ignite the loop-player for 5 seconds
+
+# Wizard
+
+function setupMana(player: player):
+	if {rpgSkript::%{_player}%::mana} is not set:
+		set {rpgSkript::%{_player}%::mana} to 0
+	if {rpgSkript::%{_player}%::maxMana} is not set:
+		set {rpgSkript::%{_player}%::maxMana} to 0
+	if isWearingMediumOrLess({_player}) is true:
+		set {_newMax} to (level of {_player}) * 9
+	else:
+		set {_newMax} to (level of {_player}) * 1.5
+
+	if hasImbue({_player}, "Mana Boost") is true:
+		set {_newMax} to {_newMax} + 0.25 * {_newMax} * countImbue({_player}, "Mana Boost")
+		
+	if {_newMax} is not {rpgSkript::%{_player}%::maxMana}:
+		set {rpgSkript::%{_player}%::maxMana} to {_newMax}
+		send "&dYour maximum mana has changed to %{_newMax}%" to {_player}
+
+function checkMana(player: player):
+	setupMana({_player})
+	if {rpgSkript::%{_player}%::mana} > {rpgSkript::%{_player}%::maxMana}:
+		set {rpgSkript::%{_player}%::mana} to {rpgSkript::%{_player}%::maxMana}
+	if {rpgSkript::%{_player}%::mana} < 0:
+		set {rpgSkript::%{_player}%::mana} to 0
+
+function regenMana(player: player):
+	if {rpgSkript::%{_player}%::mana} is not set:
+		setupMana({_player})
+	if {rpgSkript::%{_player}%::maxMana} is not set:
+		setupMana({_player})
+	addMana( {_player}, {rpgSkript::%{_player}%::maxMana} / 60 )
+
+function addMana(player: player, amount: number):
+	set {_before} to {rpgSkript::%{_player}%::mana}
+	set {rpgSkript::%{_player}%::mana} to {rpgSkript::%{_player}%::mana} + {_amount}
+	checkMana({_player})
+	if abs( {rpgSkript::%{_player}%::mana} - {_before} ) > 0.01:
+		displayMana({_player})
+
+function subMana(player: player, amount: number) :: boolean:
+	if {rpgSkript::%{_player}%::mana} is not set:
+		return false
+	send "&3Have: %{rpgSkript::%{_player}%::mana}% Need: %{_amount}%" to {_player}
+	if {rpgSkript::%{_player}%::mana} - {_amount} > -0.01:
+		set {rpgSkript::%{_player}%::mana} to {rpgSkript::%{_player}%::mana} - {_amount}
+		checkMana({_player})
+		displayMana({_player})
+		return true
+	else:
+		return false
+
+function displayMana(player: player):
+	set {_dispM} to {rpgSkript::%{_player}%::mana}
+	if {_dispM} < 0:
+		set {_dispM} to 0
+	send action bar "&3Mana: %{_dispM}% / %{rpgSkript::%{_player}%::maxMana}%" to {_player}
+
+function arcaneSense(message: text):
+	loop all players:
+		loop-player has permission "rpg.wizard":
+			send "&d%{_message}%" to loop-player
+
+
+on death of a player:
+    if the victim has permission "rpg.wizard":
+        keep the experience
+        send "&dYou use your magic powers to keep your experience!" to the victim		
+
+command /arcane <text>:
+	description: Send a message to be magically received by wizards
+	permission: rpg.control
+	permission message: You do not have permission for that command
+	trigger:
+		arcaneSense(arg 1)
+
+options:
+	#chat prefix
+	p: &a[Send]
+command /send <player>:
+	description: Magically send what you are holding to another player!
+	permission: rpg.wizard
+	permission message: You cannot use magic!
+	executable by: players
+	trigger:
+		if subMana(command executor, 10) is false:
+			message "&cYou do not have enough Mana!"
+			stop
+		set {_senditem} to held item of player
+		{_senditem} is not air
+		if arg 1 has enough space for {_senditem}:
+			remove {_senditem} from player
+			give {_senditem} to arg 1
+			message "&dSent %{_senditem}% to %arg 1%"
+			send "&a[Send] %player% Sent %{_senditem}% to %arg 1%" to console
+			send "&dReceived %{_senditem}% from %player%" to arg 1
+			delete {_senditem}
+		else:
+			message "&d%arg 1% does not have enough inventory space!"
+			stop
+
+command /remember <text>:
+	description: Remember your current location, to recall it later
+	permission: rpg.wizard
+	permission message: You cannot use magic!
+	executable by: players
+	trigger:
+		if subMana(command executor, 5) is false:
+			message "&cYou do not have enough Mana!"
+			stop
+		set {rpgSkript::%command executor%::memory::%arg 1%} to command executor's location
+		message "&dYou take note of your surroundings, so that you may magically return later..."
+
+command /forget <text>:
+	description: Forget a location
+	permission: rpg.wizard
+	permission message: You cannot use magic!
+	executable by: players
+	trigger:
+		delete {rpgSkript::%command executor%::memory::%arg 1%}
+		message "&dYou remove the location from memory..."
+
+command /recall <text>:
+	description: Teleport to a location that you remember
+	permission: rpg.wizard
+	permission message: You cannot use magic!
+	executable by: players
+	trigger:
+		if {rpgSkript::%command executor%::memory::%arg 1%} is set:
+			if subMana(command executor, 130) is false:
+				message "&cYou do not have enough Mana!"
+				stop
+			play sound "entity.enderman.teleport" at command executor
+			show smoke at command executor
+			teleport command executor to {rpgSkript::%command executor%::memory::%arg 1%}
+			show smoke at command executor
+			play sound "entity.enderman.teleport" at command executor
+			message "&dYou recall a location from memory!"
+		else:
+			message "&dYou do not remember any such location"
+
+command /sendnear <text>:
+	description: Teleport nearby players to a location that you remember
+	permission: rpg.wizard
+	permission message: You cannot use magic!
+	executable by: players
+	trigger:
+		if {rpgSkript::%command executor%::memory::%arg 1%} is set:
+			if subMana(command executor, 80) is false:
+				message "&cYou do not have enough Mana!"
+				stop
+			loop entities in radius 7 of player:
+				loop-entity is a player
+				loop-entity is not command executor
+				play sound "entity.enderman.teleport" at loop-entity
+				show smoke at loop-entity
+				teleport loop-entity to {rpgSkript::%command executor%::memory::%arg 1%}
+			message "&dYou send nearby players to a location that you remember!"
+		else:
+			message "&dYou do not remember any such location"
+
+command /memories:
+	description: List locations that you remember
+	permission: rpg.wizard
+	permission message: You cannot use magic!
+	executable by: players
+	trigger:
+		loop {rpgSkript::%command executor%::memory::*}:
+			message "%loop-index%"
+
+command /pocket:
+	description: Open your enderchest
+	permission: rpg.wizard
+	permission message: You cannot use magic!
+	executable by: players
+	trigger:
+		if subMana(command executor, 20) is false:
+			send "&cYou do not have enough Mana to cast the pocket spell!" to command executor
+			stop
+		send "&dYou open a rift and reach into your enderchest!" to command executor
+		make command executor run command "/enderchest" as op
+
+on right click with stick:
+	player has permission "rpg.wizard"
+	if subMana(event-player, 5) is false:
+		send "&cYou do not have enough Mana to cast the firebolt spell!" to event-player
+		stop
+	send "&dYou hurl a mote of fire!" to event-player
+	play sound "item.firecharge.use" at event-player
+	make player run command "/fireball" as op
+	add 2 experience to the player
+	show mob spawner flames at (the location 1 block above the player's location)
+
+on right click with gunpowder:
+	player has permission "rpg.wizard"
+	if subMana(event-player, 100) is false:
+		send "&cYou do not have enough Mana to cast the explosion spell!" to event-player
+		stop
+	send "&dYou speak words of arcane significance and create a powerful explosion!" to event-player
+	play sound "item.firecharge.use" at event-player
+	loop all entities in radius 8 around (event-player's targeted block):
+		loop-entity is not a dropped item
+		damage loop-entity by 28
+		add 4 experience to the player
+	create an explosion with force 5 at the event-player's targeted block
+	add 10 experience to the player
+	show mob spawner flames at (the location 1 block above the player's location)
+
+on right click with magma cream:
+	player has permission "rpg.wizard"
+	if subMana(event-player, 180) is false:
+		send "&cYou do not have enough Mana to cast the shatter spell!" to event-player
+		stop
+	send "&dYou tear at the fabric of reality!" to event-player
+	play sound "item.firecharge.use" at event-player
+	loop all blocks in radius 15 around (event-player's targeted block):
+		chance of 0.3%:
+			loop-block is not air
+			create an explosion with force 3 at the loop-block
+			wait 1 ticks
+	#create an explosion with force 5 at the event-player's targeted block
+	add 10 experience to the player
+	show mob spawner flames at (the location 1 block above the player's location)
+
+on right click with flint:
+	player has permission "rpg.wizard"
+	if subMana(event-player, 18) is false:
+		send "&cYou do not have enough Mana to cast the ignite spell!" to event-player
+		stop
+	send "&dYou draw energy from the item in your hand and light creatures on fire!" to event-player
+	play sound "item.flintandsteel.use" at event-player
+	loop all entities in radius 13 around (event-player's targeted block):
+		loop-entity is not a dropped item
+		loop-entity is not player
+		ignite loop-entity for 10 seconds
+		show mob spawner flames at (the location 1 block above the loop-entity's location)
+		add 1 experience to the player
+	add 4 experience to the player
+	show mob spawner flames at (the location 1 block above the player's location)
+
+on right click with blaze rod:
+	player has permission "rpg.wizard"
+	if subMana(event-player, 1000) is false:
+		send "&cYou do not have enough Mana to cast the devastating blast spell!" to event-player
+		stop
+	send "&dYou shout, and your thunderous words are met with an equally powerful blast of destruction!" to event-player
+	play sound "item.firecharge.use" at event-player
+	loop all entities in radius 50 around (event-player's targeted block):
+		loop-entity is not a dropped item
+		damage loop-entity by 80
+		add 16 experience to the player
+	create an explosion with force 38 at the event-player's targeted block
+	add 32 experience to the player
+	show mob spawner flames at (the location 1 block above the player's location)
+	create a fake explosion at the player
+
+on right click with diamond:
+	player has permission "rpg.wizard"
+	if subMana(event-player, 300) is false:
+		send "&cYou do not have enough Mana to cast the lightning spell!" to event-player
+		stop
+	send "&dYou conjure an enormous bolt of lighting from the heavens!" to event-player
+	loop all entities in radius 22 around (event-player's targeted block):
+		loop-entity is not a dropped item
+		damage loop-entity by 50
+		add 12 experience to the player
+	create lightning effect at the event-player's targeted block
+	create an explosion with force 12 at the event-player's targeted block
+	add 24 experience to the player
+	play sound "entity.player.breath" with pitch 0.7 at player
+
+on right click with feather:
+	player has permission "rpg.wizard"
+	set {_t} to targeted entity of player
+	{_t} is a player:
+		if subMana(event-player, 90) is false:
+			send "&cYou do not have enough Mana to cast the heal other spell!" to event-player
+			stop
+		heal {_t} by 3
+		send "&dYou heal %{_t}%!" to event-player
+		send "&dYou are healed!" to {_t}
+		play sound "entity.player.levelup" with pitch 1.5 at {_t}
+		stop
+	if subMana(event-player, 90) is false:
+		send "&cYou do not have enough Mana to cast the heal spell!" to event-player
+		stop
+	heal event-player by 3
+	send "&dYou are healed!" to event-player
+	play sound "entity.player.levelup" with pitch 1.5 at event-player
+
+on right click with amethyst shard:
+	player has permission "rpg.wizard"
+	set {_loc} to event-player's targeted block
+	set {_loc} to location 1 meter above {_loc}
+	set pitch of {_loc} to pitch of event-player
+	set yaw of {_loc} to yaw of event-player
+	if block at {_loc} is not air:
+		if block 1 meter above {_loc} is not air:
+			send "&cCannot blink there!" to event-player
+			stop
+	if subMana(event-player, 35) is false:
+		send "&cYou do not have enough Mana to cast the blink spell!" to event-player
+		stop
+	send "&dYou blink to your target location!" to event-player
+	play sound "entity.enderman.teleport" at event-player
+	teleport event-player to {_loc}
+	add 1 experience to the event-player
+	wait 2 ticks
+	play sound "entity.enderman.teleport" at event-player
+
+on right click with clay ball:
+	player has permission "rpg.wizard"
+	if subMana(event-player, 50) is false:
+		send "&cYou do not have enough Mana to cast the move monsters spell!" to event-player
+		stop
+	send "&dSummoned nearby monsters near where you are looking!" to event-player
+	set {_loc} to event-player's targeted block
+	loop all entities in radius 60 around (event-player's targeted block):
+		loop-entity is not a dropped item
+		loop-entity is not a player
+		teleport loop-entity to location 1 meter above {_loc}
+		add 1 experience to the player
+	add 2 experience to the player
+	play sound "entity.player.breath" with pitch 0.7 at player
+
+on right click with sugar:
+	player has permission "rpg.wizard"
+	if subMana(event-player, 30) is false:
+		send "&cYou do not have enough Mana to cast the move items spell!" to event-player
+		stop
+	send "&dSummoned nearby dropped items near where you are looking!" to event-player
+	set {_loc} to event-player's targeted block
+	loop all entities in radius 80 around (event-player's targeted block):
+		loop-entity is a dropped item
+		teleport loop-entity to location 1 meter above {_loc}
+		add 1 experience to the player
+	add 2 experience to the player
+	play sound "entity.player.breath" with pitch 0.7 at player
+
+on right click with wheat:
+	player has permission "rpg.wizard"
+	if subMana(event-player, 200) is false:
+		send "&cYou do not have enough Mana to cast the harvest spell!" to event-player
+		stop
+	send "&dYou wave your hands and your crops have been magically harvested!" to event-player
+	loop blocks in radius 50 of player:
+		loop-block is wheat:
+			break loop-block naturally
+			set loop-block to wheat
+			wait 2 ticks
+		loop-block is carrot plant:
+			break loop-block naturally
+			set loop-block to carrot plant
+			wait 2 ticks
+		loop-block is potato plant:
+			break loop-block naturally
+			set loop-block to potato plant
+			wait 2 ticks
+		loop-block is nether wart plant:
+			break loop-block naturally
+			set loop-block to nether wart plant
+			wait 2 ticks
+		loop-block is melon:
+			break loop-block naturally
+			wait 2 ticks
+		loop-block is pumpkin:
+			break loop-block naturally
+			wait 2 ticks
