@@ -33,6 +33,12 @@ function setMaxHealth(player: player):
 		set {_player}'s maximum health to {_newMax}
 		send "&cYour maximum health has changed to %{_newMax}%" to {_player}
 
+function lastLoreLine(item: item) :: number:
+	set {_x} to 1
+	loop lore of {_item}:
+		set {_x} to {_x} + 1
+	return {_x}
+
 function countImbue(player: player, text: text) :: number:
 	set {_c} to 0
 	if hasLore({_player}'s helmet, {_text}) is true:
@@ -325,6 +331,26 @@ on death of a player:
     if the victim has permission "rpg.wizard":
         keep the experience
         send "&dYou use your magic powers to keep your experience!" to the victim		
+
+command /imbue <text>:
+	description: Imbue an item with powerful magic properties
+	executable by: players
+	trigger:
+		player has permission "rpg.wizard"
+		if subMana(player, 1000) is false:
+			send "&cYou do not have enough mana to imbue an item with magic!"
+			stop
+		if arg 1 is "health":
+			set {_items::*} to 45 glowstone dust and 20 nether wart
+			player has {_items::*}:
+				remove {_items::*} from player
+				set line lastLoreLine(player's held item) of (player's held item)'s lore to "&cHealth Boost"
+			else:
+				send "&cYou do not have the required items for that property! Required: %{_items::*}%"
+				stop
+		else:
+			send "&cThat is not a valid property!"
+			stop
 
 command /arcane <text>:
 	description: Send a message to be magically received by wizards
