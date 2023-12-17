@@ -255,8 +255,10 @@ function setupMana(player: player):
 		set {rpgSkript::%{_player}%::mana} to 0
 	if {rpgSkript::%{_player}%::maxMana} is not set:
 		set {rpgSkript::%{_player}%::maxMana} to 0
-	if isWearingMediumOrLess({_player}) is true:
-		set {_newMax} to (level of {_player}) * 9
+	if isWearingLightOrLess({_player}) is true:
+		set {_newMax} to (level of {_player}) * 12
+	else if isWearingMediumOrLess({_player}) is true:
+		set {_newMax} to (level of {_player}) * 8
 	else:
 		set {_newMax} to (level of {_player}) * 1.5
 
@@ -279,7 +281,14 @@ function regenMana(player: player):
 		setupMana({_player})
 	if {rpgSkript::%{_player}%::maxMana} is not set:
 		setupMana({_player})
-	addMana( {_player}, {rpgSkript::%{_player}%::maxMana} / 60 )
+
+	set {_add} to 0
+	if isWearingLightOrLess({_player}) is true:
+		set {_add} to {rpgSkript::%{_player}%::maxMana} / 40
+	else if isWearingMediumOrLess({_player}) is true:
+		set {_add} to {rpgSkript::%{_player}%::maxMana} / 70
+	
+	addMana( {_player}, {_add} )
 
 function addMana(player: player, amount: number):
 	set {_before} to {rpgSkript::%{_player}%::mana}
