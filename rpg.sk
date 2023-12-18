@@ -113,14 +113,14 @@ function arcaneTide():
 		#broadcast {_x}
 		{_x} < 7:
 			set {rpgSkript::arcaneTide} to now
-			arcaneSense("You feel reality become more intense!")
+			arcaneSense("You feel the surrounding energy of Magic become more intense!")
 	else:
 		if difference between now and {rpgSkript::arcaneTide} is greater than 2 minutes:
 			set {_x} to a random number between 1 and 1000
 			#broadcast {_x}
 			{_x} < 20:
 				delete {rpgSkript::arcaneTide}
-				arcaneSense("Reality settles...")
+				arcaneSense("The energy in the air settles...")
 
 function countEntities(mobs: entities) :: number:
 	set {_x} to 0
