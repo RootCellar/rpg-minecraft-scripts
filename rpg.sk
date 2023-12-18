@@ -403,6 +403,9 @@ command /remember <text>:
 		if subMana(command executor, 5) is false:
 			message "&cYou do not have enough Mana!"
 			stop
+		if {rpgSkript::%command executor%::memory::%arg 1%} is set:
+			message "&cYou already know a location by that name!"
+			stop
 		set {rpgSkript::%command executor%::memory::%arg 1%} to command executor's location
 		message "&dYou take note of your surroundings, so that you may magically return later..."
 
