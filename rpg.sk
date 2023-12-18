@@ -642,6 +642,7 @@ on right click with wheat:
 		stop
 	send "&dYou wave your hands and your crops have been magically harvested!" to event-player
 	loop blocks in radius 50 of player:
+		set {_loc} to location of loop-block
 		loop-block is wheat:
 			break loop-block naturally
 			set loop-block to wheat
@@ -663,4 +664,17 @@ on right click with wheat:
 			wait 2 ticks
 		loop-block is pumpkin:
 			break loop-block naturally
+			wait 2 ticks
+		loop-block is bamboo:
+			block 1 meter below loop-block is bamboo
+			break loop-block naturally
+			wait 2 ticks
+		loop-block is sugar cane:
+			block 1 meter below loop-block is sugar cane
+			break loop-block naturally
+			wait 2 ticks
+		loop-block is sweet berry bush:
+			loop-block's age is 3
+			set loop-block's age to 1
+			drop 3 sweet berry at {_loc}
 			wait 2 ticks
