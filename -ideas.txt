@@ -1,0 +1,42 @@
+# Ideas
+
+- make lightning rod cancel all explosions
+  - spells could still deal damage, just without breaking blocks
+- create spells involving flowers
+- make diamond blocks and diamond ore improve Wizard's power
+- create "thru" spell to pass through a wall
+- create more offensive spells that don't use explosions
+  - potion effects
+    - slowness
+    - levitation
+  - smite spell to strike nearby creatures with fake lightning for X damage
+- make it easier for rogue to obtain rare materials
+  - chance on loot generate to add loot?
+  - chance on block break to add loot?
+- create "light" imbuement to make any armor count as light armor
+- create class imbuements so an item can grant a class to a player
+- make monsters more powerful
+  - 
+- create swiftness imbuement for boots
+- create spells to summon or transmute items
+- allow rogue to pick up arrows that are stuck in blocks
+- allow rogue to go longer without getting hungry, maybe not get hungry at all
+- create spell to fell trees
+- create mining spell that isn't overpowered
+- allow warrior to make pickaxe power attack, breaking blocks in a small radius
+- count holding a shield as medium armor
+- apply slowness to nearby monsters when rogue begins sprinting, so they can get away easier
+- make warrior immune to poison, hunger effects
+- make rogue resist fall damage
+
+
+# Herobrine
+
+- allow Herobrine to enter and leave spectator mode at will
+- create spell to destroy all nearby leaves
+- create spell to dig long 2x2 tunnel
+- create spell to build pyramid
+- create spell to build sphere
+- create spell to summon undead knights
+- create spell to summon zombie horde
+- create spell to summon evokers
