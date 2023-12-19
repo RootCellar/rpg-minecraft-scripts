@@ -28,6 +28,7 @@
 - apply slowness to nearby monsters when rogue begins sprinting, so they can get away easier
 - make warrior immune to poison, hunger effects
 - make rogue resist fall damage
+- disable enderman teleportation while rogue is nearby
 
 
 # Herobrine
