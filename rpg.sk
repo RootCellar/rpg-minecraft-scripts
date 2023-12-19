@@ -256,6 +256,15 @@ every 1 seconds:
 
 # Wizard
 
+on place of lightning rod:
+	add event-block to {rpgSkript::lightning_rod::*}
+	log "%player% placed lightning rod in %world% at %location of block%" to "rpg/main.log"
+	send "&dThis lightning rod will catch lightning from magic as well!" to event-player
+
+on break of lightning rod:
+	remove event-block from {rpgSkript::lightning_rod::*}
+	log "%player% broke lightning rod in %world% at %location of block%" to "rpg/main.log"
+
 function setupMana(player: player):
 	if {rpgSkript::%{_player}%::mana} is not set:
 		set {rpgSkript::%{_player}%::mana} to 0
@@ -558,6 +567,14 @@ on right click with diamond:
 		send "&cYou do not have enough Mana to cast the lightning spell!" to event-player
 		stop
 	send "&dYou conjure an enormous bolt of lighting from the heavens!" to event-player
+	loop blocks in {rpgSkript::lightning_rod::*}:
+		if loop-block is not lightning rod:
+			remove loop-block from {rpgSkript::lightning_rod::*}
+			log "lightning rod was listed in %world% at %location of block%, but block was not actually a lightning rod" to "rpg/main.log"
+		else if loop-block is within 150 meters of event-player's targeted block:
+			create lightning effect at loop-block
+			send "&dYou sense that your lightning as been absorbed by a lightning rod!"
+			stop
 	loop all entities in radius 22 around (event-player's targeted block):
 		loop-entity is not a dropped item
 		damage loop-entity by 50
