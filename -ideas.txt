@@ -23,7 +23,6 @@
 - create spell to fell trees
 - create mining spell that isn't overpowered
 - allow warrior to make pickaxe power attack, breaking blocks in a small radius
-- count holding a shield as medium armor
 - apply slowness to nearby monsters when rogue begins sprinting, so they can get away easier
 - make warrior immune to poison, hunger effects
 - make rogue resist fall damage
