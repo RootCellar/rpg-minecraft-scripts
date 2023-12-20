@@ -92,14 +92,18 @@ function isWearingLightOrLess(player: player) :: boolean:
 function isWearingMediumOrLess(player: player) :: boolean:
 	if isWearingLightOrLess({_player}) is true:
 		return true
-	helmet of {_player} is (diamond helmet or netherite helmet):
-		return false
-	chestplate of {_player} is (diamond chestplate or netherite chestplate):
-		return false
-	leggings of {_player} is (diamond leggings or netherite leggings):
-		return false
-	boots of {_player} is (diamond boots or netherite boots):
-		return false
+	hasLore(helmet of {_player}, "light") is false:
+		helmet of {_player} is (diamond helmet or netherite helmet):
+			return false
+	hasLore(chestplate of {_player}, "light") is false:
+		chestplate of {_player} is (diamond chestplate or netherite chestplate):
+			return false
+	hasLore(leggings of {_player}, "light") is false:
+		leggings of {_player} is (diamond leggings or netherite leggings):
+			return false
+	hasLore(boots of {_player}, "light") is false:
+		boots of {_player} is (diamond boots or netherite boots):
+			return false
 	return true
 
 function isWearingHeavyOrLess(player: player) :: boolean:
