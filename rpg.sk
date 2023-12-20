@@ -1,5 +1,33 @@
 # General
 
+on join:
+	wait 3 seconds
+	send "&c-------- &eMinecraft RPG &c--------" to player
+	send "&l&eNew&r&e:" to player
+
+	# Example: send "&3 - <stuff>" to player
+	
+	send "&3 - Lightning Rods will stop magic lightning" to player
+	send "&3 - Wizards lose some magic power when wearing medium armor, all when wearing heavy" to player
+	send "&3 - Spawned monsters will be toughened at random - Watch out!" to player
+	send "&3 - Rogues lose most abilities when wearing medium armor or heavier" to player
+	send "&3 - Imbuements:" to player
+	send "&3   - Health Boost: increases health by 2 hearts" to player
+	send "&3   - Mana Boost: increases mana by 25%%" to player
+	send "&3   - Light: makes any armor piece count as light armor" to player
+	send "&3 - Wizards can use '/pocket' spell to open their enderchest" to player
+	send "&3" to player
+	send "&3 Internals:" to player
+	send "&3 - hasLore(item, text): Loop lore of item to see if it has the given lore" to player
+	send "&3 - hasImbue(player, text): Check player to see if they have an imbuement on the equipment they are wearing" to player
+	send "&3 - countImbue(player, text): Count how many times imbuement appears across players' equipment" to player
+	send "&3 - rpgLog(text): Log information to file" to player
+	send "&3 - isLightningRodWithinRangeOf(location, range, strike=false): Check to see if a lightning rod is nearby, possibly striking with fake lightning" to player
+	
+
+	send "&c-------- &eMinecraft RPG &c--------" to player
+	
+
 on chat:
 	set the message to "&6[&8LVL %player's level%&6]&r %message%"
 	player has permission "rpg.rogue":
