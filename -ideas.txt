@@ -13,7 +13,6 @@
 - make it easier for rogue to obtain rare materials
   - chance on loot generate to add loot?
   - chance on block break to add loot?
-- create "light" imbuement to make any armor count as light armor
 - create class imbuements so an item can grant a class to a player
 - make monsters more powerful
   - 
