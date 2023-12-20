@@ -77,6 +77,8 @@ function isWearingLightOrLess(player: player) :: boolean:
 		return false
 	boots of {_player} is not (leather boots or air):
 		return false
+	off hand item of {_player} is shield:
+		return false
 	return true
 
 function isWearingMediumOrLess(player: player) :: boolean:
