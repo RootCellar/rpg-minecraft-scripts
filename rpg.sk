@@ -563,20 +563,26 @@ on right click with blaze rod:
 	show mob spawner flames at (the location 1 block above the player's location)
 	create a fake explosion at the player
 
+function isLightningRodWithinRangeOf(loc: location, range: number, strike: boolean=false) :: boolean:
+	loop blocks in {rpgSkript::lightning_rod::*}:
+		if loop-block is not lightning rod:
+			remove loop-block from {rpgSkript::lightning_rod::*}
+			log "lightning rod was listed at %{_loc}%, but block was not actually a lightning rod" to "rpg/main.log"
+		else if loop-block is within {_range} meters of {_loc}:
+			if {_strike} is true:
+				create lightning effect at loop-block
+			return true
+		return false
+
 on right click with diamond:
 	player has permission "rpg.wizard"
 	if subMana(event-player, 300) is false:
 		send "&cYou do not have enough Mana to cast the lightning spell!" to event-player
 		stop
 	send "&dYou conjure an enormous bolt of lighting from the heavens!" to event-player
-	loop blocks in {rpgSkript::lightning_rod::*}:
-		if loop-block is not lightning rod:
-			remove loop-block from {rpgSkript::lightning_rod::*}
-			log "lightning rod was listed in %world% at %location of block%, but block was not actually a lightning rod" to "rpg/main.log"
-		else if loop-block is within 150 meters of event-player's targeted block:
-			create lightning effect at loop-block
-			send "&dYou sense that your lightning as been absorbed by a lightning rod!"
-			stop
+	if isLightningRodWithinRangeOf(location of event-player's targeted block, 150, true) is true:
+		send "&dYou sense that your lightning as been absorbed by a lightning rod!"
+		stop
 	loop all entities in radius 22 around (event-player's targeted block):
 		loop-entity is not a dropped item
 		damage loop-entity by 50
