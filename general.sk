@@ -9,3 +9,16 @@ on command:
 	{console.broadcast} is "true"
 	broadcast "&7Server Console executing command: /%command% %arguments%"
 	send "&4Warning: &cConsole Broadcasting is on!" to console
+
+command /feedback [<text="">]:
+	trigger:
+		argument is "":
+			send "&bSend your feedback or ideas for this server, which will be stored in a file." to player
+			stop
+		log "[%command executor%] %argument%" to "feedback/feedback.log"
+		send "&bFeedback filed."
+		send "&b[FeedBack] &2%command executor%: &c%argument%" to console
+
+on join:
+	wait 5 seconds
+	send "&bUse '/feedback' to send feedback or ideas to be filed and viewed by the server administrator" to the player
