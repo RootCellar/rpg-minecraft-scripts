@@ -15,6 +15,9 @@ on chat:
 		set the message to "&0[&4Herobrine&0]&r %message%"
 		# stop trigger
 
+function rpgLog(message: text):
+	log "%{_message}%" to "rpg/main.log"
+
 function setMaxHealth(player: player):
 	set {_newMax} to 10
 	{_player} has permission "rpg.warrior":
@@ -260,12 +263,12 @@ every 1 seconds:
 
 on place of lightning rod:
 	add event-block to {rpgSkript::lightning_rod::*}
-	log "%player% placed lightning rod in %world% at %location of block%" to "rpg/main.log"
+	rpgLog("%player% placed lightning rod in %world% at %location of block%")
 	send "&dThis lightning rod will catch lightning from magic as well!" to event-player
 
 on break of lightning rod:
 	remove event-block from {rpgSkript::lightning_rod::*}
-	log "%player% broke lightning rod in %world% at %location of block%" to "rpg/main.log"
+	rpgLog("%player% broke lightning rod in %world% at %location of block%")
 
 function isLightningRodWithinRangeOf(loc: location, range: number, strike: boolean=false) :: boolean:
 	loop blocks in {rpgSkript::lightning_rod::*}:
