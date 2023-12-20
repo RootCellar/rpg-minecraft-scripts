@@ -267,6 +267,17 @@ on break of lightning rod:
 	remove event-block from {rpgSkript::lightning_rod::*}
 	log "%player% broke lightning rod in %world% at %location of block%" to "rpg/main.log"
 
+function isLightningRodWithinRangeOf(loc: location, range: number, strike: boolean=false) :: boolean:
+	loop blocks in {rpgSkript::lightning_rod::*}:
+		if loop-block is not lightning rod:
+			remove loop-block from {rpgSkript::lightning_rod::*}
+			rpgLog("lightning rod was listed at %{_loc}%, but block was not actually a lightning rod")
+		else if loop-block is within {_range} meters of {_loc}:
+			if {_strike} is true:
+				create lightning effect at loop-block
+			return true
+		return false
+
 function setupMana(player: player):
 	if {rpgSkript::%{_player}%::mana} is not set:
 		set {rpgSkript::%{_player}%::mana} to 0
@@ -562,17 +573,6 @@ on right click with blaze rod:
 	add 32 experience to the player
 	show mob spawner flames at (the location 1 block above the player's location)
 	create a fake explosion at the player
-
-function isLightningRodWithinRangeOf(loc: location, range: number, strike: boolean=false) :: boolean:
-	loop blocks in {rpgSkript::lightning_rod::*}:
-		if loop-block is not lightning rod:
-			remove loop-block from {rpgSkript::lightning_rod::*}
-			log "lightning rod was listed at %{_loc}%, but block was not actually a lightning rod" to "rpg/main.log"
-		else if loop-block is within {_range} meters of {_loc}:
-			if {_strike} is true:
-				create lightning effect at loop-block
-			return true
-		return false
 
 on right click with diamond:
 	player has permission "rpg.wizard"
