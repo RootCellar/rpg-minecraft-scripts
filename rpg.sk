@@ -62,7 +62,7 @@ function setMaxHealth(player: player):
 
 	if {_player}'s maximum health is not {_newMax}:
 		set {_player}'s maximum health to {_newMax}
-		send "&cYour maximum health has changed to %{_newMax}%" to {_player}
+		send "&cYour maximum health has changed to %{_newMax}% hearts" to {_player}
 
 function lastLoreLine(item: item) :: number:
 	set {_x} to 1
