@@ -559,6 +559,13 @@ command /pocket:
 		send "&dYou open a rift and reach into your enderchest!" to command executor
 		make command executor run command "/enderchest" as op
 
+command /cast <text>:
+	description: Cast a spell
+	permission: rpg.wizard
+	permission message: You cannot use magic!
+	executable by: players
+	trigger:
+
 on right click with stick:
 	player has permission "rpg.wizard"
 	if subMana(event-player, 5) is false:
