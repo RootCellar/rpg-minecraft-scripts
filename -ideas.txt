@@ -28,6 +28,11 @@
 - make rogue resist fall damage
 - disable enderman teleportation while rogue is nearby
 
+- Wizard: /cast command to cast spells without having to hold an item
+  - 
+
+- Wizard: Research?
+  - Inventories with items to click on, like most minigame servers have
 
 # Herobrine
 
