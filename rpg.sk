@@ -580,7 +580,7 @@ command /cast <text>:
 	executable by: players
 	trigger:
 		if arg 1 is "conjure":
-			if subMana(command executor, 500) is false:
+			if subMana(command executor, 1500) is false:
 				send "&cYou do not have enough Mana to cast the conjure spell!" to command executor
 				stop
 			spawn 1 iron golem at the location 1 meter above command executor's targeted block
