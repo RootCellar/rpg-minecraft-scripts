@@ -268,6 +268,14 @@ on right click:
 				apply slowness 3 to loop-monster for 7 seconds replacing the existing effect
 				damage loop-entity by 2
 				push loop-entity {_vec} with force 1.2
+		
+		player is holding a pickaxe:
+			distance between player and player's targeted block is less than 5:
+				create an explosion with force 0 at player's targeted block
+				loop all blocks in radius 2 around player's targeted block:
+					loop-block is not bedrock:
+						set {_didHit} to true
+						break loop-block naturally using player's held item
 
 		if {_didHit} is true:
 			set {rpgSkript::%player%::powerattack_time} to now
