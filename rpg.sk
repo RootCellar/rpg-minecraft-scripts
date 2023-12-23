@@ -289,6 +289,18 @@ on sneak toggle:
 	player is sneaking:
 		remove invisibility from the player
 
+on hunger meter change:
+	player has permission "rpg.rogue"
+	if {rpgSkript::%player%::eating} is true:
+		set {rpgSkript::%player%::eating} to false
+		stop
+	else:
+		chance of 80%:
+			cancel the event
+
+on consume:
+	set {rpgSkript::%player%::eating} to true
+
 # Herobrine?
 
 every 1 seconds:
