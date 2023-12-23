@@ -388,6 +388,20 @@ function displayMana(player: player):
 		set {_dispM} to 0
 	send action bar "&3Mana: %{_dispM}% / %{rpgSkript::%{_player}%::maxMana}%" to {_player}
 
+function hasResources(player: player, mana: number, items: items) :: boolean:
+	send "&3Items - Need: %{_items::*}%" to {_player}
+	{_player} has {_items::*}:
+		hasMana({_player}, {_mana}) is true:
+			return true
+	return false
+
+function takeResources(player: player, mana: number, items: items) :: boolean:
+	if hasResources({_player}, {_mana}, {_items}) is true:
+		remove {_items::*} from {_player}
+		subMana({_player}, {_amount})
+		return true
+	return false
+
 function arcaneSense(message: text):
 	loop all players:
 		loop-player has permission "rpg.wizard":
