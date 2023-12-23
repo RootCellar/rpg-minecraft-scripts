@@ -244,7 +244,7 @@ on right click:
 		apply slowness 3 to player for 6 seconds replacing the existing effect
 		loop all entities in radius 5 around player:
 			loop-entity is not a dropped item
-			loop-entity is not player
+			loop-entity is not a player
 			damage loop-entity by 2.5
 			set {_vec} to normalized vector between player and loop-entity
 			push loop-entity {_vec} with force 0.8
@@ -256,7 +256,7 @@ on right click:
 		set {_vec} to normalized vector between {_loc} and player
 		loop all entities in radius 5 around player:
 			loop-entity is not a dropped item
-			loop-entity is not player
+			loop-entity is not a player
 			damage loop-entity by 1.5
 			push loop-entity {_vec} with force 1.2
 			#push loop-entity upwards with force 0.8
