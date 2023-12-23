@@ -223,8 +223,7 @@ on damage:
 			chance of 45%:
 				set the damage to 0
 				play sound "entity.player.attack.nodamage" at victim
-				send action bar "DODGE!" to victim
-				send "DODGE!" to the victim
+				send action bar "&2~ ~ DODGE ~ ~" to victim
 
 on target:
 	target is a player
