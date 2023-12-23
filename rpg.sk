@@ -241,27 +241,41 @@ on target:
 
 on right click:
 	player has permission "rpg.warrior"
+
+	set {_didHit} to false
+	set {_can_power_attack} to false
 	
-	player is holding a sword:
-		apply slowness 3 to player for 6 seconds replacing the existing effect
-		loop all entities in radius 5 around player:
-			loop-entity is not a dropped item
-			loop-entity is not a player
-			damage loop-entity by 2.5
-			set {_vec} to normalized vector between player and loop-entity
-			push loop-entity {_vec} with force 0.8
-			push loop-entity upwards with force 0.5
-			
-	player is holding an axe:
-		apply slowness 3 to player for 6 seconds replacing the existing effect
-		set {_loc} to the location 2 meters below and 3 meters horizontally behind the player
-		set {_vec} to normalized vector between {_loc} and player
-		loop all entities in radius 5 around player:
-			loop-entity is not a dropped item
-			loop-entity is not a player
-			damage loop-entity by 1.5
-			push loop-entity {_vec} with force 1.2
-			#push loop-entity upwards with force 0.8
+	if {rpgSkript::%player%::powerattack_time} is not set:
+		set {_can_power_attack} to true
+	if difference between now and {rpgSkript::%player%::powerattack_time} is more than 4 seconds:
+		set {_can_power_attack} to true
+
+	if {_can_power_attack} is true:
+		player is holding a sword:
+			loop all monsters in radius 5 around player:
+				set {_didHit} to true
+				apply slowness 3 to loop-monster for 7 seconds replacing the existing effect
+				damage loop-entity by 3
+				set {_vec} to normalized vector between player and loop-entity
+				push loop-entity {_vec} with force 0.9
+				push loop-entity upwards with force 0.6
+				
+		player is holding an axe:
+			set {_loc} to the location 2 meters below and 3 meters horizontally behind the player
+			set {_vec} to normalized vector between {_loc} and player
+			loop all monsters in radius 5 around player:
+				set {_didHit} to true
+				apply slowness 3 to loop-monster for 7 seconds replacing the existing effect
+				damage loop-entity by 2
+				push loop-entity {_vec} with force 1.2
+
+		if {_didHit} is true:
+			set {rpgSkript::%player%::powerattack_time} to now
+			apply slowness 3 to player for 4 seconds replacing the existing effect
+			send action bar "&c&lPOWER ATTACK" to the player
+				
+	else:
+		send action bar "&cYour power attack is still on cooldown!" to the player
 
 # Rogue
 
