@@ -19,13 +19,10 @@
 - create swiftness imbuement for boots
 - create spells to summon or transmute items
 - allow rogue to pick up arrows that are stuck in blocks
-- allow rogue to go longer without getting hungry, maybe not get hungry at all
 - create spell to fell trees
 - create mining spell that isn't overpowered
-- allow warrior to make pickaxe power attack, breaking blocks in a small radius
 - apply slowness to nearby monsters when rogue begins sprinting, so they can get away easier
 - make warrior immune to poison, hunger effects
-- make rogue resist fall damage
 - disable enderman teleportation while rogue is nearby
 
 - Wizard: /cast command to cast spells without having to hold an item
