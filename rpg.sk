@@ -220,6 +220,8 @@ on damage:
 			apply slowness 1 to victim for 4 seconds replacing the existing effect
 		victim has permission "rpg.rogue":
 			isWearingLightOrLess(victim) is true
+			damage cause is fall:
+				set the damage to the damage * 0.3
 			chance of 45%:
 				set the damage to 0
 				play sound "entity.player.attack.nodamage" at victim
