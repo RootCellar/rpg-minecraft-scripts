@@ -293,9 +293,9 @@ on death of a monster:
 	attacker is a player
 	attacker has permission "rpg.rogue"
 	set {_x} to a random number between 0 and 1000
-	if {_x} <= 5:
+	if {_x} <= 7:
 		add 1 gold ore to the drops
-	if {_x} <= 1:
+	if {_x} <= 3:
 		add 1 diamond to the drops
 
 on death of an animal:
