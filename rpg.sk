@@ -197,6 +197,12 @@ every 2 seconds:
 				#send "&cKnockback resistance applied" to loop-player
 			apply haste 2 without particles to the loop-player for 30 seconds replacing the existing effect
 			apply strength 2 without particles to the loop-player for 30 seconds replacing the existing effect
+		loop-player has permission "rpg.herobrine":
+			heal loop-player by 2
+			loop-player's knockback resistance attribute is not 0.9:
+				set loop-player's knockback resistance attribute to 0.9
+			apply haste 6 without particles to the loop-player for 30 seconds replacing the existing effect
+			apply strength 4 without particles to the loop-player for 30 seconds replacing the existing effect
 
 on damage:
 	attacker is a player:
