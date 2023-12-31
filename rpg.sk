@@ -369,6 +369,22 @@ every 1 seconds:
 		time in world of loop-player is not between 19:00 and 5:00
 		ignite the loop-player for 5 seconds
 
+on sprint toggle:
+	player has permission "rpg.herobrine"
+	player is not sprinting:
+		apply swiftness 4 without particles to the player for 600 seconds replacing the existing effect
+		apply jump boost 4 without particles to the player for 600 seconds replacing the existing effect
+	player is sprinting:
+		remove swiftness from the player
+		remove jump boost from the player
+
+on sneak toggle:
+	player has permission "rpg.herobrine"
+	player is not sneaking:
+		apply invisibility without particles to the player for 600 seconds replacing the existing effect
+	player is sneaking:
+		remove invisibility from the player
+
 # Wizard
 
 on place of lightning rod:
