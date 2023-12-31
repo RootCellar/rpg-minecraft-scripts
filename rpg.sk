@@ -744,10 +744,16 @@ on right click with amethyst shard:
 	set {_loc} to location 1 meter above {_loc}
 	set pitch of {_loc} to pitch of event-player
 	set yaw of {_loc} to yaw of event-player
+
+	set {_canTp} to true
 	if block at {_loc} is not air:
-		if block 1 meter above {_loc} is not air:
-			send "&cCannot blink there!" to event-player
-			stop
+		set {_canTp} to false
+	if block 1 meter above {_loc} is not air:
+		set {_canTp} to false
+	if {_canTp} is false:
+		send "&cCannot blink there!" to event-player
+		stop
+		
 	if subMana(event-player, 35) is false:
 		send "&cYou do not have enough Mana to cast the blink spell!" to event-player
 		stop
