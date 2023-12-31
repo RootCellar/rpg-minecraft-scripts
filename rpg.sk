@@ -233,6 +233,8 @@ on target:
 			cancel the event
 
 on item damage:
+	player has permission "rpg.herobrine":
+		cancel the event
 	player has permission "rpg.warrior":
 		chance of 45%:
 			cancel the event
