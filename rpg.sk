@@ -239,6 +239,16 @@ on target:
 		chance of 80%:
 			cancel the event
 
+on item damage:
+	player has permission "rpg.warrior":
+		chance of 45%:
+			cancel the event
+			#send "&cSaved durability"
+	player has permission "rpg.rogue":
+		chance of 25%:
+			cancel the event
+			#send "&2Saved durability"
+
 # Warrior
 
 on right click:
