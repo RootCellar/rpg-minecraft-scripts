@@ -208,6 +208,8 @@ on damage:
 		attacker has permission "rpg.rogue":
 			isWearingLightOrLess(attacker) is true
 			set the damage to the damage * 2.0
+		attacker has permission "rpg.herobrine":
+			set the damage to the damage * 3.0
 			
 	victim is a player:
 		setMaxHealth(the victim)
