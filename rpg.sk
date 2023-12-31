@@ -205,7 +205,11 @@ on damage:
 			
 	victim is a player:
 		setMaxHealth(the victim)
-		
+
+		victim has permission "rpg.herobrine":
+			set the damage to the damage * 0.4
+			damage cause is fall:
+				cancel the event
 		victim has permission "rpg.warrior":
 			set {_odamage} to the damage
 			set {_newdamage} to {_odamage} * 0.65
