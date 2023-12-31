@@ -431,7 +431,7 @@ function subMana(player: player, amount: number) :: boolean:
 		return false
 
 function hasMana(player: player, amount: number) :: boolean:
-	send "&3Mana - Have: %{rpgSkript::%{_player}%::mana}% Need: %{_amount}%" to {_player}
+	send "&3Mana: Have %{rpgSkript::%{_player}%::mana}%, Need %{_amount}%" to {_player}
 	if {rpgSkript::%{_player}%::mana} - {_amount} > -0.01:
 		return true
 	return false
