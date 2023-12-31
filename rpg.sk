@@ -623,6 +623,7 @@ command /cast <text>:
 			if subMana(command executor, 1500) is false:
 				send "&cYou do not have enough Mana to cast the conjure spell!" to command executor
 				stop
+			send "&dYou whisper, and an iron golem materializes into existence!" to command executor
 			spawn 1 iron golem at the location 1 meter above command executor's targeted block
 				
 
