@@ -7,23 +7,16 @@ on join:
 
 	# Example: send "&3 - <stuff>" to player
 	
-	send "&3 - Lightning Rods will stop magic lightning" to player
-	send "&3 - Wizards lose some magic power when wearing medium armor, all when wearing heavy" to player
-	send "&3 - Spawned monsters will be toughened at random - Watch out!" to player
-	send "&3 - Rogues lose most abilities when wearing medium armor or heavier" to player
-	send "&3 - Imbuements:" to player
-	send "&3   - Health Boost: increases health by 2 hearts" to player
-	send "&3   - Mana Boost: increases mana by 25%%" to player
-	send "&3   - Light: makes any armor piece count as light armor" to player
-	send "&3 - Wizards can use '/pocket' spell to open their enderchest" to player
-	send "&3" to player
-	send "&3 Internals:" to player
-	send "&3 - hasLore(item, text): Loop lore of item to see if it has the given lore" to player
-	send "&3 - hasImbue(player, text): Check player to see if they have an imbuement on the equipment they are wearing" to player
-	send "&3 - countImbue(player, text): Count how many times imbuement appears across players' equipment" to player
-	send "&3 - rpgLog(text): Log information to file" to player
-	send "&3 - isLightningRodWithinRangeOf(location, range, strike=false): Check to see if a lightning rod is nearby, possibly striking with fake lightning" to player
+	send "&3 - Tools and armor will now last longer for Warriors and Rogues" to player
+	send "&3 - Rogues now get hungry substantially slower" to player
+	send "&3 - Rogues now resist 70 percent of fall damage" to player
+	send "&3 - Wizards can now conjure iron golems for 1,500 Mana" to player
+	send "&3 - Warriors can now make power attacks with pickaxes, breaking all blocks in a small radius" to player
+	send "&3 - Warrior's power attacks now have a cooldown" to player
+	send "&3 - Warriors now resist knockback" to player
+	send "&3 - Rogues get additional items at random when killing monsters and animals" to player
 	
+	#send "&3" to player
 
 	send "&c-------- &eMinecraft RPG &c--------" to player
 	
