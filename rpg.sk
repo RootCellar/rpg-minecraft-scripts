@@ -369,6 +369,15 @@ every 1 seconds:
 		time in world of loop-player is not between 19:00 and 5:00
 		ignite the loop-player for 5 seconds
 
+on hunger meter change:
+	player has permission "rpg.herobrine"
+	if {rpgSkript::%player%::filling_hunger} is true:
+		delete {rpgSkript::%player%::filling_hunger}
+		stop trigger
+	else if the player's hunger meter is less than 10:
+		set {rpgSkript::%player%::filling_hunger} to true
+		set the player's hunger meter to 10
+
 on sprint toggle:
 	player has permission "rpg.herobrine"
 	player is not sprinting:
