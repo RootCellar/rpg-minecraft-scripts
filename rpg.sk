@@ -379,7 +379,6 @@ on death of a player:
 		clear drops
 		send "&7Using your dark powers, you vanish!" to the victim
 		play sound "entity.ender_dragon.death" with pitch 0.5 at victim
-		
 
 every 1 seconds:
 	loop all players:
@@ -412,6 +411,12 @@ on sneak toggle:
 		apply invisibility without particles to the player for 600 seconds replacing the existing effect
 	player is sneaking:
 		remove invisibility from the player
+
+on jump:
+	entity is a player
+	player has permission "rpg.herobrine":
+		player is sprinting
+		push the player horizontally forward with force 1.5
 
 # Wizard
 
