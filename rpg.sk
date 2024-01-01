@@ -197,6 +197,9 @@ every 2 seconds:
 
 	loop all players:
 		setMaxHealth(loop-player)
+		loop-player has permission "rpg.herobrine":
+			setupMana(loop-player)
+			regenMana(loop-player)
 		loop-player has permission "rpg.wizard":
 			setupMana(loop-player)
 			regenMana(loop-player)
