@@ -337,6 +337,7 @@ on death of an animal:
 on death of a player:
 	if the victim has permission "rpg.rogue":
 		keep the items
+		clear drops
 		send "&aYou may have died, but they'll never get your items!" to the victim
 
 on sprint toggle:
@@ -375,6 +376,7 @@ on consume:
 on death of a player:
 	if the victim has permission "rpg.herobrine":
 		keep the items and experience
+		clear drops
 		send "&7Using your dark powers, you vanish!" to the victim
 		play sound "entity.ender_dragon.death" with pitch 0.5 at victim
 		
