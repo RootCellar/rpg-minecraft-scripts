@@ -170,7 +170,7 @@ on heal:
 function heal(entity: entity, amount: number) :: boolean:
 	if {_entity} is not alive:
 		return false
-	heal {_entity} by {_number}
+	heal {_entity} by {_amount}
 	return true
 
 on join:
