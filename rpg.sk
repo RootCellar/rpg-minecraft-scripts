@@ -776,6 +776,9 @@ on right click with blaze rod:
 		loop-entity is not the player
 		damage loop-entity by 80
 		add 16 experience to the player
+	loop all blocks in radius 10 around the player's targeted block:
+		loop-block is not bedrock:
+			break loop-block naturally using diamond pickaxe
 	create an explosion with force 38 at the event-player's targeted block
 	add 32 experience to the player
 	show mob spawner flames at (the location 1 block above the player's location)
