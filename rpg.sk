@@ -372,6 +372,13 @@ on consume:
 
 # Herobrine?
 
+on death of a player:
+	if the victim has permission "rpg.herobrine":
+		keep the items and experience
+		send "&7Using your dark powers, you vanish!" to the victim
+		play sound "entity.ender_dragon.death" with pitch 0.5 at victim
+		
+
 every 1 seconds:
 	loop all players:
 		loop-player has permission "rpg.herobrine"
