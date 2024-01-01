@@ -163,6 +163,16 @@ function countEntities(mobs: entities) :: number:
 		set {_x} to {_x} + 1
 	return {_x}
 
+on heal:
+	entity is not alive:
+		cancel the event
+
+function heal(entity: entity, amount: number) :: boolean:
+	if {_entity} is not alive:
+		return false
+	heal {_entity} by {_number}
+	return true
+
 on join:
 	setMaxHealth(the player)
 	set the player's health to the player's health
