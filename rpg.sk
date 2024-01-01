@@ -448,12 +448,17 @@ function setupMana(player: player):
 		set {rpgSkript::%{_player}%::mana} to 0
 	if {rpgSkript::%{_player}%::maxMana} is not set:
 		set {rpgSkript::%{_player}%::maxMana} to 0
-	if isWearingLightOrLess({_player}) is true:
-		set {_newMax} to (level of {_player}) * 12
-	else if isWearingMediumOrLess({_player}) is true:
-		set {_newMax} to (level of {_player}) * 8
-	else:
-		set {_newMax} to (level of {_player}) * 1.5
+
+	set {_newMax} to 0
+	if {_player} has permission "rpg.herobrine":
+		set {_newMax} to (level of {_player}) * 45
+	else if {_player} has permission "rpg.wizard":
+		if isWearingLightOrLess({_player}) is true:
+			set {_newMax} to (level of {_player}) * 12
+		else if isWearingMediumOrLess({_player}) is true:
+			set {_newMax} to (level of {_player}) * 8
+		else:
+			set {_newMax} to (level of {_player}) * 1.5
 
 	if hasImbue({_player}, "Mana Boost") is true:
 		set {_newMax} to {_newMax} + 0.25 * {_newMax} * countImbue({_player}, "Mana Boost")
@@ -476,10 +481,13 @@ function regenMana(player: player):
 		setupMana({_player})
 
 	set {_add} to 0
-	if isWearingLightOrLess({_player}) is true:
-		set {_add} to {rpgSkript::%{_player}%::maxMana} / 40
-	else if isWearingMediumOrLess({_player}) is true:
-		set {_add} to {rpgSkript::%{_player}%::maxMana} / 70
+	if {_player} has permission "rpg.herobrine":
+		set {_add} to {rpgSkript::%{_player}%::maxMana} / 100
+	else if {_player} has permission "rpg.wizard":
+		if isWearingLightOrLess({_player}) is true:
+			set {_add} to {rpgSkript::%{_player}%::maxMana} / 40
+		else if isWearingMediumOrLess({_player}) is true:
+			set {_add} to {rpgSkript::%{_player}%::maxMana} / 70
 	
 	addMana( {_player}, {_add} )
 
