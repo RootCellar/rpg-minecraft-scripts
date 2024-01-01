@@ -773,6 +773,7 @@ on right click with blaze rod:
 	play sound "item.firecharge.use" at event-player
 	loop all entities in radius 50 around (event-player's targeted block):
 		loop-entity is not a dropped item
+		loop-entity is not the player
 		damage loop-entity by 80
 		add 16 experience to the player
 	create an explosion with force 38 at the event-player's targeted block
@@ -791,6 +792,7 @@ on right click with diamond:
 		stop
 	loop all entities in radius 22 around (event-player's targeted block):
 		loop-entity is not a dropped item
+		loop-entity is not the player
 		damage loop-entity by 50
 		add 12 experience to the player
 	create lightning effect at the event-player's targeted block
