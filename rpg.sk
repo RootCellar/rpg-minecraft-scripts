@@ -790,10 +790,10 @@ on right click with blaze rod:
 	send "&dYou shout, and your thunderous words are met with an equally powerful blast of destruction!" to event-player
 	set {_block} to event-player's targeted block
 	play sound "item.firecharge.use" at event-player
-	loop all entities in radius 50 around (event-player's targeted block):
+	loop all entities in radius 50 around {_block}:
 		loop-entity is not a dropped item
 		loop-entity is not the player
-		set {_vec} to the vector between the event-player's targeted block and the loop-entity
+		set {_vec} to the vector between {_block} and the loop-entity
 		set {_vec} to normalized {_vec}
 		push loop-entity {_vec} with force 2
 		damage loop-entity by 80
@@ -801,7 +801,7 @@ on right click with blaze rod:
 	create an explosion with force 0 at {_block}
 	explodeRadius({_block}, 13)
 	wait 5 ticks
-	create an explosion with force 38 at the event-player's targeted block
+	create an explosion with force 38 at {_block}
 	add 32 experience to the player
 	show mob spawner flames at (the location 1 block above the player's location)
 	create a fake explosion at the player
