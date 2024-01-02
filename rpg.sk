@@ -200,6 +200,7 @@ every 2 seconds:
 		loop-player has permission "rpg.herobrine":
 			setupMana(loop-player)
 			regenMana(loop-player)
+			enable flight for loop-player
 		loop-player has permission "rpg.wizard":
 			setupMana(loop-player)
 			regenMana(loop-player)
