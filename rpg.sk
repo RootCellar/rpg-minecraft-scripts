@@ -787,11 +787,16 @@ on right click with blaze rod:
 	loop all entities in radius 50 around (event-player's targeted block):
 		loop-entity is not a dropped item
 		loop-entity is not the player
+		set {_vec} to the vector between the event-player's targeted block and the loop-entity
+		set {_vec} to normalized {_vec}
+		push loop-entity {_vec} with force 2
 		damage loop-entity by 80
 		add 16 experience to the player
+	create an explosion with force 0 at the event-player's targeted block
 	loop all blocks in radius 10 around the player's targeted block:
 		loop-block is not bedrock:
 			break loop-block naturally using diamond pickaxe
+	wait 5 ticks
 	create an explosion with force 38 at the event-player's targeted block
 	add 32 experience to the player
 	show mob spawner flames at (the location 1 block above the player's location)
