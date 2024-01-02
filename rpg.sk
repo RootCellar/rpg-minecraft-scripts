@@ -400,6 +400,8 @@ every 1 seconds:
 		sunlight level at the loop-player is greater than 10
 		time in world of loop-player is not between 19:00 and 5:00
 		ignite the loop-player for 5 seconds
+		send action bar "&4The daylight burns!" to loop-player
+		damage loop-player by 12
 
 on hunger meter change:
 	player has permission "rpg.herobrine"
