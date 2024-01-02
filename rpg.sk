@@ -568,7 +568,7 @@ command /imbue <text>:
 			send "&cYou do not have enough mana to imbue an item with magic!"
 			stop
 		if arg 1 is "health":
-			set {_items::*} to 45 glowstone dust and 20 nether wart
+			set {_items::*} to 64 glowstone dust and 96 nether wart
 			player has {_items::*}:
 				remove {_items::*} from player
 				set line lastLoreLine(player's held item) of (player's held item)'s lore to "&cHealth Boost"
