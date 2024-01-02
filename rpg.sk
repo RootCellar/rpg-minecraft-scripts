@@ -130,6 +130,11 @@ function isWearingMediumOrLess(player: player) :: boolean:
 function isWearingHeavyOrLess(player: player) :: boolean:
 	return true
 
+function explodeRadius(block: block, range: number):
+	loop all blocks in radius {_range} around {_block}:
+		loop-block is not bedrock:
+			break loop-block naturally using diamond pickaxe
+
 command /haslore <text>:
 	executable by: players
 	trigger:
@@ -783,6 +788,7 @@ on right click with blaze rod:
 		send "&cYou do not have enough Mana to cast the devastating blast spell!" to event-player
 		stop
 	send "&dYou shout, and your thunderous words are met with an equally powerful blast of destruction!" to event-player
+	set {_block} to event-player's targeted block
 	play sound "item.firecharge.use" at event-player
 	loop all entities in radius 50 around (event-player's targeted block):
 		loop-entity is not a dropped item
@@ -792,10 +798,8 @@ on right click with blaze rod:
 		push loop-entity {_vec} with force 2
 		damage loop-entity by 80
 		add 16 experience to the player
-	create an explosion with force 0 at the event-player's targeted block
-	loop all blocks in radius 10 around the player's targeted block:
-		loop-block is not bedrock:
-			break loop-block naturally using diamond pickaxe
+	create an explosion with force 0 at {_block}
+	explodeRadius({_block}, 13)
 	wait 5 ticks
 	create an explosion with force 38 at the event-player's targeted block
 	add 32 experience to the player
