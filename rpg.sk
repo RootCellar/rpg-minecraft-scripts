@@ -232,6 +232,16 @@ on damage:
 			set the damage to the damage * 0.3
 			damage cause is fall:
 				cancel the event
+			damage cause is burn:
+				cancel the event
+			damage cause is lava:
+				cancel the event
+			damage cause is hot floor:
+				cancel the event
+			damage cause is drowning:
+				cancel the event
+			damage cause is freeze:
+				cancel the event
 		victim has permission "rpg.warrior":
 			set {_odamage} to the damage
 			set {_newdamage} to {_odamage} * 0.65
