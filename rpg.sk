@@ -730,7 +730,7 @@ command /cast <text>:
 			spawn 1 iron golem at the location 1 meter above command executor's targeted block
 		if arg 1 is "safe":
 			if subMana(command executor, 20) is false:
-				send "&cYou do not have enough Mana to cast the conjure spell!" to command executor
+				send "&cYou do not have enough Mana to cast the magic safe spell!" to command executor
 				stop
 			set {_inv} to chest inventory with 6 rows named "&dSafe"
 			send "&dYou open a rift and reach into a magical safe!" to command executor
