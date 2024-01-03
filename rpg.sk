@@ -208,10 +208,7 @@ every 2 seconds:
 
 	loop all players:
 		setMaxHealth(loop-player)
-		loop-player has permission "rpg.herobrine":
-			setupMana(loop-player)
-			regenMana(loop-player)
-			enable flight for loop-player
+		
 		loop-player has permission "rpg.wizard":
 			setupMana(loop-player)
 			regenMana(loop-player)
@@ -222,6 +219,9 @@ every 2 seconds:
 			apply haste 2 without particles to the loop-player for 30 seconds replacing the existing effect
 			apply strength 2 without particles to the loop-player for 30 seconds replacing the existing effect
 		loop-player has permission "rpg.herobrine":
+			setupMana(loop-player)
+			regenMana(loop-player)
+			enable flight for loop-player
 			heal(loop-player, 2)
 			loop-player's knockback resistance attribute is not 0.9:
 				set loop-player's knockback resistance attribute to 0.9
