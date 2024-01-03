@@ -770,6 +770,22 @@ on right click with gunpowder:
 	add 10 experience to the player
 	show mob spawner flames at (the location 1 block above the player's location)
 
+on right click with nether quartz:
+	player has permission "rpg.wizard"
+	if subMana(event-player, 120) is false:
+		send "&cYou do not have enough Mana to cast the smite spell!" to event-player
+		stop
+	send "&dYou strike monsters with lightning!" to event-player
+	play sound "entity.player.breath" with pitch 0.7 at player
+	loop all entities in radius 12 around (event-player's targeted block):
+		loop-entity is not a dropped item
+		loop-entity is not a player
+		create lightning effect at the loop-entity
+		damage loop-entity by 8
+		add 5 experience to the player
+	add 14 experience to the player
+	show mob spawner flames at (the location 1 block above the player's location)
+
 on right click with magma cream:
 	player has permission "rpg.wizard"
 	if subMana(event-player, 180) is false:
