@@ -728,7 +728,21 @@ command /cast <text>:
 				stop
 			send "&dYou whisper, and an iron golem materializes into existence!" to command executor
 			spawn 1 iron golem at the location 1 meter above command executor's targeted block
-				
+		if arg 1 is "safe":
+			if subMana(command executor, 20) is false:
+				send "&cYou do not have enough Mana to cast the conjure spell!" to command executor
+				stop
+			set {_inv} to chest inventory with 6 rows named "&dSafe"
+			send "&dYou open a rift and reach into a magical safe!" to command executor
+			play sound "entity.enderman.teleport" at command executor
+			loop 6*9 times:
+				set slot (loop-value)-1 of {_inv} to {rpgSkript::%player%::safe::%loop-value%}
+			open {_inv} to player
+
+on inventory close:
+	if event-inventory's name is "&dSafe":
+		loop 6*9 times:
+			set {rpgSkript::%player%::safe::%loop-value%} to slot (loop-value)-1 of event-inventory
 
 on right click with stick:
 	player has permission "rpg.wizard"
