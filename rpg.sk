@@ -772,7 +772,7 @@ on right click with gunpowder:
 
 on right click with nether quartz:
 	player has permission "rpg.wizard"
-	if subMana(event-player, 120) is false:
+	if subMana(event-player, 200) is false:
 		send "&cYou do not have enough Mana to cast the smite spell!" to event-player
 		stop
 	send "&dYou strike monsters with lightning!" to event-player
