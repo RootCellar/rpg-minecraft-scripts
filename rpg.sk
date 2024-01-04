@@ -770,6 +770,19 @@ command /cast <text>:
 			
 every tick:
 	loop {rpgSkript::fireballs::*}:
+		set {_loc} to {rpgSkript::fireballs::%loop-index%::loc}
+		
+		y of (vector of {_loc}) is greater than 300:
+			explodeFireball(loop-index)
+			send "&cCleared fireball" to console
+			rpgLog("Cleared stray fireball")
+			continue
+		y of (vector of {_loc}) is less than -300:
+			explodeFireball(loop-index)
+			send "&cCleared fireball" to console
+			rpgLog("Cleared stray fireball")
+			continue
+			
 		set {_delta} to {rpgSkript::fireballs::%loop-index%::v}
 		set vector length of {_delta} to 0.5
 		set {_distance} to vector length of {rpgSkript::fireballs::%loop-index%::v}
