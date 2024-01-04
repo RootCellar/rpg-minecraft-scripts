@@ -141,6 +141,13 @@ function explodeRadius(block: block, range: number):
 		loop-block is not bedrock:
 			break loop-block naturally using diamond pickaxe
 
+local function drawLine(loc1: location, loc2: location):
+	set {_v} to vector from {_loc1} to {_loc2}
+	set vector length of {_v} to 0.25
+	loop floor((distance between {_loc1} and {_loc2}) / 0.25) times:
+		draw 1 flame at {_loc1} with extra 0
+		set {_loc1} to {_loc1} ~ {_v}
+
 command /haslore <text>:
 	executable by: players
 	trigger:
