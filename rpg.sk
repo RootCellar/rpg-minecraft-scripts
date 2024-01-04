@@ -756,10 +756,10 @@ command /cast <text>:
 			
 			set {_v} to vector from yaw (yaw of command executor) and pitch (pitch of command executor)
 			set {_v} to normalized {_v}
-			set the vector length of {_v} to 1.2
+			set the vector length of {_v} to 4
 			
 			set {_first} to {_v}
-			set vector length of {_first} to 3
+			set vector length of {_first} to 4
 			
 			set {_loc} to ( {_loc} ~ {_first} )
 			
@@ -770,23 +770,33 @@ command /cast <text>:
 			
 every tick:
 	loop {rpgSkript::fireballs::*}:
-		show large smoke at ({rpgSkript::fireballs::%loop-index%::loc})
-		#broadcast "%{rpgSkript::fireballs::%loop-index%::loc}%"
-		set {rpgSkript::fireballs::%loop-index%::loc} to ({rpgSkript::fireballs::%loop-index%::loc} ~ {rpgSkript::fireballs::%loop-index%::v})
-		set {_loc} to {rpgSkript::fireballs::%loop-index%::loc}
-		#broadcast "%{rpgSkript::fireballs::%loop-index%::loc}%"
-		show mob spawner flames at {_loc}
-		loop blocks in radius 1.5 around {_loc}:
-			show mob spawner flames at loop-block
-			loop-block is solid:
-				explodeFireball(loop-index)
-		loop all entities in radius 2 around {_loc}:
-			loop-entity is not a dropped item:
-				explodeFireball(loop-index)
+		set {_delta} to {rpgSkript::fireballs::%loop-index%::v}
+		set vector length of {_delta} to 0.5
+		set {_distance} to vector length of {rpgSkript::fireballs::%loop-index%::v}
+		while {_distance} > 0.5:
+			moveFireball(loop-index, {_delta})
+			set {_distance} to {_distance} - 0.5
+		set vector length of {_delta} to {_distance}
+		moveFireball(loop-index, {_delta})
+
+function moveFireball(index: string, v: vector):
+	show large smoke at ({rpgSkript::fireballs::%{_index}%::loc})
+	#broadcast "%{rpgSkript::fireballs::%{_index}%::loc}%"
+	set {rpgSkript::fireballs::%{_index}%::loc} to ({rpgSkript::fireballs::%{_index}%::loc} ~ {_v})
+	set {_loc} to {rpgSkript::fireballs::%{_index}%::loc}
+	#broadcast "%{rpgSkript::fireballs::%{_index}%::loc}%"
+	show mob spawner flames at {_loc}
+	loop blocks in radius 1.5 around {_loc}:
+		#show mob spawner flames at loop-block
+		loop-block is solid:
+			explodeFireball({_index})
+	loop all entities in radius 2 around {_loc}:
+		loop-entity is not a dropped item:
+			explodeFireball({_index})
 
 function explodeFireball(index: string):
 	set {_loc} to {rpgSkript::fireballs::%{_index}%::loc}
-	loop blocks in radius 4 around {_loc}:
+	loop blocks in radius 2.5 around {_loc}:
 		loop-block is air:
 			show mob spawner flames at loop-block
 	delete {rpgSkript::fireballs::%{_index}%}
