@@ -795,6 +795,8 @@ function moveFireball(index: string, v: vector):
 			explodeFireball({_index})
 
 function explodeFireball(index: string):
+	if {rpgSkript::fireballs::%{_index}%} is not set:
+		exit
 	set {_loc} to {rpgSkript::fireballs::%{_index}%::loc}
 	loop blocks in radius 2.5 around {_loc}:
 		loop-block is air:
