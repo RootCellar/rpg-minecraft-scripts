@@ -780,6 +780,8 @@ every tick:
 		moveFireball(loop-index, {_delta})
 
 function moveFireball(index: string, v: vector):
+	if {rpgSkript::fireballs::%{_index}%} is not set:
+		exit
 	show large smoke at ({rpgSkript::fireballs::%{_index}%::loc})
 	#broadcast "%{rpgSkript::fireballs::%{_index}%::loc}%"
 	set {rpgSkript::fireballs::%{_index}%::loc} to ({rpgSkript::fireballs::%{_index}%::loc} ~ {_v})
