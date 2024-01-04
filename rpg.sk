@@ -767,7 +767,16 @@ command /cast <text>:
 			set {rpgSkript::fireballs::%{_x}%::v} to {_v}
 			set {rpgSkript::fireballs::%{_x}%} to 1
 			play sound "item.firecharge.use" at command executor
-			
+
+command /fireballs:
+	executable by: players
+	trigger:
+		player has permission "rpg.control":
+			set {_x} to 0
+			loop {rpgSkript::fireballs::*}:
+				set {_x} to {_x} + 1
+			send "&cFireballs: %{_x}%" to command executor
+
 every tick:
 	loop {rpgSkript::fireballs::*}:
 		set {_loc} to {rpgSkript::fireballs::%loop-index%::loc}
