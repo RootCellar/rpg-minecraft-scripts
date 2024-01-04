@@ -798,6 +798,7 @@ function explodeFireball(index: string):
 	if {rpgSkript::fireballs::%{_index}%} is not set:
 		exit
 	set {_loc} to {rpgSkript::fireballs::%{_index}%::loc}
+	explodeRadius(block at {_loc}, 1.5)
 	loop blocks in radius 2.5 around {_loc}:
 		loop-block is air:
 			show mob spawner flames at loop-block
