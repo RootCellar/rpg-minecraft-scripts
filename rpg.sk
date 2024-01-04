@@ -805,7 +805,7 @@ function explodeFireball(index: string):
 	loop all entities in radius 8 around ({_loc}):
 		loop-entity is not a dropped item
 		damage loop-entity by 20
-	create an explosion with force 6 at {_loc}
+	create an explosion with force 3 at {_loc}
 
 on inventory close:
 	if event-inventory's name is "&dSafe":
