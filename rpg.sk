@@ -6,6 +6,9 @@ on script load:
 on script unload:
 	broadcast "&c[&eRPG Skript&c] &3Unloading script..."
 
+	loop {rpgSkript::fireballs::*}:
+		delete {rpgSkript::fireballs::%loop-index%}
+
 on join:
 	wait 3 seconds
 	send "&c-------- &eMinecraft RPG &c--------" to player
