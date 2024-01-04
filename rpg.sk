@@ -776,9 +776,8 @@ command /cast <text>:
 			play sound "item.firecharge.use" at command executor
 
 command /fireballs:
-	executable by: players
 	trigger:
-		player has permission "rpg.control":
+		command executor has permission "rpg.control":
 			set {_x} to 0
 			loop {rpgSkript::fireballs::*}:
 				set {_x} to {_x} + 1
