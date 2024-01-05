@@ -777,6 +777,7 @@ command /cast <text>:
 			set {rpgSkript::fireballs::%{_x}%::v} to {_v}
 			set {rpgSkript::fireballs::%{_x}%} to 1
 			play sound "item.firecharge.use" at command executor
+			send "&dYou unleash a sphere of fiery destruction!" to command executor
 
 command /fireballs:
 	trigger:
@@ -819,6 +820,8 @@ function moveFireball(index: string, v: vector):
 	show mob spawner flames at {_loc}
 	loop blocks in radius 1.5 around {_loc}:
 		#show mob spawner flames at loop-block
+		loop-block is water:
+			delete {rpgSkript::fireballs::%{_index}%}
 		loop-block is solid:
 			explodeFireball({_index})
 	loop all entities in radius 2 around {_loc}:
