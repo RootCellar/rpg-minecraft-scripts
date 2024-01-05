@@ -996,9 +996,9 @@ on right click with amethyst shard:
 	set yaw of {_loc} to yaw of event-player
 
 	set {_canTp} to true
-	if block at {_loc} is not air:
+	if block at {_loc} is solid:
 		set {_canTp} to false
-	if block 1 meter above {_loc} is not air:
+	if block 1 meter above {_loc} is solid:
 		set {_canTp} to false
 	if {_canTp} is false:
 		send "&cCannot blink there!" to event-player
