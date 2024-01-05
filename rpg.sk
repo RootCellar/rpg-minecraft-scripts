@@ -818,7 +818,7 @@ function moveFireball(index: string, v: vector):
 	set {_loc} to {rpgSkript::fireballs::%{_index}%::loc}
 	#broadcast "%{rpgSkript::fireballs::%{_index}%::loc}%"
 	show mob spawner flames at {_loc}
-	loop blocks in radius 1.5 around {_loc}:
+	loop blocks in radius 1 around {_loc}:
 		#show mob spawner flames at loop-block
 		loop-block is water:
 			delete {rpgSkript::fireballs::%{_index}%}
