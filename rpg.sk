@@ -1140,10 +1140,9 @@ on inventory click:
 	cancel event
 	
 	if index of event-slot is 4:
-		#send "You clicked the button."
 		if hasResearch(player, "power") is true:
 			deleteResearch(player, "power")
 		else:
 			addResearch(player, "power")
 
-		populateWizardResearchMenu(player, event-inventory)
+	populateWizardResearchMenu(player, event-inventory)
