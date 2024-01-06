@@ -778,6 +778,7 @@ command /cast <text>:
 			
 			set {rpgSkript::fireballs::%{_x}%::loc} to {_loc}
 			set {rpgSkript::fireballs::%{_x}%::v} to {_v}
+			set {rpgSkript::fireballs::%{_x}%::time} to now
 			set {rpgSkript::fireballs::%{_x}%} to 1
 			play sound "item.firecharge.use" at command executor
 			send "&dYou unleash a sphere of fiery destruction!" to command executor
@@ -793,6 +794,9 @@ command /fireballs:
 every tick:
 	loop {rpgSkript::fireballs::*}:
 		set {_loc} to {rpgSkript::fireballs::%loop-index%::loc}
+
+		if difference between {rpgSkript::fireballs::%loop-index%::time} and now is greater than 10 seconds:
+			delete {rpgSkript::fireballs::%loop-index%}
 		
 		y of (vector of {_loc}) is greater than 300:
 			explodeFireball(loop-index)
