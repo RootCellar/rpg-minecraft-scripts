@@ -391,6 +391,9 @@ on sneak toggle:
 		isWearingLightOrLess(player) is true
 		light level at the player is less than 11
 		apply invisibility without particles to the player for 600 seconds replacing the existing effect
+		loop all monsters in radius 40 of player:
+			target of loop-monster is player:
+				reset target of loop-monster
 	player is sneaking:
 		remove invisibility from the player
 
