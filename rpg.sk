@@ -491,9 +491,9 @@ function setupMana(player: player):
 		set {_newMax} to (level of {_player}) * 45
 	else if {_player} has permission "rpg.wizard":
 		if isWearingLightOrLess({_player}) is true:
-			set {_newMax} to (level of {_player}) * 12
+			set {_newMax} to (level of {_player}) * 9
 		else if isWearingMediumOrLess({_player}) is true:
-			set {_newMax} to (level of {_player}) * 8
+			set {_newMax} to (level of {_player}) * 7
 		else:
 			set {_newMax} to (level of {_player}) * 1.5
 
