@@ -1012,7 +1012,7 @@ on right click with amethyst shard:
 		send "&cCannot blink there!" to event-player
 		stop
 		
-	if subMana(event-player, 35) is false:
+	if subMana(event-player, 80) is false:
 		send "&cYou do not have enough Mana to cast the blink spell!" to event-player
 		stop
 	send "&dYou blink to your target location!" to event-player
