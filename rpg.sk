@@ -60,7 +60,7 @@ function setMaxHealth(player: player):
 		set {_newMax} to 10
 
 	if hasImbue({_player}, "Health Boost") is true:
-		set {_newMax} to ({_newMax} + 2 * countImbue({_player}, "Health Boost"))
+		set {_newMax} to ({_newMax} + {_newMax} * 0.15 * countImbue({_player}, "Health Boost"))
 
 	if {_player}'s maximum health is not {_newMax}:
 		set {_player}'s maximum health to {_newMax}
