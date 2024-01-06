@@ -883,6 +883,7 @@ on right click with nether quartz:
 	loop all entities in radius 12 around (event-player's targeted block):
 		loop-entity is not a dropped item
 		loop-entity is not a player
+		loop-entity is a monster
 		loop-entity's health is greater than 0
 		create lightning effect at the loop-entity
 		damage loop-entity by 8
