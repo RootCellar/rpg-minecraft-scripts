@@ -50,12 +50,12 @@ function rpgLog(message: text):
 
 function setMaxHealth(player: player):
 	set {_newMax} to 10
-	{_player} has permission "rpg.warrior":
+	if {_player} has permission "rpg.herobrine":
+		set {_newMax} to 40
+	else if {_player} has permission "rpg.warrior":
 		set {_newMax} to 20
 	else if {_player} has permission "rpg.wizard":
 		set {_newMax} to 8
-	else if {_player} has permission "rpg.herobrine":
-		set {_newMax} to 40
 	else:
 		set {_newMax} to 10
 
