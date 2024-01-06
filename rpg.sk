@@ -139,6 +139,22 @@ function isWearingMediumOrLess(player: player) :: boolean:
 function isWearingHeavyOrLess(player: player) :: boolean:
 	return true
 
+function addResearch(player: player, name: string, level: number=1):
+	set {rpgSkript::%{_player}%::research::%{_name}%} to {_level}
+
+function deleteResearch(player: player, name: string):
+	delete {rpgSkript::%{_player}%::research::%{_name}%}
+
+function hasResearch(player: player, name: string) :: boolean:
+	if {rpgSkript::%{_player}%::research::%{_name}%} is set:
+		return true
+	return false
+
+function getResearchLevel(player: player, name: string) :: number:
+	if {rpgSkript::%{_player}%::research::%{_name}%} is set:
+		return 0
+	return {rpgSkript::%{_player}%::research::%{_name}%}
+
 function explodeRadius(block: block, range: number):
 	loop all blocks in radius {_range} around {_block}:
 		loop-block is not bedrock:
@@ -1100,3 +1116,34 @@ on right click with wheat:
 			set loop-block's age to 1
 			drop 3 sweet berry at {_loc}
 			wait 2 ticks
+
+command /wizardresearch:
+	executable by: players
+	trigger:
+		player doesn't have permission "rpg.wizard":
+			send "&dYou are not a wizard!"
+			exit
+		set {_menu} to a new chest inventory with 6 rows named "&dWizard Research"
+		
+		set {_item} to red wool named "&7PvP"
+		if hasResearch(player, "power") is true:
+			set {_item} to lime wool named "&cPvP"
+		set slot 4 of {_menu} to {_item}
+		
+		open {_menu} to player
+
+on inventory click:
+	name of event-inventory is "&dWizard Research"
+	cancel event
+	
+	if index of event-slot is 4:
+		#send "You clicked the button."
+		if hasResearch(player, "power") is true:
+			deleteResearch(player, "power")
+		else:
+			addResearch(player, "power")
+
+		set {_item} to red wool named "&7PvP"
+		if hasResearch(player, "power") is true:
+			set {_item} to lime wool named "&cPvP"
+		set slot 4 of event-inventory to {_item}
