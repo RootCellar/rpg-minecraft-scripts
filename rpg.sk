@@ -238,6 +238,8 @@ every 2 seconds:
 		loop-player has permission "rpg.wizard":
 			setupMana(loop-player)
 			regenMana(loop-player)
+			if hasResearch(loop-player, "power") is true:
+				add 1 experience to loop-player
 		loop-player has permission "rpg.warrior":
 			heal(loop-player, 1)
 			loop-player's knockback resistance attribute is not 0.7:
@@ -1130,16 +1132,17 @@ command /wizardresearch:
 		open {_menu} to player
 
 function populateWizardResearchMenu(player: player, menu: inventory):
-	set {_item} to red wool named "&7PvP"
+	set {_item} to red wool named "&7Constant Study"
 	if hasResearch({_player}, "power") is true:
-		set {_item} to lime wool named "&cPvP"
-	set slot 4 of {_menu} to {_item}
+		set {_item} to lime wool named "&eConstant Study"
+	set line 1 of {_item}'s lore to "&6Gain 1 experience every 2 seconds"
+	set slot 31 of {_menu} to {_item}
 
 on inventory click:
 	name of event-inventory is "&dWizard Research"
 	cancel event
 	
-	if index of event-slot is 4:
+	if index of event-slot is 31:
 		if hasResearch(player, "power") is true:
 			deleteResearch(player, "power")
 		else:
