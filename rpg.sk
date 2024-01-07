@@ -321,6 +321,37 @@ on item damage:
 
 # Warrior
 
+command /warriorresearch:
+	executable by: players
+	trigger:
+		player doesn't have permission "rpg.warrior":
+			send "&dYou are not a warrior!"
+			exit
+		set {_menu} to a new chest inventory with 6 rows named "&cWarrior Research"
+		
+		populateWarriorResearchMenu(player, {_menu})
+		
+		open {_menu} to player
+
+function populateWarriorResearchMenu(player: player, menu: inventory):
+	set {_item} to red wool named "&7Durable"
+	if hasResearch({_player}, "durable") is true:
+		set {_item} to lime wool named "&eDurable"
+	set line 1 of {_item}'s lore to "&6Maximum Health is increased by 30%%"
+	set slot 31 of {_menu} to {_item}
+
+on inventory click:
+	name of event-inventory is "&cWarrior Research"
+	cancel event
+	
+	if index of event-slot is 31:
+		if hasResearch(player, "durable") is true:
+			deleteResearch(player, "durable")
+		else:
+			addResearch(player, "durable")
+
+	populateWarriorResearchMenu(player, event-inventory)
+
 on right click:
 	player has permission "rpg.warrior"
 
