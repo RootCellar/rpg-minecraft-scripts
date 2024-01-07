@@ -402,6 +402,37 @@ on right click:
 
 # Rogue
 
+command /rogueresearch:
+	executable by: players
+	trigger:
+		player doesn't have permission "rpg.rogue":
+			send "&dYou are not a rogue!"
+			exit
+		set {_menu} to a new chest inventory with 6 rows named "&aRogue Research"
+		
+		populateRogueResearchMenu(player, {_menu})
+		
+		open {_menu} to player
+
+function populateRogueResearchMenu(player: player, menu: inventory):
+	set {_item} to red wool named "&7Fit"
+	if hasResearch({_player}, "fit") is true:
+		set {_item} to lime wool named "&eFit"
+	set line 1 of {_item}'s lore to "&6You may now wear Medium armor"
+	set slot 31 of {_menu} to {_item}
+
+on inventory click:
+	name of event-inventory is "&aRogue Research"
+	cancel event
+	
+	if index of event-slot is 31:
+		if hasResearch(player, "fit") is true:
+			deleteResearch(player, "fit")
+		else:
+			addResearch(player, "fit")
+
+	populateRogueResearchMenu(player, event-inventory)
+
 on death of a monster:
 	attacker is a player
 	attacker has permission "rpg.rogue"
