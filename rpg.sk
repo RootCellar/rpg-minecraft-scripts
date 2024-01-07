@@ -411,6 +411,8 @@ on craft:
 			enchant the cursor slot of player with efficiency 1
 		event-item is any shovel:
 			enchant the cursor slot of player with unbreaking 1
+		event-item is any hoe:
+			enchant the cursor slot of player with unbreaking 1
 		event-item is any armor:
 			enchant the cursor slot of player with protection 1
 	
