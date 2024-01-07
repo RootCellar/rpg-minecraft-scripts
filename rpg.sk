@@ -345,7 +345,7 @@ function populateWarriorResearchMenu(player: player, menu: inventory):
 	set {_item} to red wool named "&7Tree Feller"
 	if hasResearch({_player}, "tree_feller") is true:
 		set {_item} to lime wool named "&eTree Feller"
-	set line 1 of {_item}'s lore to "&6You cut down trees instantly"
+	set line 1 of {_item}'s lore to "&6You cut trees down instantly"
 	set slot 32 of {_menu} to {_item}
 
 on inventory click:
