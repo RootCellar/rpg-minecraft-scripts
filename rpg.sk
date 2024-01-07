@@ -55,7 +55,7 @@ function setMaxHealth(player: player):
 	else if {_player} has permission "rpg.warrior":
 		set {_newMax} to 20
 		if hasResearch({_player}, "durable") is true:
-			set {_newMax} to {_newMax} * 1.3
+			set {_newMax} to {_newMax} * 1.25
 	else if {_player} has permission "rpg.wizard":
 		set {_newMax} to 8
 	else:
@@ -339,7 +339,7 @@ function populateWarriorResearchMenu(player: player, menu: inventory):
 	set {_item} to red wool named "&7Durable"
 	if hasResearch({_player}, "durable") is true:
 		set {_item} to lime wool named "&eDurable"
-	set line 1 of {_item}'s lore to "&6Maximum Health is increased by 30%%"
+	set line 1 of {_item}'s lore to "&6Maximum Health is increased by 25%%"
 	set slot 31 of {_menu} to {_item}
 
 	set {_item} to red wool named "&7Tree Feller"
