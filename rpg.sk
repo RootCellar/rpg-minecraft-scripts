@@ -336,6 +336,12 @@ command /warriorresearch:
 		open {_menu} to player
 
 function populateWarriorResearchMenu(player: player, menu: inventory):
+	set {_item} to red wool named "&7Master Smith"
+	if hasResearch({_player}, "master_smith") is true:
+		set {_item} to lime wool named "&eMaster Smith"
+	set line 1 of {_item}'s lore to "&6Tools and Armor that you craft are enchanted"
+	set slot 30 of {_menu} to {_item}
+
 	set {_item} to red wool named "&7Durable"
 	if hasResearch({_player}, "durable") is true:
 		set {_item} to lime wool named "&eDurable"
@@ -351,7 +357,12 @@ function populateWarriorResearchMenu(player: player, menu: inventory):
 on inventory click:
 	name of event-inventory is "&cWarrior Research"
 	cancel event
-	
+
+	if index of event-slot is 30:
+		if hasResearch(player, "master_smith") is true:
+			deleteResearch(player, "master_smith")
+		else:
+			addResearch(player, "master_smith")
 	if index of event-slot is 31:
 		if hasResearch(player, "durable") is true:
 			deleteResearch(player, "durable")
@@ -387,6 +398,21 @@ function fellTree(block: block, depth: number=1):
 	if {_recurse} is true:
 		loop blocks in radius 2 of {_block}:
 			fellTree(loop-block, {_depth} + 1)
+
+on craft:
+	player has permission "rpg.warrior"
+	if hasResearch(player, "master_smith") is true:
+		wait 1 tick
+		event-item is any sword:
+			enchant the cursor slot of player with sharpness 1
+		event-item is any pickaxe:
+			enchant the cursor slot of player with efficiency 1
+		event-item is any axe:
+			enchant the cursor slot of player with efficiency 1
+		event-item is any shovel:
+			enchant the cursor slot of player with unbreaking 1
+		event-item is any armor:
+			enchant the cursor slot of player with protection 1
 	
 
 on right click:
