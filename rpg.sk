@@ -153,7 +153,7 @@ function hasResearch(player: player, name: string) :: boolean:
 	return false
 
 function getResearchLevel(player: player, name: string) :: number:
-	if {rpgSkript::%{_player}%::research::%{_name}%} is set:
+	if {rpgSkript::%{_player}%::research::%{_name}%} is not set:
 		return 0
 	return {rpgSkript::%{_player}%::research::%{_name}%}
 
