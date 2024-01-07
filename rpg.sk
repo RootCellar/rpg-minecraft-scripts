@@ -54,6 +54,8 @@ function setMaxHealth(player: player):
 		set {_newMax} to 40
 	else if {_player} has permission "rpg.warrior":
 		set {_newMax} to 20
+		if hasResearch({_player}, "durable") is true:
+			set {_newMax} to {_newMax} * 1.3
 	else if {_player} has permission "rpg.wizard":
 		set {_newMax} to 8
 	else:
