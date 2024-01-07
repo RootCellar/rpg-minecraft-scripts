@@ -342,6 +342,12 @@ function populateWarriorResearchMenu(player: player, menu: inventory):
 	set line 1 of {_item}'s lore to "&6Maximum Health is increased by 30%%"
 	set slot 31 of {_menu} to {_item}
 
+	set {_item} to red wool named "&7Tree Feller"
+	if hasResearch({_player}, "tree_feller") is true:
+		set {_item} to lime wool named "&eTree Feller"
+	set line 1 of {_item}'s lore to "&6You cut down trees instantly"
+	set slot 32 of {_menu} to {_item}
+
 on inventory click:
 	name of event-inventory is "&cWarrior Research"
 	cancel event
@@ -351,8 +357,37 @@ on inventory click:
 			deleteResearch(player, "durable")
 		else:
 			addResearch(player, "durable")
+	if index of event-slot is 32:
+		if hasResearch(player, "tree_feller") is true:
+			deleteResearch(player, "tree_feller")
+		else:
+			addResearch(player, "tree_feller")
 
 	populateWarriorResearchMenu(player, event-inventory)
+
+on mine of any log:
+	player has permission "rpg.warrior"
+	player's tool is an axe
+	if hasResearch(player, "tree_feller") is true:
+		cancel the event
+		fellTree(event-block)
+
+function fellTree(block: block, depth: number=1):
+	if {_depth} is greater than 300:
+		exit
+	if {_block} is not any log or any leaves:
+		exit
+
+	set {_recurse} to false
+	{_block} is any log:
+		set {_recurse} to true
+		
+	break {_block} naturally using a diamond axe
+		
+	if {_recurse} is true:
+		loop blocks in radius 2 of {_block}:
+			fellTree(loop-block, {_depth} + 1)
+	
 
 on right click:
 	player has permission "rpg.warrior"
