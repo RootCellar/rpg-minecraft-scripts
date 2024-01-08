@@ -261,7 +261,7 @@ every 2 seconds:
 on damage:
 	attacker is a player:
 		attacker has permission "rpg.rogue":
-			isWearingLightOrLess(attacker) is true
+			canUseRogueAbilities(attacker) is true
 			set the damage to the damage * 2.0
 		attacker has permission "rpg.herobrine":
 			set the damage to the damage * 3.0
@@ -289,7 +289,7 @@ on damage:
 			set the damage to {_newdamage}
 			apply slowness 1 to victim for 4 seconds replacing the existing effect
 		victim has permission "rpg.rogue":
-			isWearingLightOrLess(victim) is true
+			canUseRogueAbilities(victim) is true
 			damage cause is fall:
 				set the damage to the damage * 0.3
 			chance of 45%:
@@ -302,7 +302,7 @@ on target:
 	target has permission "rpg.herobrine":
 		cancel the event
 	target has permission "rpg.rogue":
-		isWearingLightOrLess(target) is true
+		canUseRogueAbilities(target) is true
 		distance between event-entity and target is greater than 10:
 			cancel the event
 			stop
@@ -533,7 +533,7 @@ on death of a player:
 on sprint toggle:
 	player has permission "rpg.rogue"
 	player is not sprinting:
-		isWearingLightOrLess(player) is true
+		canUseRogueAbilities(player) is true
 		apply swiftness 2 without particles to the player for 600 seconds replacing the existing effect
 		apply jump boost 2 without particles to the player for 600 seconds replacing the existing effect
 	player is sprinting:
@@ -543,7 +543,7 @@ on sprint toggle:
 on sneak toggle:
 	player has permission "rpg.rogue"
 	player is not sneaking:
-		isWearingLightOrLess(player) is true
+		canUseRogueAbilities(player) is true
 		light level at the player is less than 11
 		apply invisibility without particles to the player for 600 seconds replacing the existing effect
 		loop all monsters in radius 40 of player:
