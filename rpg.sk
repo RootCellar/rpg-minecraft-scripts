@@ -780,7 +780,7 @@ command /cast <text>:
 			set {rpgSkript::fireballs::%{_x}%::v} to {_v}
 			set {rpgSkript::fireballs::%{_x}%::time} to now
 			set {rpgSkript::fireballs::%{_x}%} to 1
-			play sound "item.firecharge.use" at command executor
+			play sound "item.firecharge.use" with pitch 0.7 at command executor
 			send "&dYou unleash a sphere of fiery destruction!" to command executor
 
 command /fireballs:
