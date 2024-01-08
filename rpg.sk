@@ -556,7 +556,8 @@ on jump:
 	entity is a player
 	player has permission "rpg.rogue":
 		player is sprinting
-		push the player horizontally forward with force 0.7
+		if canUseRogueAbilities(player) is true:
+			push the player horizontally forward with force 0.7
 
 on hunger meter change:
 	player has permission "rpg.rogue"
