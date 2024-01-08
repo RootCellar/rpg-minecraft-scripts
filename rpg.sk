@@ -1008,7 +1008,7 @@ function explodeFireball(index: string):
 	delete {rpgSkript::fireballs::%{_index}%}
 	loop all entities in radius 8 around ({_loc}):
 		loop-entity is not a dropped item
-		damage loop-entity by 20
+		damage loop-entity by 60
 	create an explosion with force 3 at {_loc}
 
 on inventory close:
@@ -1036,7 +1036,7 @@ on right click with gunpowder:
 	play sound "item.firecharge.use" at event-player
 	loop all entities in radius 8 around (event-player's targeted block):
 		loop-entity is not a dropped item
-		damage loop-entity by 28
+		damage loop-entity by 24
 		add 4 experience to the player
 	create an explosion with force 5 at the event-player's targeted block
 	add 10 experience to the player
@@ -1110,7 +1110,7 @@ on right click with blaze rod:
 		set {_vec} to the vector between {_block} and the loop-entity
 		set {_vec} to normalized {_vec}
 		push loop-entity {_vec} with force 2
-		damage loop-entity by 80
+		damage loop-entity by 200
 		add 16 experience to the player
 	create an explosion with force 0 at {_block}
 	explodeRadius({_block}, 13)
@@ -1132,7 +1132,7 @@ on right click with diamond:
 	loop all entities in radius 22 around (event-player's targeted block):
 		loop-entity is not a dropped item
 		loop-entity is not the player
-		damage loop-entity by 50
+		damage loop-entity by 90
 		add 12 experience to the player
 	create lightning effect at the event-player's targeted block
 	create an explosion with force 12 at the event-player's targeted block
