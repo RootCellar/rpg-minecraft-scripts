@@ -808,11 +808,11 @@ every tick:
 			continue
 			
 		set {_delta} to {rpgSkript::fireballs::%loop-index%::v}
-		set vector length of {_delta} to 0.5
+		set vector length of {_delta} to 0.25
 		set {_distance} to vector length of {rpgSkript::fireballs::%loop-index%::v}
-		while {_distance} > 0.5:
+		while {_distance} > 0.25:
 			moveFireball(loop-index, {_delta})
-			set {_distance} to {_distance} - 0.5
+			set {_distance} to {_distance} - 0.25
 		set vector length of {_delta} to {_distance}
 		moveFireball(loop-index, {_delta})
 
