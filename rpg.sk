@@ -397,6 +397,12 @@ on sneak toggle:
 	player is sneaking:
 		remove invisibility from the player
 
+on jump:
+	entity is a player
+	player has permission "rpg.rogue":
+		player is sprinting
+		push the player horizontally forward with force 0.7
+
 on hunger meter change:
 	player has permission "rpg.rogue"
 	if {rpgSkript::%player%::eating} is true:
