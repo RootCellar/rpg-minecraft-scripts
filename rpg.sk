@@ -465,6 +465,16 @@ on right click:
 
 # Rogue
 
+function canUseRogueAbilities(player: player) :: boolean:
+	if hasResearch({_player}, "fit") is true:
+		if isWearingMediumOrLess({_player}) is true:
+			return true
+		return false
+	else:
+		if isWearingLightOrLess({_player}) is true:
+			return true
+		return false
+
 command /rogueresearch:
 	executable by: players
 	trigger:
