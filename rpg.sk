@@ -941,6 +941,7 @@ command /cast <text>:
 			set {rpgSkript::fireballs::%{_x}%::loc} to {_loc}
 			set {rpgSkript::fireballs::%{_x}%::v} to {_v}
 			set {rpgSkript::fireballs::%{_x}%::time} to now
+			set {rpgSkript::fireballs::%{_x}%::caster} to player
 			set {rpgSkript::fireballs::%{_x}%} to 1
 			play sound "item.firecharge.use" with pitch 0.7 at command executor
 			send "&dYou unleash a sphere of fiery destruction!" to command executor
@@ -1010,6 +1011,8 @@ function explodeFireball(index: string):
 		loop-entity is not a dropped item
 		damage loop-entity by 60
 	create an explosion with force 3 at {_loc}
+	if {rpgSkript::fireballs::%{_index}%::caster} is set:
+		add 5 experience to {rpgSkript::fireballs::%{_index}%::caster}
 
 on inventory close:
 	if event-inventory's name is "&dSafe":
