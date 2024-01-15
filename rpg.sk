@@ -9,6 +9,9 @@ on script unload:
 	loop {rpgSkript::fireballs::*}:
 		delete {rpgSkript::fireballs::%loop-index%}
 
+	loop {rpgSkript::cryoballs::*}:
+		delete {rpgSkript::cryoballs::%loop-index%}
+
 on join:
 	wait 3 seconds
 	send "&c-------- &eMinecraft RPG &c--------" to player
@@ -1014,6 +1017,70 @@ function explodeFireball(index: string):
 	if {rpgSkript::fireballs::%{_index}%::caster} is set:
 		add 5 experience to {rpgSkript::fireballs::%{_index}%::caster}
 
+every tick:
+	loop {rpgSkript::cryoballs::*}:
+		set {_loc} to {rpgSkript::cryoballs::%loop-index%::loc}
+
+		if difference between {rpgSkript::cryoballs::%loop-index%::time} and now is greater than 10 seconds:
+			delete {rpgSkript::cryoballs::%loop-index%}
+		
+		y of (vector of {_loc}) is greater than 300:
+			explodeCryoball(loop-index)
+			rpgLog("Cleared stray cryoball")
+			continue
+		y of (vector of {_loc}) is less than -300:
+			explodeCryoball(loop-index)
+			rpgLog("Cleared stray cryoball")
+			continue
+			
+		set {_delta} to {rpgSkript::cryoballs::%loop-index%::v}
+		set vector length of {_delta} to 0.25
+		set {_distance} to vector length of {rpgSkript::cryoballs::%loop-index%::v}
+		while {_distance} > 0.25:
+			moveCryoball(loop-index, {_delta})
+			set {_distance} to {_distance} - 0.25
+		set vector length of {_delta} to {_distance}
+		moveCryoball(loop-index, {_delta})
+
+function moveCryoball(index: string, v: vector):
+	if {rpgSkript::cryoballs::%{_index}%} is not set:
+		exit
+	set {rpgSkript::cryoballs::%{_index}%::loc} to ({rpgSkript::cryoballs::%{_index}%::loc} ~ {_v})
+	set {_loc} to {rpgSkript::cryoballs::%{_index}%::loc}
+	show water splash at {_loc}
+	loop blocks in radius 1 around {_loc}:
+		show cloud at loop-block
+		show water splash at {_loc}
+		loop-block is water:
+			explodeCryoball({_index})
+		loop-block is lava:
+			explodeCryoball({_index})
+		loop-block is solid:
+			explodeCryoball({_index})
+	loop all entities in radius 2 around {_loc}:
+		loop-entity is not a dropped item:
+			explodeCryoball({_index})
+
+function explodeCryoball(index: string):
+	if {rpgSkript::cryoballs::%{_index}%} is not set:
+		exit
+	set {_loc} to {rpgSkript::cryoballs::%{_index}%::loc}
+	playSoundToPlayers({_loc}, "entity.firework_rocket.blast", 50, 0.7)
+	loop blocks in radius 4 around {_loc}:
+		loop-block is air:
+			show cloud at loop-block
+		loop-block is water:
+			set loop-block to ice
+		loop-block is lava:
+			set loop-block to cobblestone
+	delete {rpgSkript::cryoballs::%{_index}%}
+	loop all entities in radius 14 around ({_loc}):
+		loop-entity is not a dropped item
+		damage loop-entity by 3
+		apply slowness 3 to loop-entity for 8 seconds replacing the existing effect
+	if {rpgSkript::cryoballs::%{_index}%::caster} is set:
+		add 3 experience to {rpgSkript::cryoballs::%{_index}%::caster}
+
 on inventory close:
 	if event-inventory's name is "&dSafe":
 		loop 6*9 times:
@@ -1290,3 +1357,35 @@ on inventory click:
 			addResearch(player, "power")
 
 	populateWizardResearchMenu(player, event-inventory)
+on right click with lapis lazuli:
+	if subMana(command executor, 80) is false:
+		send "&cYou do not have enough Mana to cast the cryoball spell!" to command executor
+		stop
+		
+	set {_c} to 1
+	while {_x} is not set:
+		if {rpgSkript::cryoballs::%{_c}%} is not set:
+			set {_x} to {_c}
+			set {rpgSkript::cryoballs::%{_x}%} to "cryoball"
+		else:
+			set {_c} to {_c} + 1
+			
+	set {_loc} to the command executor's location
+	set {_loc} to the location 1.6 meters above {_loc}
+	
+	set {_v} to vector from yaw (yaw of command executor) and pitch (pitch of command executor)
+	set {_v} to normalized {_v}
+	set the vector length of {_v} to 2
+	
+	set {_first} to {_v}
+	set vector length of {_first} to 4
+	
+	set {_loc} to ( {_loc} ~ {_first} )
+	
+	set {rpgSkript::cryoballs::%{_x}%::loc} to {_loc}
+	set {rpgSkript::cryoballs::%{_x}%::v} to {_v}
+	set {rpgSkript::cryoballs::%{_x}%::time} to now
+	set {rpgSkript::cryoballs::%{_x}%::caster} to player
+	set {rpgSkript::cryoballs::%{_x}%} to 1
+	play sound "item.bucket.empty" with pitch 0.7 at command executor
+	send "&dYou release a freezing orb of water!" to command executor
