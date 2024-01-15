@@ -473,6 +473,8 @@ on right click:
 # Rogue
 
 function canUseRogueAbilities(player: player) :: boolean:
+	if {_player} has potion effect slowness:
+		return false
 	if hasResearch({_player}, "fit") is true:
 		if isWearingMediumOrLess({_player}) is true:
 			return true
