@@ -172,6 +172,10 @@ local function drawLine(loc1: location, loc2: location):
 		draw 1 flame at {_loc1} with extra 0
 		set {_loc1} to {_loc1} ~ {_v}
 
+function playSoundToPlayers(loc: location, sound: string, range: number, pitch: number=1):
+	loop players in radius {_range} of {_loc}:
+		play sound "%{_sound}%" with pitch {_pitch} for loop-player
+
 command /haslore <text>:
 	executable by: players
 	trigger:
@@ -1005,6 +1009,7 @@ function explodeFireball(index: string):
 	if {rpgSkript::fireballs::%{_index}%} is not set:
 		exit
 	set {_loc} to {rpgSkript::fireballs::%{_index}%::loc}
+	playSoundToPlayers({_loc}, "entity.firework_rocket.blast", 90, 0.3)
 	explodeRadius(block at {_loc}, 1.5)
 	loop blocks in radius 2.5 around {_loc}:
 		loop-block is air:
