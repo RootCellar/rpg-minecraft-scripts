@@ -146,9 +146,11 @@ function isWearingHeavyOrLess(player: player) :: boolean:
 
 function addResearch(player: player, name: string, level: number=1):
 	set {rpgSkript::%{_player}%::research::%{_name}%} to {_level}
+	send "&eYou have earned research ""%{_name}%"" Level %{_level}%" to {_player}
 
 function deleteResearch(player: player, name: string):
 	delete {rpgSkript::%{_player}%::research::%{_name}%}
+	send "&cYou have lost research ""%{_name}%""" to {_player}
 
 function hasResearch(player: player, name: string) :: boolean:
 	if {rpgSkript::%{_player}%::research::%{_name}%} is set:
