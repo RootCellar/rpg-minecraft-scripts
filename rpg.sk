@@ -729,9 +729,20 @@ function displayMana(player: player):
 		set {_dispM} to 0
 	send action bar "&3Mana: %{_dispM}% / %{rpgSkript::%{_player}%::maxMana}%" to {_player}
 
+function hasItems(player: player, items: items) :: boolean:
+	{_player} has {_items::*}:
+		return true
+	return false
+
+function takeItems(player: player, items: items) :: boolean:
+	if hasItems({_player}, {_items}) is true:
+		remove {_items::*} from {_player}
+		return true
+	return false
+
 function hasResources(player: player, mana: number, items: items) :: boolean:
 	send "&3Items - Need: %{_items::*}%" to {_player}
-	{_player} has {_items::*}:
+	if hasItems({_player}, {_items}) is true:
 		hasMana({_player}, {_mana}) is true:
 			return true
 	return false
