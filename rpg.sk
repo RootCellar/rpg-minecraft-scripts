@@ -1382,7 +1382,7 @@ on inventory click:
 
 	populateWizardResearchMenu(player, event-inventory)
 on right click with lapis lazuli:
-	if subMana(command executor, 80) is false:
+	if subMana(command executor, 60) is false:
 		send "&cYou do not have enough Mana to cast the cryoball spell!" to command executor
 		stop
 		
