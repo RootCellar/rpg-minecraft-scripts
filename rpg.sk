@@ -709,6 +709,8 @@ function addMana(player: player, amount: number):
 		displayMana({_player})
 
 function subMana(player: player, amount: number) :: boolean:
+	{_player} has permission "rpg.control":
+		return true
 	if {rpgSkript::%{_player}%::mana} is not set:
 		return false
 	if hasMana({_player}, {_amount}) is true:
@@ -720,6 +722,8 @@ function subMana(player: player, amount: number) :: boolean:
 		return false
 
 function hasMana(player: player, amount: number) :: boolean:
+	{_player} has permission "rpg.control":
+		return true
 	send "&3Mana: Have %{rpgSkript::%{_player}%::mana}%, Need %{_amount}%" to {_player}
 	if {rpgSkript::%{_player}%::mana} - {_amount} > -0.01:
 		return true
@@ -732,11 +736,15 @@ function displayMana(player: player):
 	send action bar "&3Mana: %{_dispM}% / %{rpgSkript::%{_player}%::maxMana}%" to {_player}
 
 function hasItems(player: player, items: items) :: boolean:
+	{_player} has permission "rpg.control":
+		return true
 	{_player} has {_items::*}:
 		return true
 	return false
 
 function takeItems(player: player, items: items) :: boolean:
+	{_player} has permission "rpg.control":
+		return true
 	if hasItems({_player}, {_items}) is true:
 		remove {_items::*} from {_player}
 		return true
