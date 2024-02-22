@@ -751,6 +751,8 @@ function takeItems(player: player, items: items) :: boolean:
 	return false
 
 function hasResources(player: player, mana: number, items: items) :: boolean:
+	{_player} has permission "rpg.control":
+		return true
 	send "&3Items - Need: %{_items::*}%" to {_player}
 	if hasItems({_player}, {_items}) is true:
 		hasMana({_player}, {_mana}) is true:
@@ -758,6 +760,8 @@ function hasResources(player: player, mana: number, items: items) :: boolean:
 	return false
 
 function takeResources(player: player, mana: number, items: items) :: boolean:
+	{_player} has permission "rpg.control":
+		return true
 	if hasResources({_player}, {_mana}, {_items}) is true:
 		remove {_items::*} from {_player}
 		subMana({_player}, {_amount})
