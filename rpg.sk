@@ -1065,6 +1065,7 @@ every tick:
 			set {_distance} to {_distance} - 0.25
 		set vector length of {_delta} to {_distance}
 		moveCryoball(loop-index, {_delta})
+		set {rpgSkript::cryoballs::%loop-index%::v} to {rpgSkript::cryoballs::%loop-index%::v} -- (vector 0,0.1,0)
 
 function moveCryoball(index: string, v: vector):
 	if {rpgSkript::cryoballs::%{_index}%} is not set:
