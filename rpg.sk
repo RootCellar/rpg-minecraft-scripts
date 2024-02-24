@@ -1116,6 +1116,8 @@ on inventory close:
 			set {rpgSkript::%player%::safe::%loop-value%} to slot (loop-value)-1 of event-inventory
 
 on right click with stick:
+	player's held item is not a plain stick:
+		stop trigger
 	player has permission "rpg.wizard"
 	if subMana(event-player, 5) is false:
 		send "&cYou do not have enough Mana to cast the firebolt spell!" to event-player
