@@ -35,31 +35,35 @@ on join:
 
 on chat:
 	set the message to "&6[&8LVL %player's level%&6]&r %message%"
-	player has permission "rpg.rogue":
+	hasClass(player, "rogue") is true:
 		set the message to "&7[&2Rogue&7]&r %message%"
 		# stop trigger
-	player has permission "rpg.warrior":
+	hasClass(player, "warrior") is true:
 		set the message to "&e[&cWarrior&e]&r %message%"
 		# stop trigger
-	player has permission "rpg.wizard":
+	hasClass(player, "wizard") is true:
 		set the message to "&8[&3Wizard&8]&r %message%"
 		# stop trigger
-	player has permission "rpg.herobrine":
+	hasClass(player, "herobrine") is true:
 		set the message to "&0[&4Herobrine&0]&r %message%"
 		# stop trigger
 
 function rpgLog(message: text):
 	log "%{_message}%" to "rpg/main.log"
 
+function hasClass(player: player, class: text) :: boolean:
+	if {_player} has permission "rpg.%{_class}%":
+		return true
+
 function setMaxHealth(player: player):
 	set {_newMax} to 10
-	if {_player} has permission "rpg.herobrine":
+	if hasClass({_player}, "herobrine") is true:
 		set {_newMax} to 40
-	else if {_player} has permission "rpg.warrior":
+	else if hasClass({_player}, "warrior") is true:
 		set {_newMax} to 20
 		if hasResearch({_player}, "durable") is true:
 			set {_newMax} to {_newMax} * 1.25
-	else if {_player} has permission "rpg.wizard":
+	else if hasClass({_player}, "wizard") is true:
 		set {_newMax} to 8
 	else:
 		set {_newMax} to 10
@@ -233,7 +237,7 @@ every 3 seconds:
 		set line 14 of loop-player's scoreboard to "&3&l   RPG"
 		set line 13 of loop-player's scoreboard to "&a"
 
-		loop-player has permission "rpg.rogue":
+		hasClass(loop-player, "rogue") is true:
 			set line 9 of loop-player's scoreboard to "Monsters: %countEntities(monsters within 20 meters of loop-player)%"
 			set line 8 of loop-player's scoreboard to "Animals: %countEntities(animals within 30 meters of loop-player)%"
 			set line 7 of loop-player's scoreboard to "Players: %countEntities(players within 50 meters of loop-player)%"
@@ -246,18 +250,18 @@ every 2 seconds:
 	loop all players:
 		setMaxHealth(loop-player)
 		
-		loop-player has permission "rpg.wizard":
+		hasClass(loop-player, "wizard") is true:
 			setupMana(loop-player)
 			regenMana(loop-player)
 			if hasResearch(loop-player, "power") is true:
 				add 3 experience to loop-player
-		loop-player has permission "rpg.warrior":
+		hasClass(loop-player, "warrior") is true:
 			heal(loop-player, 1)
 			loop-player's knockback resistance attribute is not 0.7:
 				set loop-player's knockback resistance attribute to 0.7
 			apply haste 2 without particles to the loop-player for 30 seconds replacing the existing effect
 			apply strength 2 without particles to the loop-player for 30 seconds replacing the existing effect
-		loop-player has permission "rpg.herobrine":
+		hasClass(loop-player, "herobrine") is true:
 			setupMana(loop-player)
 			regenMana(loop-player)
 			enable flight for loop-player
@@ -269,16 +273,16 @@ every 2 seconds:
 
 on damage:
 	attacker is a player:
-		attacker has permission "rpg.rogue":
+		hasClass(attacker, "rogue") is true:
 			canUseRogueAbilities(attacker) is true
 			set the damage to the damage * 2.0
-		attacker has permission "rpg.herobrine":
+		hasClass(attacker, "herobrine") is true:
 			set the damage to the damage * 3.0
 			
 	victim is a player:
 		setMaxHealth(the victim)
 
-		victim has permission "rpg.herobrine":
+		hasClass(victim, "herobrine") is true:
 			set the damage to the damage * 0.3
 			damage cause is fall:
 				cancel the event
@@ -292,12 +296,12 @@ on damage:
 				cancel the event
 			damage cause is freeze:
 				cancel the event
-		victim has permission "rpg.warrior":
+		hasClass(victim, "warrior") is true:
 			set {_odamage} to the damage
 			set {_newdamage} to {_odamage} * 0.65
 			set the damage to {_newdamage}
 			apply slowness 1 to victim for 4 seconds replacing the existing effect
-		victim has permission "rpg.rogue":
+		hasClass(victim, "rogue") is true:
 			canUseRogueAbilities(victim) is true
 			damage cause is fall:
 				set the damage to the damage * 0.3
@@ -308,9 +312,9 @@ on damage:
 
 on target:
 	target is a player
-	target has permission "rpg.herobrine":
+	hasClass(target, "herobrine") is true:
 		cancel the event
-	target has permission "rpg.rogue":
+	hasClass(target, "rogue") is true:
 		canUseRogueAbilities(target) is true
 		distance between event-entity and target is greater than 10:
 			cancel the event
@@ -319,13 +323,13 @@ on target:
 			cancel the event
 
 on item damage:
-	player has permission "rpg.herobrine":
+	hasClass(player, "herobrine") is true:
 		cancel the event
-	player has permission "rpg.warrior":
+	hasClass(player, "warrior") is true:
 		chance of 45%:
 			cancel the event
 			#send "&cSaved durability"
-	player has permission "rpg.rogue":
+	hasClass(player, "rogue") is true:
 		chance of 25%:
 			cancel the event
 			#send "&2Saved durability"
@@ -335,7 +339,7 @@ on item damage:
 command /warriorresearch:
 	executable by: players
 	trigger:
-		player doesn't have permission "rpg.warrior":
+		hasClass(player, "warrior") is false:
 			send "&dYou are not a warrior!"
 			exit
 		set {_menu} to a new chest inventory with 6 rows named "&cWarrior Research"
@@ -386,7 +390,7 @@ on inventory click:
 	populateWarriorResearchMenu(player, event-inventory)
 
 on mine of any log:
-	player has permission "rpg.warrior"
+	hasClass(player, "warrior") is true
 	player's tool is an axe
 	if hasResearch(player, "tree_feller") is true:
 		cancel the event
@@ -409,7 +413,7 @@ function fellTree(block: block, depth: number=1):
 			fellTree(loop-block, {_depth} + 1)
 
 on craft:
-	player has permission "rpg.warrior"
+	hasClass(player, "warrior") is true
 	if hasResearch(player, "master_smith") is true:
 		wait 1 tick
 		event-item is any sword:
@@ -427,7 +431,7 @@ on craft:
 	
 
 on right click:
-	player has permission "rpg.warrior"
+	hasClass(player, "warrior") is true
 
 	set {_didHit} to false
 	set {_can_power_attack} to false
@@ -489,7 +493,7 @@ function canUseRogueAbilities(player: player) :: boolean:
 command /rogueresearch:
 	executable by: players
 	trigger:
-		player doesn't have permission "rpg.rogue":
+		hasClass(player, "rogue") is false:
 			send "&dYou are not a rogue!"
 			exit
 		set {_menu} to a new chest inventory with 6 rows named "&aRogue Research"
@@ -519,7 +523,7 @@ on inventory click:
 
 on death of a monster:
 	attacker is a player
-	attacker has permission "rpg.rogue"
+	hasClass(attacker, "rogue") is true
 	set {_x} to a random number between 0 and 1000
 	if {_x} <= 350:
 		add 3 arrows to the drops
@@ -530,19 +534,19 @@ on death of a monster:
 
 on death of an animal:
 	attacker is a player
-	attacker has permission "rpg.rogue"
+	hasClass(attacker, "rogue") is true
 	set {_x} to a random number between 0 and 1000
 	if {_x} < 80:
 		add 2 leather to the drops
 
 on death of a player:
-	if the victim has permission "rpg.rogue":
+	hasClass(victim, "rogue") is true:
 		keep the items
 		clear drops
 		send "&aYou may have died, but they'll never get your items!" to the victim
 
 on sprint toggle:
-	player has permission "rpg.rogue"
+	hasClass(player, "rogue") is true
 	player is not sprinting:
 		canUseRogueAbilities(player) is true
 		apply swiftness 2 without particles to the player for 600 seconds replacing the existing effect
@@ -552,7 +556,7 @@ on sprint toggle:
 		remove jump boost from the player
 
 on sneak toggle:
-	player has permission "rpg.rogue"
+	hasClass(player, "rogue") is true
 	player is not sneaking:
 		canUseRogueAbilities(player) is true
 		light level at the player is less than 11
@@ -565,13 +569,13 @@ on sneak toggle:
 
 on jump:
 	entity is a player
-	player has permission "rpg.rogue":
+	hasClass(player, "rogue") is true:
 		player is sprinting
 		if canUseRogueAbilities(player) is true:
 			push the player horizontally forward with force 0.7
 
 on hunger meter change:
-	player has permission "rpg.rogue"
+	hasClass(player, "rogue") is true
 	if {rpgSkript::%player%::eating} is true:
 		set {rpgSkript::%player%::eating} to false
 		stop
@@ -585,7 +589,7 @@ on consume:
 # Herobrine?
 
 on death of a player:
-	if the victim has permission "rpg.herobrine":
+	hasClass(victim, "herobrine") is true:
 		keep the items and experience
 		clear drops
 		send "&7Using your dark powers, you vanish!" to the victim
@@ -593,7 +597,7 @@ on death of a player:
 
 every 1 seconds:
 	loop all players:
-		loop-player has permission "rpg.herobrine"
+		hasClass(loop-player, "herobrine") is true
 		sunlight level at the loop-player is greater than 10
 		time in world of loop-player is not between 19:00 and 5:00
 		ignite the loop-player for 5 seconds
@@ -601,7 +605,7 @@ every 1 seconds:
 		damage loop-player by 12
 
 on hunger meter change:
-	player has permission "rpg.herobrine"
+	hasClass(player, "herobrine") is true
 	if {rpgSkript::%player%::filling_hunger} is true:
 		delete {rpgSkript::%player%::filling_hunger}
 		stop trigger
@@ -610,7 +614,7 @@ on hunger meter change:
 		set the player's hunger meter to 10
 
 on sprint toggle:
-	player has permission "rpg.herobrine"
+	hasClass(player, "herobrine") is true
 	player is not sprinting:
 		apply swiftness 4 without particles to the player for 600 seconds replacing the existing effect
 		apply jump boost 4 without particles to the player for 600 seconds replacing the existing effect
@@ -619,7 +623,7 @@ on sprint toggle:
 		remove jump boost from the player
 
 on sneak toggle:
-	player has permission "rpg.herobrine"
+	hasClass(player, "herobrine") is true
 	player is not sneaking:
 		apply invisibility without particles to the player for 600 seconds replacing the existing effect
 	player is sneaking:
@@ -627,7 +631,7 @@ on sneak toggle:
 
 on jump:
 	entity is a player
-	player has permission "rpg.herobrine":
+	hasClass(player, "herobrine") is true:
 		player is sprinting
 		push the player horizontally forward with force 1.5
 
@@ -660,9 +664,9 @@ function setupMana(player: player):
 		set {rpgSkript::%{_player}%::maxMana} to 0
 
 	set {_newMax} to 0
-	if {_player} has permission "rpg.herobrine":
+	if hasClass({_player}, "herobrine") is true:
 		set {_newMax} to (level of {_player}) * 45
-	else if {_player} has permission "rpg.wizard":
+	else if hasClass({_player}, "wizard") is true:
 		if isWearingLightOrLess({_player}) is true:
 			set {_newMax} to (level of {_player}) * 9
 		else if isWearingMediumOrLess({_player}) is true:
@@ -691,9 +695,9 @@ function regenMana(player: player):
 		setupMana({_player})
 
 	set {_add} to 0
-	if {_player} has permission "rpg.herobrine":
+	if hasClass({_player}, "herobrine") is true:
 		set {_add} to {rpgSkript::%{_player}%::maxMana} / 100
-	else if {_player} has permission "rpg.wizard":
+	else if hasClass({_player}, "wizard") is true:
 		if isWearingLightOrLess({_player}) is true:
 			set {_add} to {rpgSkript::%{_player}%::maxMana} / 40
 		else if isWearingMediumOrLess({_player}) is true:
@@ -770,12 +774,12 @@ function takeResources(player: player, mana: number, items: items) :: boolean:
 
 function arcaneSense(message: text):
 	loop all players:
-		loop-player has permission "rpg.wizard":
+		hasClass(loop-player, "wizard") is true:
 			send "&d%{_message}%" to loop-player
 
 
 on death of a player:
-    if the victim has permission "rpg.wizard":
+    hasClass(victim, "wizard") is true:
         keep the experience
         send "&dYou use your magic powers to keep your experience!" to the victim		
 
@@ -783,7 +787,7 @@ command /imbue <text>:
 	description: Imbue an item with powerful magic properties
 	executable by: players
 	trigger:
-		player has permission "rpg.wizard"
+		hasClass(player, "wizard") is true
 		if subMana(player, 1000) is false:
 			send "&cYou do not have enough mana to imbue an item with magic!"
 			stop
@@ -817,10 +821,9 @@ options:
 	p: &a[Send]
 command /send <player>:
 	description: Magically send what you are holding to another player!
-	permission: rpg.wizard
-	permission message: You cannot use magic!
 	executable by: players
 	trigger:
+		hasClass(player, "wizard") is true
 		if subMana(command executor, 10) is false:
 			message "&cYou do not have enough Mana!"
 			stop
@@ -839,10 +842,9 @@ command /send <player>:
 
 command /remember <text>:
 	description: Remember your current location, to recall it later
-	permission: rpg.wizard
-	permission message: You cannot use magic!
 	executable by: players
 	trigger:
+		hasClass(player, "wizard") is true
 		if subMana(command executor, 5) is false:
 			message "&cYou do not have enough Mana!"
 			stop
@@ -854,19 +856,17 @@ command /remember <text>:
 
 command /forget <text>:
 	description: Forget a location
-	permission: rpg.wizard
-	permission message: You cannot use magic!
 	executable by: players
 	trigger:
+		hasClass(player, "wizard") is true
 		delete {rpgSkript::%command executor%::memory::%arg 1%}
 		message "&dYou remove the location from memory..."
 
 command /recall <text>:
 	description: Teleport to a location that you remember
-	permission: rpg.wizard
-	permission message: You cannot use magic!
 	executable by: players
 	trigger:
+		hasClass(player, "wizard") is true
 		if {rpgSkript::%command executor%::memory::%arg 1%} is set:
 			if subMana(command executor, 130) is false:
 				message "&cYou do not have enough Mana!"
@@ -882,10 +882,9 @@ command /recall <text>:
 
 command /sendnear <text>:
 	description: Teleport nearby players to a location that you remember
-	permission: rpg.wizard
-	permission message: You cannot use magic!
 	executable by: players
 	trigger:
+		hasClass(player, "wizard") is true
 		if {rpgSkript::%command executor%::memory::%arg 1%} is set:
 			if subMana(command executor, 80) is false:
 				message "&cYou do not have enough Mana!"
@@ -902,19 +901,17 @@ command /sendnear <text>:
 
 command /memories:
 	description: List locations that you remember
-	permission: rpg.wizard
-	permission message: You cannot use magic!
 	executable by: players
 	trigger:
+		hasClass(player, "wizard") is true
 		loop {rpgSkript::%command executor%::memory::*}:
 			message "%loop-index%"
 
 command /pocket:
 	description: Open your enderchest
-	permission: rpg.wizard
-	permission message: You cannot use magic!
 	executable by: players
 	trigger:
+		hasClass(player, "wizard") is true
 		if subMana(command executor, 20) is false:
 			send "&cYou do not have enough Mana to cast the pocket spell!" to command executor
 			stop
@@ -923,10 +920,9 @@ command /pocket:
 
 command /cast <text>:
 	description: Cast a spell
-	permission: rpg.wizard
-	permission message: You cannot use magic!
 	executable by: players
 	trigger:
+		hasClass(player, "wizard") is true
 		if arg 1 is "conjure":
 			if subMana(command executor, 1500) is false:
 				send "&cYou do not have enough Mana to cast the conjure spell!" to command executor
@@ -1118,7 +1114,7 @@ on inventory close:
 on right click with stick:
 	player's held item is not a plain stick:
 		stop trigger
-	player has permission "rpg.wizard"
+	hasClass(player, "wizard") is true
 	if subMana(event-player, 5) is false:
 		send "&cYou do not have enough Mana to cast the firebolt spell!" to event-player
 		stop
@@ -1129,7 +1125,7 @@ on right click with stick:
 	show mob spawner flames at (the location 1 block above the player's location)
 
 on right click with gunpowder:
-	player has permission "rpg.wizard"
+	hasClass(player, "wizard") is true
 	if subMana(event-player, 100) is false:
 		send "&cYou do not have enough Mana to cast the explosion spell!" to event-player
 		stop
@@ -1144,7 +1140,7 @@ on right click with gunpowder:
 	show mob spawner flames at (the location 1 block above the player's location)
 
 on right click with nether quartz:
-	player has permission "rpg.wizard"
+	hasClass(player, "wizard") is true
 	if subMana(event-player, 200) is false:
 		send "&cYou do not have enough Mana to cast the smite spell!" to event-player
 		stop
@@ -1162,7 +1158,7 @@ on right click with nether quartz:
 	show mob spawner flames at (the location 1 block above the player's location)
 
 on right click with iron nugget:
-	player has permission "rpg.wizard"
+	hasClass(player, "wizard") is true
 	if subMana(event-player, 180) is false:
 		send "&cYou do not have enough Mana to cast the shatter spell!" to event-player
 		stop
@@ -1178,11 +1174,11 @@ on right click with iron nugget:
 	show mob spawner flames at (the location 1 block above the player's location)
 
 on right click with magma cream:
-	player has permission "rpg.wizard"
+	hasClass(player, "wizard") is true
 	make player execute command "/cast fireball"
 
 on right click with flint:
-	player has permission "rpg.wizard"
+	hasClass(player, "wizard") is true
 	if subMana(event-player, 18) is false:
 		send "&cYou do not have enough Mana to cast the ignite spell!" to event-player
 		stop
@@ -1198,7 +1194,7 @@ on right click with flint:
 	show mob spawner flames at (the location 1 block above the player's location)
 
 on right click with blaze rod:
-	player has permission "rpg.wizard"
+	hasClass(player, "wizard") is true
 	if subMana(event-player, 1000) is false:
 		send "&cYou do not have enough Mana to cast the devastating blast spell!" to event-player
 		stop
@@ -1222,7 +1218,7 @@ on right click with blaze rod:
 	create a fake explosion at the player
 
 on right click with diamond:
-	player has permission "rpg.wizard"
+	hasClass(player, "wizard") is true
 	if subMana(event-player, 300) is false:
 		send "&cYou do not have enough Mana to cast the lightning spell!" to event-player
 		stop
@@ -1241,7 +1237,7 @@ on right click with diamond:
 	play sound "entity.player.breath" with pitch 0.7 at player
 
 on right click with feather:
-	player has permission "rpg.wizard"
+	hasClass(player, "wizard") is true
 	set {_t} to targeted entity of player
 	{_t} is a player:
 		if subMana(event-player, 90) is false:
@@ -1260,7 +1256,7 @@ on right click with feather:
 	play sound "entity.player.levelup" with pitch 1.5 at event-player
 
 on right click with amethyst shard:
-	player has permission "rpg.wizard"
+	hasClass(player, "wizard") is true
 	set {_loc} to event-player's targeted block
 	set {_loc} to location 1 meter above {_loc}
 	set pitch of {_loc} to pitch of event-player
@@ -1286,7 +1282,7 @@ on right click with amethyst shard:
 	play sound "entity.enderman.teleport" at event-player
 
 on right click with clay ball:
-	player has permission "rpg.wizard"
+	hasClass(player, "wizard") is true
 	if subMana(event-player, 50) is false:
 		send "&cYou do not have enough Mana to cast the move monsters spell!" to event-player
 		stop
@@ -1301,7 +1297,7 @@ on right click with clay ball:
 	play sound "entity.player.breath" with pitch 0.7 at player
 
 on right click with sugar:
-	player has permission "rpg.wizard"
+	hasClass(player, "wizard") is true
 	if subMana(event-player, 30) is false:
 		send "&cYou do not have enough Mana to cast the move items spell!" to event-player
 		stop
@@ -1315,7 +1311,7 @@ on right click with sugar:
 	play sound "entity.player.breath" with pitch 0.7 at player
 
 on right click with wheat:
-	player has permission "rpg.wizard"
+	hasClass(player, "wizard") is true
 	if subMana(event-player, 200) is false:
 		send "&cYou do not have enough Mana to cast the harvest spell!" to event-player
 		stop
@@ -1361,7 +1357,7 @@ on right click with wheat:
 command /wizardresearch:
 	executable by: players
 	trigger:
-		player doesn't have permission "rpg.wizard":
+		hasClass(player, "wizard") is false:
 			send "&dYou are not a wizard!"
 			exit
 		set {_menu} to a new chest inventory with 6 rows named "&dWizard Research"
@@ -1388,7 +1384,9 @@ on inventory click:
 			addResearch(player, "power")
 
 	populateWizardResearchMenu(player, event-inventory)
+
 on right click with lapis lazuli:
+	hasClass(player, "wizard") is true
 	if subMana(command executor, 60) is false:
 		send "&cYou do not have enough Mana to cast the cryoball spell!" to command executor
 		stop
