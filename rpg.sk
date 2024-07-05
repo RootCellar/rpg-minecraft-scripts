@@ -68,6 +68,14 @@ function hasClass(player: player, class: text) :: boolean:
 		return true
 	return false
 
+function isMonster(entity: entity) :: boolean:
+	{_entity} is a player:
+		hasClass({_entity}, "herobrine") is true:
+			return true
+	{_entity} is a monster:
+		return true
+	return false
+
 function setMaxHealth(player: player):
 	set {_newMax} to 10
 	if hasClass({_player}, "herobrine") is true:
@@ -1171,7 +1179,7 @@ on right click with nether quartz:
 	loop all entities in radius 12 around (event-player's targeted block):
 		loop-entity is not a dropped item
 		loop-entity is not a player
-		loop-entity is a monster
+		isMonster(loop-entity) is true
 		loop-entity's health is greater than 0
 		create lightning effect at the loop-entity
 		damage loop-entity by 8
