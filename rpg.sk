@@ -326,6 +326,7 @@ on target:
 	target is a player
 	hasClass(target, "herobrine") is true:
 		cancel the event
+		stop
 	hasClass(target, "rogue") is true:
 		canUseRogueAbilities(target) is true
 		distance between event-entity and target is greater than 10:
@@ -333,6 +334,7 @@ on target:
 			stop
 		chance of 80%:
 			cancel the event
+			stop
 
 on item damage:
 	hasClass(player, "herobrine") is true:
