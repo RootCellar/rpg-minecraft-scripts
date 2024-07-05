@@ -687,6 +687,10 @@ function setupMana(player: player):
 			set {_newMax} to (level of {_player}) * 7
 		else:
 			set {_newMax} to (level of {_player}) * 1.5
+	else if hasClass({_player}, "cleric") is true:
+		set {_newMax} to 1000
+	else if hasClass({_player}, "paladin") is true:
+		set {_newMax} to 30
 
 	if hasImbue({_player}, "Mana Boost") is true:
 		set {_newMax} to {_newMax} + 0.25 * {_newMax} * countImbue({_player}, "Mana Boost")
@@ -716,6 +720,10 @@ function regenMana(player: player):
 			set {_add} to {rpgSkript::%{_player}%::maxMana} / 40
 		else if isWearingMediumOrLess({_player}) is true:
 			set {_add} to {rpgSkript::%{_player}%::maxMana} / 70
+	else if hasClass({_player}, "cleric") is true:
+		set {_add} to {rpgSkript::%{_player}%::maxMana} / 200
+	else if hasClass({_player}, "paladin") is true:
+		set {_add} to {rpgSkript::%{_player}%::maxMana} / 10
 	
 	addMana( {_player}, {_add} )
 
