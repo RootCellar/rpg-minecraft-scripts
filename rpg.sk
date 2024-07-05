@@ -64,6 +64,8 @@ function hasClass(player: player, class: text) :: boolean:
 		return true
 	if hasImbue({_player}, "%{_class}% class") is true:
 		return true
+	if hasLore({_player}'s held item, "%{_class}% class") is true:
+		return true
 	return false
 
 function setMaxHealth(player: player):
