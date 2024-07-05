@@ -254,7 +254,7 @@ on join:
 	setMaxHealth(the player)
 	set the player's health to the player's health
 
-every 3 seconds:
+every 1 seconds:
 	loop all players:
 		clear loop-player's scoreboard
 		set title of loop-player's scoreboard to "&eInformation"
