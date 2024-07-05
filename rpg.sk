@@ -604,7 +604,7 @@ on sneak toggle:
 	player is not sneaking:
 		canUseRogueAbilities(player) is true
 		light level at the player is less than 11
-		apply invisibility without particles to the player for 600 seconds replacing the existing effect
+		apply invisibility without particles to the player for 30 seconds replacing the existing effect
 		loop all monsters in radius 40 of player:
 			target of loop-monster is player:
 				reset target of loop-monster
@@ -660,8 +660,8 @@ on hunger meter change:
 on sprint toggle:
 	hasClass(player, "herobrine") is true
 	player is not sprinting:
-		apply swiftness 4 without particles to the player for 600 seconds replacing the existing effect
-		apply jump boost 4 without particles to the player for 600 seconds replacing the existing effect
+		apply swiftness 4 without particles to the player for 30 seconds replacing the existing effect
+		apply jump boost 4 without particles to the player for 30 seconds replacing the existing effect
 	player is sprinting:
 		remove swiftness from the player
 		remove jump boost from the player
@@ -669,7 +669,7 @@ on sprint toggle:
 on sneak toggle:
 	hasClass(player, "herobrine") is true
 	player is not sneaking:
-		apply invisibility without particles to the player for 600 seconds replacing the existing effect
+		apply invisibility without particles to the player for 30 seconds replacing the existing effect
 	player is sneaking:
 		remove invisibility from the player
 
