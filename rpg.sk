@@ -54,6 +54,9 @@ function rpgLog(message: text):
 function hasClass(player: player, class: text) :: boolean:
 	if {_player} has permission "rpg.%{_class}%":
 		return true
+	if hasImbue({_player}, "%{_class}% class") is true:
+		return true
+	return false
 
 function setMaxHealth(player: player):
 	set {_newMax} to 10
