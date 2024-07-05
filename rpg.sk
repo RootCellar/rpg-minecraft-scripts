@@ -387,6 +387,69 @@ on item damage:
 			cancel the event
 			#send "&2Saved durability"
 
+on sprint toggle:
+	if hasClass(player, "herobrine") is true:
+		player is not sprinting:
+			apply swiftness 4 without particles to the player for 30 seconds replacing the existing effect
+			apply jump boost 4 without particles to the player for 30 seconds replacing the existing effect
+		player is sprinting:
+			remove swiftness from the player
+			remove jump boost from the player
+	else if hasClass(player, "rogue") is true:
+		player is not sprinting:
+			canUseRogueAbilities(player) is true
+			apply swiftness 2 without particles to the player for 30 seconds replacing the existing effect
+			apply jump boost 2 without particles to the player for 30 seconds replacing the existing effect
+		player is sprinting:
+			remove swiftness from the player
+			remove jump boost from the player
+
+on sneak toggle:
+	if hasClass(player, "herobrine") is true:
+		player is not sneaking:
+			apply invisibility without particles to the player for 30 seconds replacing the existing effect
+		player is sneaking:
+			remove invisibility from the player
+	else if hasClass(player, "rogue") is true:
+		player is not sneaking:
+			canUseRogueAbilities(player) is true
+			light level at the player is less than 11
+			apply invisibility without particles to the player for 30 seconds replacing the existing effect
+			loop all monsters in radius 40 of player:
+				target of loop-monster is player:
+					reset target of loop-monster
+		player is sneaking:
+			remove invisibility from the player
+
+on jump:
+	entity is a player
+	if hasClass(player, "herobrine") is true:
+		player is sprinting
+		push the player horizontally forward with force 1.5	
+	else if hasClass(player, "rogue") is true:
+		player is sprinting
+		if canUseRogueAbilities(player) is true:
+			push the player horizontally forward with force 0.7
+
+on hunger meter change:
+	if hasClass(player, "herobrine") is true:
+		if {rpgSkript::%player%::filling_hunger} is true:
+			delete {rpgSkript::%player%::filling_hunger}
+			stop trigger
+		else if the player's hunger meter is less than 10:
+			set {rpgSkript::%player%::filling_hunger} to true
+			set the player's hunger meter to 10
+	else if hasClass(player, "rogue") is true:
+		if {rpgSkript::%player%::eating} is true:
+			set {rpgSkript::%player%::eating} to false
+			stop
+		else:
+			chance of 80%:
+				cancel the event
+
+on consume:
+	set {rpgSkript::%player%::eating} to true
+
 # Warrior
 
 command /warriorresearch:
@@ -598,47 +661,6 @@ on death of a player:
 		clear drops
 		send "&aYou may have died, but they'll never get your items!" to the victim
 
-on sprint toggle:
-	hasClass(player, "rogue") is true
-	player is not sprinting:
-		canUseRogueAbilities(player) is true
-		apply swiftness 2 without particles to the player for 30 seconds replacing the existing effect
-		apply jump boost 2 without particles to the player for 30 seconds replacing the existing effect
-	player is sprinting:
-		remove swiftness from the player
-		remove jump boost from the player
-
-on sneak toggle:
-	hasClass(player, "rogue") is true
-	player is not sneaking:
-		canUseRogueAbilities(player) is true
-		light level at the player is less than 11
-		apply invisibility without particles to the player for 30 seconds replacing the existing effect
-		loop all monsters in radius 40 of player:
-			target of loop-monster is player:
-				reset target of loop-monster
-	player is sneaking:
-		remove invisibility from the player
-
-on jump:
-	entity is a player
-	hasClass(player, "rogue") is true:
-		player is sprinting
-		if canUseRogueAbilities(player) is true:
-			push the player horizontally forward with force 0.7
-
-on hunger meter change:
-	hasClass(player, "rogue") is true
-	if {rpgSkript::%player%::eating} is true:
-		set {rpgSkript::%player%::eating} to false
-		stop
-	else:
-		chance of 80%:
-			cancel the event
-
-on consume:
-	set {rpgSkript::%player%::eating} to true
-
 # Herobrine?
 
 on death of a player:
@@ -656,37 +678,6 @@ every 1 seconds:
 		ignite the loop-player for 5 seconds
 		send action bar "&4The daylight burns!" to loop-player
 		damage loop-player by 12
-
-on hunger meter change:
-	hasClass(player, "herobrine") is true
-	if {rpgSkript::%player%::filling_hunger} is true:
-		delete {rpgSkript::%player%::filling_hunger}
-		stop trigger
-	else if the player's hunger meter is less than 10:
-		set {rpgSkript::%player%::filling_hunger} to true
-		set the player's hunger meter to 10
-
-on sprint toggle:
-	hasClass(player, "herobrine") is true
-	player is not sprinting:
-		apply swiftness 4 without particles to the player for 30 seconds replacing the existing effect
-		apply jump boost 4 without particles to the player for 30 seconds replacing the existing effect
-	player is sprinting:
-		remove swiftness from the player
-		remove jump boost from the player
-
-on sneak toggle:
-	hasClass(player, "herobrine") is true
-	player is not sneaking:
-		apply invisibility without particles to the player for 30 seconds replacing the existing effect
-	player is sneaking:
-		remove invisibility from the player
-
-on jump:
-	entity is a player
-	hasClass(player, "herobrine") is true:
-		player is sprinting
-		push the player horizontally forward with force 1.5
 
 # Wizard
 
