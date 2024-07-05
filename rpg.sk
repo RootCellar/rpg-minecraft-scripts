@@ -345,6 +345,10 @@ on target:
 		chance of 80%:
 			cancel the event
 			stop
+	hasClass(target, "paladin") is true:
+		isMonster(event-entity) is true:
+			ignite the event-entity for 15 seconds
+			stop
 
 on item damage:
 	hasClass(player, "herobrine") is true:
