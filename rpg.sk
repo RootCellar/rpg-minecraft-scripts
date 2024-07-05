@@ -307,7 +307,6 @@ on damage:
 			set {_odamage} to the damage
 			set {_newdamage} to {_odamage} * 0.65
 			set the damage to {_newdamage}
-			apply slowness 1 to victim for 4 seconds replacing the existing effect
 		hasClass(victim, "rogue") is true:
 			canUseRogueAbilities(victim) is true
 			damage cause is fall:
