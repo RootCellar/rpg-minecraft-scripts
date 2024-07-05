@@ -347,6 +347,9 @@ on target:
 on item damage:
 	hasClass(player, "herobrine") is true:
 		cancel the event
+	hasClass(player, "paladin") is true:
+		subMana(player, 2) is true:
+			cancel the event
 	hasClass(player, "warrior") is true:
 		chance of 45%:
 			cancel the event
