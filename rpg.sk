@@ -32,6 +32,7 @@ on join:
 	send "&3   - Evil magically burns in the presence of a Paladin" to player
 	send "&3   - Automatically spends mana to prevent tools from taking durability damage" to player
 	send "&3   - Regenerates 2 hearts of health every 2 seconds" to player
+	send "&3   - Immune to the effects of poison and withering" to player
 	
 	send "&3 - New Class: Cleric. Channel divine powers to smite your foes!" to player
 	
