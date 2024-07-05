@@ -49,6 +49,10 @@ on chat:
 		set the message to "&e[&cWarrior&e]&r %message%"
 	hasClass(player, "wizard") is true:
 		set the message to "&8[&3Wizard&8]&r %message%"
+	hasClass(player, "paladin") is true:
+		set the message to "&6[&9Paladin&6]&r %message%"
+	hasClass(player, "cleric") is true:
+		set the message to "&3[&eCleric&3]&r %message%"
 	hasClass(player, "herobrine") is true:
 		set the message to "&0[&4Herobrine&0]&r %message%"
 
