@@ -27,14 +27,16 @@ on join:
 
 	# Example: send "&3 - <stuff>" to player
 	
-	send "&3 - Tools and armor will now last longer for Warriors and Rogues" to player
-	send "&3 - Rogues now get hungry substantially slower" to player
-	send "&3 - Rogues now resist 70 percent of fall damage" to player
-	send "&3 - Wizards can now conjure iron golems for 1,500 Mana" to player
-	send "&3 - Warriors can now make power attacks with pickaxes, breaking all blocks in a small radius" to player
-	send "&3 - Warrior's power attacks now have a cooldown" to player
-	send "&3 - Warriors now resist knockback" to player
-	send "&3 - Rogues get additional items at random when killing monsters and animals" to player
+	send "&3 - New Class: Paladin. Evil falters in their presence!" to player
+	send "&3   - Deals extra damage to, and takes less damage from, evil" to player
+	send "&3   - Evil magically burns in the presence of a Paladin" to player
+	send "&3   - Automatically spends mana to prevent tools from taking durability damage" to player
+	send "&3   - Regenerates 2 hearts of health every 2 seconds" to player
+	
+	send "&3 - New Class: Cleric. Channel divine powers to smite your foes!" to player
+	
+	send "&3 - Items can now be imbued to grant classes while you are wearing/holding them" to player
+	send "&3 - Warrior no longer gets slowness when they take damage" to player
 	
 	#send "&3" to player
 
