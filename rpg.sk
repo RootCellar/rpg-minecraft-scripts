@@ -74,6 +74,8 @@ function isMonster(entity: entity) :: boolean:
 			return true
 	{_entity} is a monster:
 		return true
+	{_entity} is a phantom:
+		return true
 	return false
 
 function setMaxHealth(player: player):
