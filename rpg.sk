@@ -559,8 +559,8 @@ on sprint toggle:
 	hasClass(player, "rogue") is true
 	player is not sprinting:
 		canUseRogueAbilities(player) is true
-		apply swiftness 2 without particles to the player for 600 seconds replacing the existing effect
-		apply jump boost 2 without particles to the player for 600 seconds replacing the existing effect
+		apply swiftness 2 without particles to the player for 30 seconds replacing the existing effect
+		apply jump boost 2 without particles to the player for 30 seconds replacing the existing effect
 	player is sprinting:
 		remove swiftness from the player
 		remove jump boost from the player
