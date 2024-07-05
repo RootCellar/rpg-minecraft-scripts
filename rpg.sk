@@ -37,16 +37,12 @@ on chat:
 	set the message to "&6[&8LVL %player's level%&6]&r %message%"
 	hasClass(player, "rogue") is true:
 		set the message to "&7[&2Rogue&7]&r %message%"
-		# stop trigger
 	hasClass(player, "warrior") is true:
 		set the message to "&e[&cWarrior&e]&r %message%"
-		# stop trigger
 	hasClass(player, "wizard") is true:
 		set the message to "&8[&3Wizard&8]&r %message%"
-		# stop trigger
 	hasClass(player, "herobrine") is true:
 		set the message to "&0[&4Herobrine&0]&r %message%"
-		# stop trigger
 
 function rpgLog(message: text):
 	log "%{_message}%" to "rpg/main.log"
