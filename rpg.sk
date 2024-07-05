@@ -346,6 +346,10 @@ on damage:
 		hasClass(victim, "paladin") is true:
 			isMonster(attacker) is true:
 				set the damage to the damage * 0.6
+			damage cause is poison:
+				cancel the event
+			damage cause is wither potion effect:
+				cancel the event
 
 on target:
 	target is a player
