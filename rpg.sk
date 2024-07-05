@@ -292,6 +292,8 @@ every 2 seconds:
 			heal(loop-player, 2)
 			loop entities in radius 50 of loop-player:
 				isMonster(loop-entity-2) is true
+				apply slowness 1 to the loop-entity-2 for 60 seconds
+				apply weakness 1 to the loop-entity-2 for 60 seconds
 				chance of 20%:
 					ignite loop-entity-2 for 5 seconds
 		hasClass(loop-player, "herobrine") is true:
