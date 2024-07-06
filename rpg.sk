@@ -56,6 +56,8 @@ on chat:
 		set the message to "&6[&9Paladin&6]&r %message%"
 	hasClass(player, "cleric") is true:
 		set the message to "&3[&eCleric&3]&r %message%"
+	hasClass(player, "necromancer") is true:
+		set the message to "&c[&7Necromancer&c]&r %message%"
 	hasClass(player, "herobrine") is true:
 		set the message to "&0[&4Herobrine&0]&r %message%"
 
@@ -75,6 +77,8 @@ function isMonster(entity: entity) :: boolean:
 	{_entity} is a player:
 		hasClass({_entity}, "herobrine") is true:
 			return true
+	isMinion({_entity}) is true:
+		return false
 	{_entity} is a monster:
 		return true
 	{_entity} is a phantom:
@@ -355,6 +359,10 @@ on damage:
 				cancel the event
 
 on target:
+	isMinion(event-entity) is true:
+		{rpgSkript::minions::%uuid of the event-entity%::summoner} is target:
+			cancel the event
+
 	target is a player
 	hasClass(target, "herobrine") is true:
 		cancel the event
@@ -450,7 +458,11 @@ on hunger meter change:
 on consume:
 	set {rpgSkript::%player%::eating} to true
 
+
+
 # Warrior
+
+
 
 command /warriorresearch:
 	executable by: players
@@ -592,7 +604,11 @@ on right click:
 	else:
 		send action bar "&cYour power attack is still on cooldown!" to the player
 
+
+
 # Rogue
+
+
 
 function canUseRogueAbilities(player: player) :: boolean:
 	if {_player} has potion effect slowness:
@@ -661,7 +677,11 @@ on death of a player:
 		clear drops
 		send "&aYou may have died, but they'll never get your items!" to the victim
 
+
+
 # Herobrine?
+
+
 
 on death of a player:
 	hasClass(victim, "herobrine") is true:
@@ -679,7 +699,11 @@ every 1 seconds:
 		send action bar "&4The daylight burns!" to loop-player
 		damage loop-player by 12
 
+
+
 # Wizard
+
+
 
 on place of lightning rod:
 	add event-block to {rpgSkript::lightning_rod::*}
@@ -717,6 +741,8 @@ function setupMana(player: player):
 			set {_newMax} to (level of {_player}) * 7
 		else:
 			set {_newMax} to (level of {_player}) * 1.5
+	else if hasClass({_player}, "necromancer") is true:
+		set {_newMax} to (level of {_player}) * 6
 	else if hasClass({_player}, "cleric") is true:
 		set {_newMax} to 1000
 	else if hasClass({_player}, "paladin") is true:
@@ -750,6 +776,8 @@ function regenMana(player: player):
 			set {_add} to {rpgSkript::%{_player}%::maxMana} / 40
 		else if isWearingMediumOrLess({_player}) is true:
 			set {_add} to {rpgSkript::%{_player}%::maxMana} / 70
+	else if hasClass({_player}, "necromancer") is true:
+		set {_add} to {rpgSkript::%{_player}%::maxMana} / 80
 	else if hasClass({_player}, "cleric") is true:
 		set {_add} to {rpgSkript::%{_player}%::maxMana} / 200
 	else if hasClass({_player}, "paladin") is true:
@@ -1470,3 +1498,58 @@ on right click with lapis lazuli:
 	set {rpgSkript::cryoballs::%{_x}%} to 1
 	play sound "item.bucket.empty" with pitch 0.7 at command executor
 	send "&dYou release a freezing orb of water!" to command executor
+
+
+
+# Necromancer
+
+
+
+
+function isMinion(entity: entity) :: boolean:
+	{rpgSkript::minions::%uuid of {_entity}%} is set:
+		return true
+	return false
+
+function getByUUID(uuid: text) :: entity:
+	loop all entities:
+		uuid of loop-entity contains {_uuid}:
+			return loop-entity
+
+every 2 seconds:
+	loop {rpgSkript::minions::*}:
+		set {_uuid} to loop-index
+		set {_entity} to getByUUID({_uuid})
+		set {_summoner} to {rpgSkript::minions::%{_uuid}%::summoner}
+
+		distance between {_entity} and {_summoner} is more than 10:
+			make {_entity} pathfind towards {_summoner}
+		distance between {_entity} and {_summoner} is more than 30:
+			teleport {_entity} to {_summoner}
+
+		target of {_entity} is not set:
+			loop entities in radius 20 of {_entity}:
+				if isMonster(loop-entity) is true:
+					set target of {_entity} to loop-entity
+
+on death:
+	the victim is not a player
+	isMinion(the victim) is true:
+		broadcast "&7Deleting dying minion"
+		delete {rpgSkript::minions::%uuid of {_entity}%}
+		delete {rpgSkript::minions::%uuid of {_entity}%::*}
+
+command /raise <text>:
+	description: Raise a minion
+	executable by: players
+	trigger:
+		hasClass(player, "necromancer") is true
+		if arg 1 is "skeleton":
+			if subMana(command executor, 40) is false:
+				send "&cYou do not have enough Mana to raise a skeleton!" to command executor
+				stop
+			send "&dYou raise an undead skeleton!" to command executor
+			set {_player} to the player
+			spawn 1 skeleton at the player:
+				set {rpgSkript::minions::%uuid of the skeleton%} to 1
+				set {rpgSkript::minions::%uuid of the skeleton%::summoner} to {_player}
