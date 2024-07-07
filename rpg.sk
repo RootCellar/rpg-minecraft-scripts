@@ -1613,6 +1613,9 @@ command /raise <text>:
 function setupMinion(entity: entity, summoner: player):
 	set {rpgSkript::minions::%uuid of {_entity}%} to 1
 	set {rpgSkript::minions::%uuid of {_entity}%::summoner} to {_summoner}
+	set {_entity}'s helmet to leather helmet
+	dye {_entity}'s helmet blue
+	enchant {_entity}'s helmet with protection 1
 	reset target of {_entity}
 
 function hasSameSummoner(entity: entity, entity2: entity) :: boolean:
