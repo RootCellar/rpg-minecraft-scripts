@@ -1,14 +1,18 @@
 on spawn:
+  spawn reason is natural
   entity is a monster
   entity is a zombie:
     entity is not a baby zombie
-    chance of 25%:
-      makeChosen(entity)
+    chance of 35%:
+      makeSpecial(entity)
   else if entity is a skeleton:
+    chance of 35%:
+      makeSpecial(entity)
+  else if entity is a spider:
     chance of 25%:
-      makeChosen(entity)
+      makeSpecial(entity)
 
-function makeChosen(entity: entity):
+function makeSpecial(entity: entity):
   {_entity} is a zombie:
     {_entity} is not a baby zombie
     #set name of {_entity} to "&cHerobrine's Chosen"
@@ -35,3 +39,6 @@ function makeChosen(entity: entity):
     set {_entity}'s held item to iron sword
     loop 2 times:
       spawn a zombie at {_entity}
+  else if {_entity} is a spider:
+    loop 3 times:
+      spawn a cave spider at {_entity}
