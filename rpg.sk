@@ -274,6 +274,9 @@ every 1 seconds:
 		set line 13 of loop-player's scoreboard to "&a"
 		set line 12 of loop-player's scoreboard to "&3 Mana: %{rpgSkript::%loop-player%::mana}% / %{rpgSkript::%loop-player%::maxMana}%"
 
+		hasClass(loop-player, "necromancer") is true:
+			set line 11 of loop-player's scoreboard to "&3 Minions: %getMinionCount(loop-player)% / %calculateMaxMinions(loop-player)%"
+
 		hasClass(loop-player, "rogue") is true:
 			set line 9 of loop-player's scoreboard to "Monsters: %countEntities(monsters within 20 meters of loop-player)%"
 			set line 8 of loop-player's scoreboard to "Animals: %countEntities(animals within 30 meters of loop-player)%"
@@ -289,6 +292,8 @@ every 2 seconds:
 
 		setupMana(loop-player)
 		regenMana(loop-player)
+
+		cullMinions(loop-player)
 		
 		hasClass(loop-player, "wizard") is true:
 			if hasResearch(loop-player, "power") is true:
@@ -327,6 +332,9 @@ on damage:
 					set the target of the victim to the attacker
 			getSummoner(uuid of the attacker) is the victim:
 				cancel the event
+				stop
+
+		add 1 experience to getSummoner(uuid of attacker)
 
 	attacker is a player:
 		hasClass(attacker, "rogue") is true:
@@ -763,7 +771,7 @@ function setupMana(player: player):
 		else:
 			set {_newMax} to (level of {_player}) * 1.5
 	else if hasClass({_player}, "necromancer") is true:
-		set {_newMax} to (level of {_player}) * 6
+		set {_newMax} to (level of {_player}) * 6 + 10
 	else if hasClass({_player}, "cleric") is true:
 		set {_newMax} to 1000
 	else if hasClass({_player}, "paladin") is true:
@@ -798,7 +806,7 @@ function regenMana(player: player):
 		else if isWearingMediumOrLess({_player}) is true:
 			set {_add} to {rpgSkript::%{_player}%::maxMana} / 70
 	else if hasClass({_player}, "necromancer") is true:
-		set {_add} to {rpgSkript::%{_player}%::maxMana} / 80
+		set {_add} to {rpgSkript::%{_player}%::maxMana} / 20
 	else if hasClass({_player}, "cleric") is true:
 		set {_add} to {rpgSkript::%{_player}%::maxMana} / 200
 	else if hasClass({_player}, "paladin") is true:
@@ -1577,12 +1585,12 @@ on explosion prime:
 			cancel the event
 
 function deleteMinion(uuid: text):
-	broadcast "&7Deleting minion"
+	#broadcast "&7Deleting minion"
 	delete {rpgSkript::minions::%{_uuid}%}
 	delete {rpgSkript::minions::%{_uuid}%::*}
 
 function killMinion(uuid: text):
-	broadcast "&7Deleting minion"
+	#broadcast "&7Killing minion"
 	kill getByUUID({_uuid})
 	deleteMinion({_uuid})
 
@@ -1592,7 +1600,7 @@ command /raise <text>:
 	trigger:
 		hasClass(player, "necromancer") is true
 		if arg 1 is "skeleton":
-			if subMana(command executor, 40) is false:
+			if subMana(command executor, 10) is false:
 				send "&cYou do not have enough Mana to raise a skeleton!" to command executor
 				stop
 			send "&dYou raise an undead skeleton!" to command executor
@@ -1600,7 +1608,7 @@ command /raise <text>:
 			spawn 1 skeleton at the player:
 				setupMinion(the skeleton, {_player})
 		if arg 1 is "warrior":
-			if subMana(command executor, 40) is false:
+			if subMana(command executor, 10) is false:
 				send "&cYou do not have enough Mana to raise a skeleton!" to command executor
 				stop
 			send "&dYou raise an undead skeleton!" to command executor
@@ -1627,3 +1635,28 @@ function getSummoner(uuid: text) :: player:
 	{rpgSkript::minions::%{_uuid}%::summoner} is set:
 		return {rpgSkript::minions::%{_uuid}%::summoner}
 
+function getMinionCount(summoner: player) :: number:
+	set {_count} to 0
+	loop {rpgSkript::minions::*}:
+		getSummoner(loop-index) is {_summoner}:
+			set {_count} to {_count} + 1
+	return {_count}
+
+function calculateMaxMinions(summoner: player) :: number:
+	set {_count} to 0
+	hasClass({_summoner}, "necromancer") is true:
+		set {_count} to 4
+		set {_count} to {_count} + level of {_summoner} / 2
+		{_count} is greater than 18:
+			set {_count} to 18
+		isWearingLightOrLess({_summoner}) is true:
+			set {_count} to {_count} * 1.5
+	return floor({_count})
+
+function cullMinions(summoner: player):
+	set {_toRemove} to getMinionCount({_summoner}) - calculateMaxMinions({_summoner})
+	loop {rpgSkript::minions::*}:
+		{_toRemove} > 0:
+			getSummoner(loop-index) is {_summoner}:
+				killMinion(loop-index)
+				set {_toRemove} to {_toRemove} - 1
