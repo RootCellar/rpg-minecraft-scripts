@@ -813,12 +813,12 @@ function addMana(player: player, amount: number):
 	if abs( {rpgSkript::%{_player}%::mana} - {_before} ) > 0.01:
 		displayMana({_player})
 
-function subMana(player: player, amount: number) :: boolean:
+function subMana(player: player, amount: number, print: boolean=true) :: boolean:
 	{_player} has permission "rpg.control":
 		return true
 	if {rpgSkript::%{_player}%::mana} is not set:
 		return false
-	if hasMana({_player}, {_amount}) is true:
+	if hasMana({_player}, {_amount}, {_print}) is true:
 		set {rpgSkript::%{_player}%::mana} to {rpgSkript::%{_player}%::mana} - {_amount}
 		checkMana({_player})
 		displayMana({_player})
@@ -826,10 +826,11 @@ function subMana(player: player, amount: number) :: boolean:
 	else:
 		return false
 
-function hasMana(player: player, amount: number) :: boolean:
+function hasMana(player: player, amount: number, print: boolean=true) :: boolean:
 	{_player} has permission "rpg.control":
 		return true
-	# send "&3Mana: Have %{rpgSkript::%{_player}%::mana}%, Need %{_amount}%" to {_player}
+	if {_print} is true:
+		send "&3Mana: Have %{rpgSkript::%{_player}%::mana}%, Need %{_amount}%" to {_player}
 	if {rpgSkript::%{_player}%::mana} - {_amount} > -0.01:
 		return true
 	return false
