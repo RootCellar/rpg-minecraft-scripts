@@ -386,11 +386,13 @@ on damage:
 
 on target:
 	isMinion(event-entity) is true:
-		{rpgSkript::minions::%uuid of the event-entity%::summoner} is target:
+		getSummoner(uuid of event-entity) is target:
 			cancel the event
+			stop
 		isMinion(target) is true:
 			hasSameSummoner(event-entity, target) is true:
 				cancel the event
+				stop
 
 	target is a player
 	hasClass(target, "herobrine") is true:
@@ -407,7 +409,6 @@ on target:
 	hasClass(target, "paladin") is true:
 		isMonster(event-entity) is true:
 			ignite the event-entity for 15 seconds
-			stop
 
 on item damage:
 	hasClass(player, "herobrine") is true:
@@ -1565,9 +1566,14 @@ every 2 seconds:
 		distance between {_entity} and {_summoner} is more than 15:
 			make {_entity} pathfind towards {_summoner} at speed 1.3
 			reset target of {_entity}
-		distance between {_entity} and {_summoner} is more than 30:
+
+		if at least one of:
+			distance between {_entity} and {_summoner} is more than 30
+			{_entity}'s world is not {_summoner}'s world
+		then:
 			teleport {_entity} to {_summoner}
 			make {_entity} stop pathfinding
+			reset target of {_entity}
 
 	set {_end} to now
 	set {_seconds} to difference between {_end} and {_start}
@@ -1618,6 +1624,37 @@ command /raise <text>:
 				set the skeleton's held item to iron sword
 				setupMinion(the skeleton, {_player})
 
+on right click with bone:
+	hasClass(player, "necromancer") is true
+	if subMana(command executor, 10) is false:
+		send "&cYou do not have enough Mana to raise a skeleton!" to command executor
+		stop
+	send "&dYou raise an undead skeleton!" to command executor
+	set {_player} to the player
+	spawn 1 skeleton at the player:
+		setupMinion(the skeleton, {_player})
+
+on right click with rotten flesh:
+	hasClass(player, "necromancer") is true
+	if subMana(command executor, 10) is false:
+		send "&cYou do not have enough Mana to raise a skeleton!" to command executor
+		stop
+	send "&dYou raise an undead skeleton!" to command executor
+	set {_player} to the player
+	spawn 1 skeleton at the player:
+		set movement speed attribute of the skeleton to 1.3 * movement speed attribute of the skeleton
+		set the skeleton's held item to iron sword
+		setupMinion(the skeleton, {_player})
+
+on left click with bone:
+	hasClass(event-player, "necromancer") is true:
+		loop getMinions(event-player):
+			event-player's targeted entity is not set:
+				reset target of loop-value
+				make loop-value pathfind to event-player's targeted block at speed 1.4
+			event-player's targeted entity is set:
+				set target of loop-value to event-player's targeted entity
+
 function setupMinion(entity: entity, summoner: player):
 	set {rpgSkript::minions::%uuid of {_entity}%} to 1
 	set {rpgSkript::minions::%uuid of {_entity}%::summoner} to {_summoner}
@@ -1641,6 +1678,18 @@ function getMinionCount(summoner: player) :: number:
 		getSummoner(loop-index) is {_summoner}:
 			set {_count} to {_count} + 1
 	return {_count}
+
+function getMinionUUIDs(summoner: player) :: texts:
+	loop {rpgSkript::minions::*}:
+		getSummoner(loop-index) is {_summoner}:
+			add loop-index to {_list::*}
+	return {_list::*}
+
+function getMinions(summoner: player) :: entities:
+	set {_uuids::*} to getMinionUUIDs({_summoner})
+	loop {_uuids::*}:
+		add getByUUID({_uuids::%loop-index%}) to {_list::*}
+	return {_list::*}
 
 function calculateMaxMinions(summoner: player) :: number:
 	set {_count} to 0
