@@ -275,7 +275,7 @@ every 1 seconds:
 		set line 12 of loop-player's scoreboard to "&3 Mana: %{rpgSkript::%loop-player%::mana}% / %{rpgSkript::%loop-player%::maxMana}%"
 
 		hasClass(loop-player, "necromancer") is true:
-			set line 11 of loop-player's scoreboard to "&3 Minions: %getMinionCount(loop-player)% / %calculateMaxMinions(loop-player)%"
+			set line 11 of loop-player's scoreboard to "&d Minions: %getMinionCount(loop-player)% / %calculateMaxMinions(loop-player)%"
 
 		hasClass(loop-player, "rogue") is true:
 			set line 9 of loop-player's scoreboard to "Monsters: %countEntities(monsters within 20 meters of loop-player)%"
