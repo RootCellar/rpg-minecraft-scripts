@@ -386,6 +386,9 @@ on damage:
 
 on target:
 	isMinion(event-entity) is true:
+		target is a player:
+			cancel the event
+			stop
 		getSummoner(uuid of event-entity) is target:
 			cancel the event
 			stop
