@@ -1585,6 +1585,7 @@ every 2 seconds:
 on death:
 	the victim is not a player
 	isMinion(the victim) is true:
+		play sound "entity.player.breath" with pitch 1.5 at the victim
 		deleteMinion(uuid of the victim)
 		clear drops
 
@@ -1651,6 +1652,7 @@ on right click with rotten flesh:
 
 on left click with bone:
 	hasClass(event-player, "necromancer") is true:
+		play sound "entity.player.breath" with pitch 0.7 at player
 		loop getMinions(event-player):
 			event-player's targeted entity is not set:
 				reset target of loop-value
