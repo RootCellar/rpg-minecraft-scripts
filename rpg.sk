@@ -5,20 +5,11 @@ on script load:
 
 on script unload:
 	broadcast "&c[&eRPG Skript&c] &3Unloading script..."
+	
+	delete {rpgSkript::fireballs::*}
+	delete {rpgSkript::cryoballs::*}
 
-	loop {rpgSkript::fireballs::*}:
-		delete {rpgSkript::fireballs::%loop-index%::caster}
-		delete {rpgSkript::fireballs::%loop-index%::loc}
-		delete {rpgSkript::fireballs::%loop-index%::time}
-		delete {rpgSkript::fireballs::%loop-index%::v}
-		delete {rpgSkript::fireballs::%loop-index%}
 
-	loop {rpgSkript::cryoballs::*}:
-		delete {rpgSkript::cryoballs::%loop-index%::caster}
-		delete {rpgSkript::cryoballs::%loop-index%::loc}
-		delete {rpgSkript::cryoballs::%loop-index%::time}
-		delete {rpgSkript::cryoballs::%loop-index%::v}
-		delete {rpgSkript::cryoballs::%loop-index%}
 
 on join:
 	wait 3 seconds
