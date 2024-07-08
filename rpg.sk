@@ -1549,11 +1549,17 @@ every 2 seconds:
 	set {_start} to now
 
 	loop {rpgSkript::minions::*}:
+	
 		set {_uuid} to loop-index
 		set {_entity} to getByUUID({_uuid})
 		{_entity} is not set:
 			deleteMinion({_uuid})
+			continue loop
+			
 		set {_summoner} to {rpgSkript::minions::%{_uuid}%::summoner}
+		{_summoner} is not online:
+			killMinion({_uuid})
+			continue loop
 
 		target of {_entity} is not set:
 			loop living entities in radius 10 of {_entity}:
