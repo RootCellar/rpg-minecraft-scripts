@@ -9,7 +9,10 @@ on script unload:
 	delete {rpgSkript::fireballs::*}
 	delete {rpgSkript::cryoballs::*}
 
+	loop {rpgSkript::minions::*}:
+		killMinion(loop-index)
 
+	delete {rpgSkript::minions::*}
 
 on join:
 	wait 3 seconds
