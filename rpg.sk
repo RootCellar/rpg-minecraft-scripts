@@ -857,7 +857,7 @@ function hasItems(player: player, items: items) :: boolean:
 function takeItems(player: player, items: items) :: boolean:
 	{_player} has permission "rpg.control":
 		return true
-	if hasItems({_player}, {_items}) is true:
+	if hasItems({_player}, {_items::*}) is true:
 		remove {_items::*} from {_player}
 		return true
 	return false
@@ -866,7 +866,7 @@ function hasResources(player: player, mana: number, items: items) :: boolean:
 	{_player} has permission "rpg.control":
 		return true
 	send "&3Items - Need: %{_items::*}%" to {_player}
-	if hasItems({_player}, {_items}) is true:
+	if hasItems({_player}, {_items::*}) is true:
 		hasMana({_player}, {_mana}) is true:
 			return true
 	return false
@@ -874,7 +874,7 @@ function hasResources(player: player, mana: number, items: items) :: boolean:
 function takeResources(player: player, mana: number, items: items) :: boolean:
 	{_player} has permission "rpg.control":
 		return true
-	if hasResources({_player}, {_mana}, {_items}) is true:
+	if hasResources({_player}, {_mana}, {_items::*}) is true:
 		remove {_items::*} from {_player}
 		subMana({_player}, {_amount})
 		return true
@@ -900,14 +900,16 @@ command /imbue <text>:
 			send "&cYou do not have enough mana to imbue an item with magic!"
 			stop
 		if arg 1 is "health":
-			if takeItems( player, (64 glowstone dust and 96 nether wart) ) is true:
+			set {_items::*} to (64 glowstone dust and 96 nether wart)
+			if takeItems( player, {_items::*} ) is true:
 				set line lastLoreLine(player's held item) of (player's held item)'s lore to "&cHealth Boost"
 				send "&dYou imbue the item in your hand with Health Boost!"
 			else:
 				send "&cYou do not have the required items for that property! Required: %{_items::*}%"
 				stop
 		else if arg 1 is "mana":
-			if takeItems( player, (4 diamond and 12 gold ingot) ) is true:
+			set {_items::*} to (4 diamond and 12 gold ingot)
+			if takeItems( player, {_items::*}) is true:
 				set line lastLoreLine(player's held item) of (player's held item)'s lore to "&3Mana Boost"
 				send "&dYou imbue the item in your hand with Mana Boost!"
 			else:
