@@ -268,7 +268,7 @@ every 1 seconds:
 		set line 13 of loop-player's scoreboard to "&a"
 		set line 12 of loop-player's scoreboard to "&3 Mana: %{rpgSkript::%loop-player%::mana}% / %{rpgSkript::%loop-player%::maxMana}%"
 
-		hasClass(loop-player, "necromancer") is true:
+		calculateMaxMinions(loop-player) > 0:
 			set line 11 of loop-player's scoreboard to "&d Minions: %getMinionCount(loop-player)% / %calculateMaxMinions(loop-player)%"
 
 		hasClass(loop-player, "rogue") is true:
