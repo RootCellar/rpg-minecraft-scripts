@@ -1724,7 +1724,7 @@ function calculateMaxMinions(summoner: player) :: number:
 	set {_count} to 0
 	hasClass({_summoner}, "necromancer") is true:
 		set {_count} to 4
-		set {_count} to {_count} + level of {_summoner} / 2
+		set {_count} to {_count} + level of {_summoner} / 3
 		{_count} is greater than 18:
 			set {_count} to 18
 		isWearingLightOrLess({_summoner}) is true:
