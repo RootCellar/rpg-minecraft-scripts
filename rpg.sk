@@ -966,9 +966,6 @@ command /arcane <text>:
 	trigger:
 		arcaneSense(arg 1)
 
-options:
-	#chat prefix
-	p: &a[Send]
 command /send <player>:
 	description: Magically send what you are holding to another player!
 	executable by: players
