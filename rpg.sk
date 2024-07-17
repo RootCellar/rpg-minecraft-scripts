@@ -1,10 +1,18 @@
 # General
 
 Options:
-	prefix: &c[&eRPG Skript&c]
+	prefix: &c[&eRPG Skript&c]&r
+	consolePrefix: &6[&8Console&6]&r
+	
+	debugPrefix: &e[&bDEBUG&e]&r
+	debug: true
 
 on script load:
-	broadcast "{@prefix} &3Loading script..."
+	scriptBroadcast("Loading script...")
+	scriptDebugBroadcast("Debug Output Enabled")
+	
+	scriptConsoleMessage("Test console message")
+	scriptDebugConsoleMessage("Test debug to console")
 
 on script unload:
 	broadcast "{@prefix} &3Unloading script..."
@@ -66,6 +74,20 @@ on chat:
 
 function rpgLog(message: text):
 	log "%{_message}%" to "rpg/main.log"
+
+function scriptBroadcast(message: text):
+	broadcast "{@prefix} &3%{_message}%"
+
+function scriptConsoleMessage(message: text):
+	send "{@consolePrefix} {@prefix} &3%{_message}%" to console
+
+function scriptDebugBroadcast(message: text):
+	{@debug} is true:
+		broadcast "{@debugPrefix} {@prefix} &7%{_message}%"
+
+function scriptDebugConsoleMessage(message: text):
+	{@debug} is true:
+		send "{@consolePrefix} {@debugPrefix} {@prefix} &7%{_message}%" to console
 
 function hasClass(player: player, class: text) :: boolean:
 	if {_player} has permission "rpg.%{_class}%":
