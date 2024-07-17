@@ -1032,7 +1032,7 @@ command /memories:
 	trigger:
 		hasClass(player, "wizard") is true
 		loop {rpgSkript::%command executor%::memory::*}:
-			message "%loop-index%"
+			message loop-index
 
 command /pocket:
 	description: Open your enderchest
