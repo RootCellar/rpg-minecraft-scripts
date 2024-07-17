@@ -121,6 +121,10 @@ function countImbue(player: player, text: text) :: number:
 		set {_c} to {_c} + 1
 	if hasLore({_player}'s boots, {_text}) is true:
 		set {_c} to {_c} + 1
+	if hasLore({_player}'s held item, {_text}) is true:
+		set {_c} to {_c} + 1
+	if hasLore({_player}'s off hand item, {_text}) is true:
+		set {_c} to {_c} + 1
 	return {_c}
 
 function hasImbue(player: player, text: text) :: boolean:
@@ -131,6 +135,10 @@ function hasImbue(player: player, text: text) :: boolean:
 	if hasLore({_player}'s leggings, {_text}) is true:
 		return true
 	if hasLore({_player}'s boots, {_text}) is true:
+		return true
+	if hasLore({_player}'s held item, {_text}) is true:
+		return true
+	if hasLore({_player}'s off hand item, {_text}) is true:
 		return true
 	return false
 
