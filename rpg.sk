@@ -1610,6 +1610,10 @@ function deleteMinion(uuid: text):
 	delete {rpgSkript::minions::%{_uuid}%}
 	delete {rpgSkript::minions::%{_uuid}%::*}
 
+	set {_entity} to getByUUID({_uuid})
+	{_entity} is set:
+		reset target of {_entity}
+
 function killMinion(uuid: text):
 	#broadcast "&7Killing minion"
 	kill getByUUID({_uuid})
