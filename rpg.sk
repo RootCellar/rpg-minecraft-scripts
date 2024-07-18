@@ -283,6 +283,9 @@ on heal:
 function heal(entity: entity, amount: number) :: boolean:
 	if {_entity} is not alive:
 		return false
+	{_entity} is a player:
+		hasClass({_entity}, "cleric") is true:
+			set {_amount} to {_amount} * 2
 	heal {_entity} by {_amount}
 	return true
 
@@ -1775,3 +1778,43 @@ on resurrect attempt:
 				uncancel the event
 				send "&6You use your divine powers to escape death!" to the player
 				stop
+
+on heal:
+	event-entity is a player:
+		hasClass(event-player, "cleric") is true:
+			set the heal amount to the heal amount * 2
+
+command /pray <text>:
+	executable by: players
+	trigger:
+		hasClass(player, "cleric") is true
+		{rpgSkript::%player%::lastPrayer} is not set:
+			set {rpgSkript::%player%::lastPrayer} to 30 minutes ago
+		difference between {rpgSkript::%player%::lastPrayer} and now is less than 2 minutes:
+			send "&cYou must wait before you can pray again!" to player
+			stop
+		set {rpgSkript::%player%::lastPrayer} to now
+		arg 1 is "food":
+			chance of 70%:
+				send "&6The gods answer and give you food!" to player
+				play sound "entity.elder_guardian.curse" with pitch 2 at player
+				give 10 bread to player
+				stop
+		arg 1 is "strength":
+			chance of 40%:
+				send "&6The gods answer and give you strength!" to player
+				play sound "item.trident.thunder" with pitch 2.0 at player
+				apply regeneration 2 to player for 60 seconds replacing the existing effect
+				apply saturation 2 to player for 60 seconds replacing the existing effect
+				apply strength 2 to player for 60 seconds replacing the existing effect
+				apply haste 2 to player for 60 seconds replacing the existing effect
+				apply resistance 2 to player for 60 seconds replacing the existing effect
+				stop
+		wait 30 ticks
+		send "&6The gods do not seem to answer..." to player
+		play sound "entity.elder_guardian.ambient" with pitch 0.7 at player
+
+command /channel <text>:
+	executable by: players
+	trigger:
+		hasClass(player, "cleric") is true
