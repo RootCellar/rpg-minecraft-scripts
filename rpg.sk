@@ -214,6 +214,22 @@ function isWearingMediumOrLess(player: player) :: boolean:
 function isWearingHeavyOrLess(player: player) :: boolean:
 	return true
 
+function rollDie(sides: number) :: number:
+	set {_value} to a random integer between 1 and {_sides}
+	scriptDebugBroadcast("rollDie(%{_sides}%) = %{_value}%")
+	return {_value}
+
+function rollDice(dice: number, sides: number) :: number:
+	set {_total} to 0
+	loop {_dice} times:
+		add rollDie({_sides}) to {_total}
+	scriptDebugBroadcast("rollDice(%{_dice}%, %{_sides}%) = %{_total}%")
+	return {_total}
+
+command /dice <number> <number>:
+	trigger:
+		rollDice(arg 1, arg 2)
+
 function addResearch(player: player, name: string, level: number=1):
 	set {rpgSkript::%{_player}%::research::%{_name}%} to {_level}
 	send "&eYou have earned research ""%{_name}%"" Level %{_level}%" to {_player}
