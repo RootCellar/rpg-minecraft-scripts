@@ -228,7 +228,8 @@ function rollDice(dice: number, sides: number) :: number:
 
 command /dice <number> <number>:
 	trigger:
-		rollDice(arg 1, arg 2)
+		set {_value} to rollDice(arg 1, arg 2)
+		send "&9 %arg 1%d%arg 2% -> %{_value}%" to command executor
 
 function addResearch(player: player, name: string, level: number=1):
 	set {rpgSkript::%{_player}%::research::%{_name}%} to {_level}
