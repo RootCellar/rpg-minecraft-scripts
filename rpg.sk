@@ -1757,3 +1757,21 @@ function cullMinions(summoner: player):
 			getSummoner(loop-index) is {_summoner}:
 				killMinion(loop-index)
 				set {_toRemove} to {_toRemove} - 1
+
+
+
+# Cleric
+
+
+
+on resurrect attempt:
+	entity is a player:
+		hasClass(player, "cleric") is true:
+			chance of 30%:
+				uncancel the event
+				send "&6The gods save you from death!" to the player
+				stop
+			subMana(player, 500) is true:
+				uncancel the event
+				send "&6You use your divine powers to escape death!" to the player
+				stop
