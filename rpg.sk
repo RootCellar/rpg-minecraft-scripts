@@ -89,6 +89,11 @@ function scriptDebugConsoleMessage(message: text):
 	{@debug} is true:
 		send "{@consolePrefix} {@debugPrefix} {@prefix} &7%{_message}%" to console
 
+function giveItem(player: player, item: item):
+	give {_item} to {_player}
+	send "&aYou receive %{_item}%" to {_player}
+	scriptConsoleMessage("Gave %{_item}% to %{_player}%")
+
 function hasClass(player: player, class: text) :: boolean:
 	if {_player} has permission "rpg.%{_class}%":
 		return true
@@ -1798,7 +1803,7 @@ command /pray <text>:
 			chance of 70%:
 				send "&6The gods answer and give you food!" to player
 				play sound "entity.elder_guardian.curse" with pitch 2 at player
-				give 10 bread to player
+				giveItem(player, 10 bread)
 				stop
 		arg 1 is "strength":
 			chance of 40%:
