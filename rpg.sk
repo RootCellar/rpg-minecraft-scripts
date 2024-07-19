@@ -357,10 +357,11 @@ function hasEffect(player: player, name: string) :: boolean:
 
 function drawEffects(player: player):
 	hasEffect({_player}, "test") is true:
-		show flame at (location of {_player} ~ vector 0.5, 0.2, 0)
-		show flame at (location of {_player} ~ vector -0.5, 0.2, 0)
-		show flame at (location of {_player} ~ vector 0, 0.2, 0.5)
-		show flame at (location of {_player} ~ vector 0, 0.2, -0.5)
+		#show flame at (location of {_player} ~ vector 0.5, 0.2, 0)
+		#show flame at (location of {_player} ~ vector -0.5, 0.2, 0)
+		#show flame at (location of {_player} ~ vector 0, 0.2, 0.5)
+		#show flame at (location of {_player} ~ vector 0, 0.2, -0.5)
+		show rollDice(3, 3) (flame with offset of 0.2, 0.0, 0.2) at (location of {_player} ~ vector 0, 0.2, 0)
 	hasEffect({_player}, "test2") is true:
 		loop 5 times:
 			set {_x} to a random number between -0.5 and 0.5
