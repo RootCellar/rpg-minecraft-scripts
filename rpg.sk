@@ -126,10 +126,15 @@ command /rpgdebugreset:
 		delete {rpgSkript::debug::*}
 		send "&cEnabled debug types reset" to command executor
 
-function giveItem(player: player, item: item):
+function giveItem(player: player, item: item) :: boolean:
+	{_player} doesn't have space for {_item}:
+		send "&cYou don't have space for %{_item}%" to {_player}
+		scriptConsoleMessage("Failed to give %{_item}% to %{_player}%")
+		return false
 	give {_item} to {_player}
 	send "&aYou receive %{_item}%" to {_player}
 	scriptConsoleMessage("Gave %{_item}% to %{_player}%")
+	return true
 
 function hasClass(player: player, class: text) :: boolean:
 	if {_player} has permission "rpg.%{_class}%":
