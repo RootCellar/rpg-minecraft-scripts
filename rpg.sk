@@ -7,6 +7,8 @@ Options:
 	debugPrefix: &e[&bDEBUG&e]&r
 	debug: true
 
+	drawRadius: 20
+
 on script load:
 	scriptBroadcast("Loading script...")
 	scriptDebugBroadcast("Debug Output Enabled")
@@ -374,6 +376,19 @@ function hasEffect(entity: entity, name: string) :: boolean:
 	return true
 
 function drawEffects(entity: entity):
+
+	# This shouldDraw is an optimization.
+	# Particle effects only really matter to players, who can only seem them from so far away.
+	# This will ensure that the script does not even attempt to draw particles around an entity
+	# that no player will even see. This will allow the drawEffects to run faster.
+	
+	set {_shouldDraw} to false
+	loop players in radius {@drawRadius} around {_entity}:
+		set {_shouldDraw} to true
+		exit 1 loop
+
+	{_shouldDraw} is false:
+		stop
 
 	hasEffect({_entity}, "test") is true:
 		show rollDice(2, 3) (flame with offset of 0.2, 0.0, 0.2) at (location of {_entity} ~ vector 0, 0.1, 0)
