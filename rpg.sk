@@ -49,6 +49,9 @@ on join:
 	send "&3   - Minions will loosely follow their master, and will teleport to their master if they are too far away" to player
 	
 	send "&3 - New Class: Cleric. Channel divine powers to smite your foes!" to player
+	send "&3   - Upon dying, the gods may resurrect the cleric to continue the fight!" to player
+	send "&3   - Pray to the gods for a chance to get what you wish for" to player
+	send "&3   - Channel powerful divine magic" to player
 	
 	send "&3 - Items can now be imbued to grant classes while you are wearing/holding them" to player
 	send "&3 - Warrior no longer gets slowness when they take damage" to player
