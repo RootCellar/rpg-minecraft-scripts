@@ -583,16 +583,79 @@ function generateLootHelmet() :: item:
 
 function generateLootChestplate() :: item:
 	set {_item} to a leather chestplate
+	chance of 50%:
+		set {_item} to a gold chestplate
+	chance of 30%:
+		set {_item} to a iron chestplate
+	chance of 10%:
+		set {_item} to a diamond chestplate
+	chance of 5%:
+		set {_item} to a netherite chestplate
+
+	chance of 4%:
+		set {_item} to addImbue({_item}, "&7Necromancer Class")
+	chance of 4%:
+		set {_item} to addImbue({_item}, "&eCleric Class")
+	chance of 4%:
+		set {_item} to addImbue({_item}, "&bPaladin Class")
+	chance of 4%:
+		set {_item} to addImbue({_item}, "&3Wizard Class")
+	chance of 4%:
+		set {_item} to addImbue({_item}, "&2Rogue Class")
+	chance of 4%:
+		set {_item} to addImbue({_item}, "&cWarrior Class")
 
 	return {_item}
 
 function generateLootLeggings() :: item:
 	set {_item} to a leather leggings
+	chance of 50%:
+		set {_item} to a gold leggings
+	chance of 30%:
+		set {_item} to a iron leggings
+	chance of 10%:
+		set {_item} to a diamond leggings
+	chance of 5%:
+		set {_item} to a netherite leggings
+
+	chance of 4%:
+		set {_item} to addImbue({_item}, "&7Necromancer Class")
+	chance of 4%:
+		set {_item} to addImbue({_item}, "&eCleric Class")
+	chance of 4%:
+		set {_item} to addImbue({_item}, "&bPaladin Class")
+	chance of 4%:
+		set {_item} to addImbue({_item}, "&3Wizard Class")
+	chance of 4%:
+		set {_item} to addImbue({_item}, "&2Rogue Class")
+	chance of 4%:
+		set {_item} to addImbue({_item}, "&cWarrior Class")
 
 	return {_item}
 
 function generateLootBoots() :: item:
 	set {_item} to a leather boots
+	chance of 50%:
+		set {_item} to a gold boots
+	chance of 30%:
+		set {_item} to a iron boots
+	chance of 10%:
+		set {_item} to a diamond boots
+	chance of 5%:
+		set {_item} to a netherite boots
+
+	chance of 4%:
+		set {_item} to addImbue({_item}, "&7Necromancer Class")
+	chance of 4%:
+		set {_item} to addImbue({_item}, "&eCleric Class")
+	chance of 4%:
+		set {_item} to addImbue({_item}, "&bPaladin Class")
+	chance of 4%:
+		set {_item} to addImbue({_item}, "&3Wizard Class")
+	chance of 4%:
+		set {_item} to addImbue({_item}, "&2Rogue Class")
+	chance of 4%:
+		set {_item} to addImbue({_item}, "&cWarrior Class")
 
 	return {_item}
 
