@@ -24,6 +24,7 @@ on script unload:
 		killMinion(loop-index)
 
 	delete {rpgSkript::minions::*}
+	delete {rpgSkript::effects::*}
 
 on join:
 	wait 3 seconds
@@ -345,43 +346,51 @@ on join:
 	setMaxHealth(the player)
 	set the player's health to the player's health
 
-function applyEffect(player: player, name: string, duration: timespan):
-	scriptDebugBroadcastType("effect", "Applying Effect %{_name}% to %{_player}% for %{_duration}%")
-	set {rpgSkript::%{_player}%::effects::%{_name}%} to 0
-	set {rpgSkript::%{_player}%::effects::%{_name}%::duration} to {_duration}
-	set {rpgSkript::%{_player}%::effects::%{_name}%::applied} to now
+function generateIndex(entity: entity) :: text:
+	{_entity} is a player:
+		set {_index} to name of {_entity}
+	else:
+		set {_index} to "entity-%uuid of {_entity}%"
+	scriptDebugBroadcastType("generateIndex", "%{_index}%")
+	return {_index}
 
-function hasEffect(player: player, name: string) :: boolean:
-	hasImbue({_player}, "%{_name}% effect") is true:
-		return true
-	{rpgSkript::%{_player}%::effects::%{_name}%} is not set:
+function applyEffect(entity: entity, name: string, duration: timespan):
+	scriptDebugBroadcastType("effect", "Applying Effect %{_name}% to %{_entity}% for %{_duration}%")
+	set {_index} to generateIndex({_entity})
+	set {rpgSkript::effects::%{_index}%::%{_name}%} to 0
+	set {rpgSkript::effects::%{_index}%::%{_name}%::duration} to {_duration}
+	set {rpgSkript::effects::%{_index}%::%{_name}%::applied} to now
+
+function hasEffect(entity: entity, name: string) :: boolean:
+	{_entity} is a player:
+		hasImbue({_entity}, "%{_name}% effect") is true:
+			return true
+	set {_index} to generateIndex({_entity})
+	{rpgSkript::effects::%{_index}%::%{_name}%} is not set:
 		return false
-	set {_diff} to difference between now and {rpgSkript::%{_player}%::effects::%{_name}%::applied}
-	{_diff} is greater than {rpgSkript::%{_player}%::effects::%{_name}%::duration}:
+	set {_diff} to difference between now and {rpgSkript::effects::%{_index}%::%{_name}%::applied}
+	{_diff} is greater than {rpgSkript::effects::%{_index}%::%{_name}%::duration}:
 		return false
 	return true
 
-function drawEffects(player: player):
-	hasEffect({_player}, "test") is true:
-		#show flame at (location of {_player} ~ vector 0.5, 0.2, 0)
-		#show flame at (location of {_player} ~ vector -0.5, 0.2, 0)
-		#show flame at (location of {_player} ~ vector 0, 0.2, 0.5)
-		#show flame at (location of {_player} ~ vector 0, 0.2, -0.5)
-		show rollDice(3, 3) (flame with offset of 0.2, 0.0, 0.2) at (location of {_player} ~ vector 0, 0.2, 0)
-	hasEffect({_player}, "test2") is true:
+function drawEffects(entity: entity):
+
+	hasEffect({_entity}, "test") is true:
+		show rollDice(2, 3) (flame with offset of 0.2, 0.0, 0.2) at (location of {_entity} ~ vector 0, 0.1, 0)
+	hasEffect({_entity}, "test2") is true:
 		loop 5 times:
 			set {_x} to a random number between -0.5 and 0.5
 			set {_y} to a random number between 0 and 2
 			set {_z} to a random number between -0.5 and 0.5
-			show dragon breath at (location of {_player} ~ vector {_x}, {_y}, {_z})
-	hasEffect({_player}, "test3") is true:
+			show dragon breath at (location of {_entity} ~ vector {_x}, {_y}, {_z})
+	hasEffect({_entity}, "test3") is true:
 		loop 5 times:
 			set {_x} to a random number between -0.5 and 0.5
 			set {_y} to 2.5
 			set {_z} to a random number between -0.5 and 0.5
-			show water drip at (location of {_player} ~ vector {_x}, {_y}, {_z})
-	hasEffect({_player}, "test4") is true:
-		show rollDice(3, 3) (electric spark with offset of 0.3, 0.5, 0.3) at (location of {_player} ~ vector 0, 1, 0)
+			show water drip at (location of {_entity} ~ vector {_x}, {_y}, {_z})
+	hasEffect({_entity}, "test4") is true:
+		show rollDice(3, 3) (electric spark with offset of 0.3, 0.5, 0.3) at (location of {_entity} ~ vector 0, 1, 0)
 
 command /rpgeffect <text> <timespan>:
 	trigger:
@@ -407,8 +416,8 @@ every 1 seconds:
 			set line 6 of loop-player's scoreboard to "Items on Ground: %countEntities(dropped items within 30 meters of loop-player)%"
 
 every 4 ticks:
-	loop all players:
-		drawEffects(loop-player)
+	loop all entities:
+		drawEffects(loop-entity)
 
 every 2 seconds:
 
