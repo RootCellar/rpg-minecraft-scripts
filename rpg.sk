@@ -81,13 +81,38 @@ function scriptBroadcast(message: text):
 function scriptConsoleMessage(message: text):
 	send "{@consolePrefix} {@prefix} &3%{_message}%" to console
 
+function shouldPrintDebugType(type: string) :: boolean:
+	if {rpgSkript::debug::%{_type}%} is not set:
+		return true
+	return {rpgSkript::debug::%{_type}%}
+
 function scriptDebugBroadcast(message: text):
+	scriptDebugBroadcastType("main", {_message})
+
+function scriptDebugBroadcastType(type: string, message: text):
 	{@debug} is true:
-		broadcast "{@debugPrefix} {@prefix} &7%{_message}%"
+		shouldPrintDebugType({_type}) is true:
+			broadcast "{@debugPrefix} %{_type}% {@prefix} &7%{_message}%"
 
 function scriptDebugConsoleMessage(message: text):
+	scriptDebugConsoleMessageType("main", {_message})
+
+function scriptDebugConsoleMessageType(type: string, message: text):
 	{@debug} is true:
-		send "{@consolePrefix} {@debugPrefix} {@prefix} &7%{_message}%" to console
+		shouldPrintDebugType({_type}) is true:
+			send "{@consolePrefix} %{_type}% {@debugPrefix} {@prefix} &7%{_message}%" to console
+
+command /rpgdebug <string> <boolean>:
+	trigger:
+		command executor has permission "rpg.control"
+		set {rpgSkript::debug::%arg 1%} to arg 2
+		send "&3Debug logging changed" to command executor
+
+command /rpgdebugged:
+	trigger:
+		command executor has permission "rpg.control"
+		loop {rpgSkript::debug::*}:
+			send "&3%loop-index% -> %loop-value%" to command executor
 
 function giveItem(player: player, item: item):
 	give {_item} to {_player}
@@ -216,14 +241,14 @@ function isWearingHeavyOrLess(player: player) :: boolean:
 
 function rollDie(sides: number) :: number:
 	set {_value} to a random integer between 1 and {_sides}
-	scriptDebugBroadcast("rollDie(%{_sides}%) = %{_value}%")
+	scriptDebugBroadcastType("dice", "rollDie(%{_sides}%) = %{_value}%")
 	return {_value}
 
 function rollDice(dice: number, sides: number) :: number:
 	set {_total} to 0
 	loop {_dice} times:
 		add rollDie({_sides}) to {_total}
-	scriptDebugBroadcast("rollDice(%{_dice}%, %{_sides}%) = %{_total}%")
+	scriptDebugBroadcastType("dice", "rollDice(%{_dice}%, %{_sides}%) = %{_total}%")
 	return {_total}
 
 command /dice <number> <number>:
