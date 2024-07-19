@@ -83,7 +83,7 @@ function scriptConsoleMessage(message: text):
 
 function shouldPrintDebugType(type: string) :: boolean:
 	if {rpgSkript::debug::%{_type}%} is not set:
-		return true
+		set {rpgSkript::debug::%{_type}%} to true
 	return {rpgSkript::debug::%{_type}%}
 
 function scriptDebugBroadcast(message: text):
