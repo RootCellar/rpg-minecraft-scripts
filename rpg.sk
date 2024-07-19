@@ -555,6 +555,63 @@ on item damage:
 			cancel the event
 			#send "&2Saved durability"
 
+function generateLootHelmet() :: item:
+	set {_item} to a leather helmet
+	chance of 50%:
+		set {_item} to a gold helmet
+	chance of 30%:
+		set {_item} to a iron helmet
+	chance of 10%:
+		set {_item} to a diamond helmet
+	chance of 5%:
+		set {_item} to a netherite helmet
+
+	chance of 4%:
+		set {_item} to addImbue({_item}, "&7Necromancer Class")
+	chance of 4%:
+		set {_item} to addImbue({_item}, "&eCleric Class")
+	chance of 4%:
+		set {_item} to addImbue({_item}, "&bPaladin Class")
+	chance of 4%:
+		set {_item} to addImbue({_item}, "&3Wizard Class")
+	chance of 4%:
+		set {_item} to addImbue({_item}, "&2Rogue Class")
+	chance of 4%:
+		set {_item} to addImbue({_item}, "&cWarrior Class")
+	
+	return {_item}
+
+function generateLootChestplate() :: item:
+	set {_item} to a leather chestplate
+
+	return {_item}
+
+function generateLootLeggings() :: item:
+	set {_item} to a leather leggings
+
+	return {_item}
+
+function generateLootBoots() :: item:
+	set {_item} to a leather boots
+
+	return {_item}
+
+on loot generate:
+	scriptDebugBroadcastType("loot", "Loot table generated")
+
+command /rpgloot <text>:
+	executable by: players
+	trigger:
+		player has permission "rpg.control"
+		arg 1 is "helmet":
+			giveItem(player, generateLootHelmet())
+		arg 1 is "chestplate":
+			giveItem(player, generateLootChestplate())
+		arg 1 is "leggings":
+			giveItem(player, generateLootLeggings())
+		arg 1 is "boots":
+			giveItem(player, generateLootBoots())
+
 function generateTime(seconds: number) :: time span:
 	set {_time} to 0 seconds
 	set {_count} to 0
