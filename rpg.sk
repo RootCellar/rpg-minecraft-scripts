@@ -433,7 +433,7 @@ every 1 seconds:
 		set line 15 of loop-player's scoreboard to "&a"
 		set line 14 of loop-player's scoreboard to "&3&l   RPG"
 		set line 13 of loop-player's scoreboard to "&a"
-		set line 12 of loop-player's scoreboard to "&3 Mana: %{rpgSkript::%loop-player%::mana}% / %{rpgSkript::%loop-player%::maxMana}%"
+		set line 12 of loop-player's scoreboard to "&3 Mana: %{rpgSkript::mana::%loop-player%}% / %{rpgSkript::maxMana::%loop-player%}%"
 
 		calculateMaxMinions(loop-player) > 0:
 			set line 11 of loop-player's scoreboard to "&d Minions: %getMinionCount(loop-player)% / %calculateMaxMinions(loop-player)%"
@@ -1053,10 +1053,10 @@ function isLightningRodWithinRangeOf(loc: location, range: number, strike: boole
 		return false
 
 function setupMana(player: player):
-	if {rpgSkript::%{_player}%::mana} is not set:
-		set {rpgSkript::%{_player}%::mana} to 0
-	if {rpgSkript::%{_player}%::maxMana} is not set:
-		set {rpgSkript::%{_player}%::maxMana} to 0
+	if {rpgSkript::mana::%{_player}%} is not set:
+		set {rpgSkript::mana::%{_player}%} to 0
+	if {rpgSkript::maxMana::%{_player}%} is not set:
+		set {rpgSkript::maxMana::%{_player}%} to 0
 
 	set {_newMax} to 0
 	if hasClass({_player}, "herobrine") is true:
@@ -1078,54 +1078,54 @@ function setupMana(player: player):
 	if hasImbue({_player}, "Mana Boost") is true:
 		set {_newMax} to {_newMax} + 0.25 * {_newMax} * countImbue({_player}, "Mana Boost")
 		
-	if {_newMax} is not {rpgSkript::%{_player}%::maxMana}:
-		set {rpgSkript::%{_player}%::maxMana} to {_newMax}
+	if {_newMax} is not {rpgSkript::maxMana::%{_player}%}:
+		set {rpgSkript::maxMana::%{_player}%} to {_newMax}
 		send "&dYour maximum mana has changed to %{_newMax}%" to {_player}
 
 function checkMana(player: player):
 	setupMana({_player})
-	if {rpgSkript::%{_player}%::mana} > {rpgSkript::%{_player}%::maxMana}:
-		set {rpgSkript::%{_player}%::mana} to {rpgSkript::%{_player}%::maxMana}
-	if {rpgSkript::%{_player}%::mana} < 0:
-		set {rpgSkript::%{_player}%::mana} to 0
+	if {rpgSkript::mana::%{_player}%} > {rpgSkript::maxMana::%{_player}%}:
+		set {rpgSkript::mana::%{_player}%} to {rpgSkript::maxMana::%{_player}%}
+	if {rpgSkript::mana::%{_player}%} < 0:
+		set {rpgSkript::mana::%{_player}%} to 0
 
 function regenMana(player: player):
-	if {rpgSkript::%{_player}%::mana} is not set:
+	if {rpgSkript::mana::%{_player}%} is not set:
 		setupMana({_player})
-	if {rpgSkript::%{_player}%::maxMana} is not set:
+	if {rpgSkript::maxMana::%{_player}%} is not set:
 		setupMana({_player})
 
 	set {_add} to 0
 	if hasClass({_player}, "herobrine") is true:
-		set {_add} to {rpgSkript::%{_player}%::maxMana} / 100
+		set {_add} to {rpgSkript::maxMana::%{_player}%} / 100
 	else if hasClass({_player}, "wizard") is true:
 		if isWearingLightOrLess({_player}) is true:
-			set {_add} to {rpgSkript::%{_player}%::maxMana} / 40
+			set {_add} to {rpgSkript::maxMana::%{_player}%} / 40
 		else if isWearingMediumOrLess({_player}) is true:
-			set {_add} to {rpgSkript::%{_player}%::maxMana} / 70
+			set {_add} to {rpgSkript::maxMana::%{_player}%} / 70
 	else if hasClass({_player}, "necromancer") is true:
-		set {_add} to {rpgSkript::%{_player}%::maxMana} / 20
+		set {_add} to {rpgSkript::maxMana::%{_player}%} / 20
 	else if hasClass({_player}, "cleric") is true:
-		set {_add} to {rpgSkript::%{_player}%::maxMana} / 200
+		set {_add} to {rpgSkript::maxMana::%{_player}%} / 200
 	else if hasClass({_player}, "paladin") is true:
-		set {_add} to {rpgSkript::%{_player}%::maxMana} / 6
+		set {_add} to {rpgSkript::maxMana::%{_player}%} / 6
 	
 	addMana( {_player}, {_add} )
 
 function addMana(player: player, amount: number):
-	set {_before} to {rpgSkript::%{_player}%::mana}
-	set {rpgSkript::%{_player}%::mana} to {rpgSkript::%{_player}%::mana} + {_amount}
+	set {_before} to {rpgSkript::mana::%{_player}%}
+	set {rpgSkript::mana::%{_player}%} to {rpgSkript::mana::%{_player}%} + {_amount}
 	checkMana({_player})
-	if abs( {rpgSkript::%{_player}%::mana} - {_before} ) > 0.01:
+	if abs( {rpgSkript::mana::%{_player}%} - {_before} ) > 0.01:
 		displayMana({_player})
 
 function subMana(player: player, amount: number, print: boolean=true) :: boolean:
 	{_player} has permission "rpg.control":
 		return true
-	if {rpgSkript::%{_player}%::mana} is not set:
+	if {rpgSkript::mana::%{_player}%} is not set:
 		return false
 	if hasMana({_player}, {_amount}, {_print}) is true:
-		set {rpgSkript::%{_player}%::mana} to {rpgSkript::%{_player}%::mana} - {_amount}
+		set {rpgSkript::mana::%{_player}%} to {rpgSkript::mana::%{_player}%} - {_amount}
 		checkMana({_player})
 		displayMana({_player})
 		return true
@@ -1136,16 +1136,16 @@ function hasMana(player: player, amount: number, print: boolean=true) :: boolean
 	{_player} has permission "rpg.control":
 		return true
 	if {_print} is true:
-		send "&3Mana: Have %{rpgSkript::%{_player}%::mana}%, Need %{_amount}%" to {_player}
-	if {rpgSkript::%{_player}%::mana} - {_amount} > -0.01:
+		send "&3Mana: Have %{rpgSkript::mana::%{_player}%}%, Need %{_amount}%" to {_player}
+	if {rpgSkript::mana::%{_player}%} - {_amount} > -0.01:
 		return true
 	return false
 
 function displayMana(player: player):
-	set {_dispM} to {rpgSkript::%{_player}%::mana}
+	set {_dispM} to {rpgSkript::mana::%{_player}%}
 	if {_dispM} < 0:
 		set {_dispM} to 0
-	send action bar "&3Mana: %{_dispM}% / %{rpgSkript::%{_player}%::maxMana}%" to {_player}
+	send action bar "&3Mana: %{_dispM}% / %{rpgSkript::maxMana::%{_player}%}%" to {_player}
 
 function hasItems(player: player, items: items) :: boolean:
 	{_player} has permission "rpg.control":
