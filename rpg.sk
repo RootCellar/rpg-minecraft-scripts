@@ -341,6 +341,7 @@ on join:
 	set the player's health to the player's health
 
 function applyEffect(player: player, name: string, duration: timespan):
+	scriptDebugBroadcastType("effect", "Applying Effect %{_name}% to %{_player}% for %{_duration}%")
 	set {rpgSkript::%{_player}%::effects::%{_name}%} to 0
 	set {rpgSkript::%{_player}%::effects::%{_name}%::duration} to {_duration}
 	set {rpgSkript::%{_player}%::effects::%{_name}%::applied} to now
