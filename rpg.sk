@@ -164,6 +164,11 @@ function lastLoreLine(item: item) :: number:
 		set {_x} to {_x} + 1
 	return {_x}
 
+function addImbue(item: item, imbue: text) :: item:
+	set line lastLoreLine({_item}) of ({_item})'s lore to {_imbue}
+	scriptDebugBroadcastType("imbue", "%{_item}% imbue %{_imbue}%")
+	return {_item}
+
 function countImbue(player: player, text: text) :: number:
 	set {_c} to 0
 	if hasLore({_player}'s helmet, {_text}) is true:
