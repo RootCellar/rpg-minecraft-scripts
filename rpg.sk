@@ -124,6 +124,7 @@ command /rpgdebugreset:
 	trigger:
 		command executor has permission "rpg.control"
 		delete {rpgSkript::debug::*}
+		send "&cEnabled debug types reset" to command executor
 
 function giveItem(player: player, item: item):
 	give {_item} to {_player}
