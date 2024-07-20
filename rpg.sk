@@ -47,6 +47,28 @@ on join:
 	send "&3   - Minions will force monsters they hit (except creepers) to target them" to player
 	send "&3   - Minions can not damage each other" to player
 	send "&3   - Minions will loosely follow their master, and will teleport to their master if they are too far away" to player
+
+	send "&3 - New Class: Endwarden. Tap into the power of the void to massacre your enemies!" to player
+	send "&3   - Can summon Enderman (with growing hitpoints as you level up) that will target and attack monsters" to player
+	send "&3   - Levitates enemies and causes them to take increased fall damage" to player
+	send "&3   - Buffs minions and weakens enemies in large areas" to player
+	send "&3   - Can Teleport, along with hardening their skin to make them tougher" to player
+	send "&3   - 8 hearts however, and takes 1/8 of the total health when in a source of water (rain included)" to player
+
+	send "&3 - New Class: Barbarian. Use a new type of energy 'Rage' in order to tank and obliterate your enemies!" to player
+	send "&3   - Hard hitting, with bonuses to boost damage against opponents" to player
+	send "&3   - Naturally resistant, taking 10 percent less damage. Takes 15 percent more damage from projectiles" to player
+	send "&3   - Rage ability to strengthen yourself to powers almost akin to a god" to player
+	send "&3   - Can Leap to cross gaps and get to higher ground, but also to squash those below" to player
+	send "&3   - Can throw Eggs and Snowballs for damage" to player
+
+	send "&3 - New Class: Druid. Protect the Natural Order with your skills and a trusty companion!" to player
+	send "&3   - Summons 1 Druid Companion that is typically tougher than other summons. 3 options to choose from and the minion scales with the players level" to player
+	send "&3   - Gets bonus loot from hunting occasionally when their nature god spoils the hunt" to player
+	send "&3   - Can shoot a mass of cobwebs at a location that damage and slow those caught in it" to player
+	send "&3   - Gains regeneration when around flowers" to player
+	send "&3   - Can temporarily buff their companion to be stronger." to player
+	send "&3   - Wildshape into different forms that have their own benefits." to player
 	
 	send "&3 - New Class: Cleric. Channel divine powers to smite your foes!" to player
 	send "&3   - Upon dying, the gods may resurrect the cleric to continue the fight!" to player
@@ -77,6 +99,12 @@ on chat:
 		set the message to "&c[&7Necromancer&c]&r %message%"
 	hasClass(player, "herobrine") is true:
 		set the message to "&0[&4Herobrine&0]&r %message%"
+	hasClass(player, "barbarian") is true:
+		set the message to "&c[&4Barbarian&c]&r %message%"
+	hasClass(player, "endwarden") is true:
+		set the message to "&0[&9Endwarden&0]&r %message%"
+	hasClass(player, "druid") is true:
+		set the message to "&6[&aDruid&6]&r %message%"
 
 function rpgLog(message: text):
 	log "%{_message}%" to "rpg/main.log"
@@ -163,10 +191,36 @@ function setMaxHealth(player: player):
 		set {_newMax} to 20
 		if hasResearch({_player}, "durable") is true:
 			set {_newMax} to {_newMax} * 1.25
+	else if hasClass({_player}, "barbarian") is true:
+		set {_newMax} to 15
+	else if hasClass({_player}, "paladin") is true:
+		set {_newMax} to 10
+	else if hasClass({_player}, "druid") is true:
+		set {_newMax} to 12.5
 	else if hasClass({_player}, "wizard") is true:
+		set {_newMax} to 8
+	else if hasClass({_player}, "endwarden") is true:
 		set {_newMax} to 8
 	else:
 		set {_newMax} to 10
+
+	hasClass({_player}, "druid") is true:
+		if {rpgSkript::%{_player}%::batshape} is true:
+			set {_newMax} to 0.32 * {_newMax} 
+		else if {rpgSkript::%{_player}%::wolfshape} is true:
+			set {_newMax} to 0.64 * {_newMax}
+		else if {rpgSkript::%{_player}%::horseshape} is true:
+			set {_newMax} to 0.96 * {_newMax}
+		else if {rpgSkript::%{_player}%::spidershape} is true:
+			set {_newMax} to 1.28 * {_newMax} 
+		else if {rpgSkript::%{_player}%::bearshape} is true:
+			set {_newMax} to 1.6 * {_newMax}
+		else if {rpgSkript::%{_player}%::humanshape} is true:
+			if at least one of:
+				block below {_player} is dirt
+				block below {_player} is grass
+			then:
+				set {_newMax} to {_newMax} * 1.2
 
 	if hasImbue({_player}, "Health Boost") is true:
 		set {_newMax} to ({_newMax} + {_newMax} * 0.15 * countImbue({_player}, "Health Boost"))
@@ -238,6 +292,21 @@ function isWearingLightOrLess(player: player) :: boolean:
 			return false
 	hasLore(off hand item of {_player}, "light") is false:
 		off hand item of {_player} is shield:
+			return false
+	return true
+
+function isWearingNothing(player: player) :: boolean:
+	hasLore(helmet of {_player}, "shapeshifter") is false:
+		helmet of {_player} is not (air):
+			return false
+	hasLore(chestplate of {_player}, "shapeshifter") is false:
+		chestplate of {_player} is not (air):
+			return false
+	hasLore(leggings of {_player}, "shapeshifter") is false:
+		leggings of {_player} is not (air):
+			return false
+	hasLore(boots of {_player}, "shapeshifter") is false:
+		boots of {_player} is not (air):
 			return false
 	return true
 
@@ -436,7 +505,25 @@ every 1 seconds:
 		set line 12 of loop-player's scoreboard to "&3 Mana: %{rpgSkript::mana::%loop-player%}% / %{rpgSkript::maxMana::%loop-player%}%"
 
 		calculateMaxMinions(loop-player) > 0:
-			set line 11 of loop-player's scoreboard to "&d Minions: %getMinionCount(loop-player)% / %calculateMaxMinions(loop-player)%"
+			set line 10 of loop-player's scoreboard to "&d Minions: %getMinionCount(loop-player)% / %calculateMaxMinions(loop-player)%"
+
+		hasClass(loop-player, "druid") is true:
+			set line 8 of loop-player's scoreboard to "&6 Wildshape: %{rpgSkript::%loop-player%::wildshape}% / %{rpgSkript::%loop-player%::maxWildshape}%"
+			if {rpgSkript::%loop-player%::batshape} is true:
+				set line 7 of loop-player's scoreboard to "&a Current Form: Bat"
+			if {rpgSkript::%loop-player%::wolfshape} is true:
+				set line 7 of loop-player's scoreboard to "&a Current Form: wolf"
+			if {rpgSkript::%loop-player%::spidershape} is true:
+				set line 7 of loop-player's scoreboard to "&a Current Form: Spider"
+			if {rpgSkript::%loop-player%::horseshape} is true:
+				set line 7 of loop-player's scoreboard to "&a Current Form: Horse"
+			if {rpgSkript::%loop-player%::bearshape} is true:
+				set line 7 of loop-player's scoreboard to "&a Current Form: Bear"
+			if {rpgSkript::%loop-player%::humanshape} is true:
+				set line 7 of loop-player's scoreboard to "&a Current Form: Human"
+		hasClass(loop-player, "barbarian") is true:
+			set line 11 of loop-player's scoreboard to "&4 Rage: %{rpgSkript::%loop-player%::rage}% / %{rpgSkript::%loop-player%::maxRage}%"
+			#set line 5 of loop-player's scoreboard to "&c DamageMult: %{rpgSkript::%loop-player%::damageboost}%"
 
 		hasClass(loop-player, "rogue") is true:
 			set line 9 of loop-player's scoreboard to "Monsters: %countEntities(monsters within 20 meters of loop-player)%"
@@ -461,6 +548,8 @@ every 2 seconds:
 
 		setupMana(loop-player)
 		regenMana(loop-player)
+
+		setupRage(loop-player)
 
 		cullMinions(loop-player)
 		
@@ -488,8 +577,252 @@ every 2 seconds:
 				set loop-player's knockback resistance attribute to 0.9
 			apply haste 6 without particles to the loop-player for 30 seconds replacing the existing effect
 			apply strength 4 without particles to the loop-player for 30 seconds replacing the existing effect
+		hasClass(loop-player, "barbarian") is true:
+			canUseBarbarianAbilities(loop-player) is true:
+				regenRage(loop-player)
+				if {rpgSkript::%loop-player%::ragecooldown} is not set:
+					set {rpgSkript::%loop-player%::ragecooldown} to true
+				if {rpgSkript::%loop-player%::damageboost} is not set:
+					set {rpgSkript::%loop-player%::damageboost} to 1.0
+				if {rpgSkript::%loop-player%::damagemin} is not set:
+					set {rpgSkript::%loop-player%::damagemin} to 1.25
+				if {rpgSkript::%loop-player%::raging} is not set:
+					set {rpgSkript::%loop-player%::raging} to false
+				if {rpgSkript::%loop-player%::leap} is not set:
+					set {rpgSkript::%loop-player%::leap} to true
+				if at least one of:
+					loop-player's off hand item is a sword
+					loop-player's held item is a sword
+				then:
+					apply resistance 1 without particles to the loop-player for 3 seconds replacing the existing effect	
+				if at least one of:
+					loop-player's off hand item is an axe
+					loop-player's held item is an axe
+				then:
+					set {rpgSkript::%loop-player%::damagemin} to 1.5
+					if {rpgSkript::%loop-player%::raging} is true:
+						set {rpgSkript::%loop-player%::damagemin} to 2.0	
+				else:
+					set {rpgSkript::%loop-player%::damagemin} to 1.25
+				loop-player's off hand item is a pickaxe:
+					apply haste 1 without particles to the loop-player for 3 seconds replacing the existing effect
+					loop-player's held item is a pickaxe:
+						apply haste 2 without particles to the loop-player for 3 seconds replacing the existing effect
+				loop-player's off hand item is a shovel:
+					apply swiftness 1 without particles to the loop-player for 3 seconds replacing the existing effect
+					loop-player's held item is a shovel:
+						apply swiftness 2 without particles to the loop-player for 3 seconds replacing the existing effect
+				loop-player's off hand item is a hoe:
+					apply regeneration 1 without particles to the loop-player for 3 seconds replacing the existing effect
+				chance of 50%:
+					set {rpgSkript::%loop-player%::damageboost} to {rpgSkript::%loop-player%::damageboost} - 0.05
+				if {rpgSkript::%loop-player%::damageboost} is less than {rpgSkript::%loop-player%::damagemin}:
+					set {rpgSkript::%loop-player%::damageboost} to {rpgSkript::%loop-player%::damagemin}
+
+		hasClass(loop-player, "druid") is true:
+
+			setupWildshape(loop-player)
+			time in world of loop-player is between 23:00 and 1:00:
+				if {rpgSkript::%loop-player%::wildshape} is not {rpgSkript::%loop-player%::maxWildshape}:
+					if {rpgSkript::%loop-player%::humanshape} is true:
+						regenWildshape(loop-player)
+						send "&6~ ~ WILDSHAPE CHARGES REGENERATED ~ ~" to loop-player
+
+			if {rpgSkript::%loop-player%::druidspawn} is not set:
+				set {rpgSkript::%loop-player%::druidspawn} to true
+			if {rpgSkript::%loop-player%::cobweb} is not set:
+				set {rpgSkript::%loop-player%::cobweb} to true
+			if {rpgSkript::%loop-player%::batshape} is not set:
+				set {rpgSkript::%loop-player%::batshape} to false
+			if {rpgSkript::%loop-player%::bearshape} is not set:
+				set {rpgSkript::%loop-player%::bearshape} to false
+			if {rpgSkript::%loop-player%::wolfshape} is not set:
+				set {rpgSkript::%loop-player%::wolfshape} to false
+			if {rpgSkript::%loop-player%::horseshape} is not set:
+				set {rpgSkript::%loop-player%::horseshape} to false
+			if {rpgSkript::%loop-player%::spidershape} is not set:
+				set {rpgSkript::%loop-player%::spidershape} to false
+			if {rpgSkript::%loop-player%::humanshape} is not set:
+				set {rpgSkript::%loop-player%::humanshape} to true
+			
+
+			if canUseShapeshiftAbilities(loop-player) is true:
+				if {rpgSkript::%loop-player%::batshape} is true:
+					if light level at loop-player is greater than 10:
+						apply blindness 2 without particles to the loop-player for 10 seconds replacing the existing effect
+					else:
+						apply night vision 2 without particles to the loop-player for 10 seconds replacing the existing effect
+					apply swiftness 1 without particles to the loop-player for 3 seconds replacing the existing effect
+					apply haste 1 without particles to the loop-player for 3 seconds replacing the existing effect
+					enable flight for loop-player
+				if {rpgSkript::%loop-player%::wolfshape} is true:
+					apply night vision 2 without particles to the loop-player for 10 seconds replacing the existing effect
+					apply swiftness 3 without particles to the loop-player for 3 seconds replacing the existing effect
+					apply haste 3 without particles to the loop-player for 3 seconds replacing the existing effect
+					disable flight for loop-player
+				if {rpgSkript::%loop-player%::horseshape} is true:
+					apply swiftness 4 without particles to the loop-player for 3 seconds replacing the existing effect
+					apply jump boost 4 without particles to the loop-player for 3 seconds replacing the existing effect
+					disable flight for loop-player
+				if {rpgSkript::%loop-player%::spidershape} is true:
+					apply swiftness 2 without particles to the loop-player for 3 seconds replacing the existing effect
+					apply haste 2 without particles to the loop-player for 3 seconds replacing the existing effect
+					disable flight for loop-player
+				if {rpgSkript::%loop-player%::bearshape} is true:
+					apply swiftness 1 without particles to the loop-player for 3 seconds replacing the existing effect
+					apply strength 2 without particles to the loop-player for 3 seconds replacing the existing effect
+					disable flight for loop-player
+			else:
+				set {rpgSkript::%loop-player%::bearshape} to false
+				set {rpgSkript::%loop-player%::horseshape} to false
+				set {rpgSkript::%loop-player%::spidershape} to false
+				set {rpgSkript::%loop-player%::wolfshape} to false
+				set {rpgSkript::%loop-player%::batshape} to false
+				set {rpgSkript::%loop-player%::humanshape} to true
+
+				if hasClass(loop-player, "herobrine") is false:
+					if {rpgSkript::%loop-player%::batshape} is false:
+						disable flight for loop-player
+			canUseDruidAbilities(loop-player) is true:	
+				loop all blocks in radius 5 around loop-player:
+					if loop-block is a flower:
+						apply regeneration 2 without particles to the loop-player for 3 seconds replacing the existing effect
+				if {rpgSkript::%loop-player%::humanshape} is true:
+					disable flight for loop-player
+					if at least one of:
+						block below loop-player is sand
+						block below loop-player is gravel
+						block below loop-player is stone
+					then:
+						apply swiftness 1 without particles to the loop-player for 5 seconds replacing the existing effect
+						apply jump boost 2 without particles to the loop-player for 5 seconds replacing the existing effect
+
+					if at least one of:
+						block below loop-player is dirt
+						block below loop-player is grass
+					then:
+						apply saturation 1 without particles to the loop-player for 5 seconds replacing the existing effect
+
+					loop all entities in radius 10 around loop-player:
+						if loop-entity-2 is an animal:
+							apply resistance 3 without particles to the loop-entity-2 for 5 seconds replacing the existing effect
+
+
+			
+
+		hasClass(loop-player, "endwarden") is true:
+			if {rpgSkript::%loop-player%::eteleport} is not set:
+				set {rpgSkript::%loop-player%::eteleport} to true
+
+every 10 seconds:
+	
+	loop all players:
+		
+		hasClass(loop-player, "druid") is true:
+			canUseDruidAbilities(loop-player) is true:
+				if {rpgSkript::%loop-player%::humanshape} is true:
+					loop all blocks in radius 10 around loop-player:
+						chance of 5%:
+							if loop-block is wheat:
+								apply bone meal to loop-block
+								wait 20 ticks
+							if loop-block is carrot plant:
+								apply bone meal to loop-block
+								wait 20 ticks
+							if loop-block is potato plant:
+								apply bone meal to loop-block
+								wait 20 ticks
+							if loop-block is melon stem:
+								apply bone meal to loop-block
+								wait 20 ticks
+							if loop-block is pumpkin stem:
+								apply bone meal to loop-block
+								wait 20 ticks
+							if loop-block is sweet berry bush:
+								apply bone meal to loop-block
+								wait 20 ticks
+							if loop-block is beetroot plant:
+								apply bone meal to loop-block
+								wait 20 ticks
+							if loop-block is sugar cane:
+								block above loop-block is air:
+									block below loop-block is not sugar cane:
+										set block above loop-block to sugar cane
+								wait 20 ticks
+							if loop-block is bamboo:
+								block above loop-block is air:
+									set block above loop-block to bamboo
+								wait 20 ticks
+							if loop-block is a sapling:
+								apply bone meal to loop-block
+								wait 20 ticks
+
+every 15 seconds:
+	
+	loop all players:
+		
+		hasClass(loop-player, "endwarden") is true:
+			chance of 25%:
+				subMana(loop-player, 100) is true:
+					send "&2~ ~ RADIATE AN ENDER FIELD ~ ~" to loop-player
+					play sound "block.end_portal.spawn" at loop-player
+					loop entities in radius 20 of loop-player:
+						isMonster(loop-entity-2) is true:
+							chance of 50%:
+								apply levitation 1 to the loop-entity-2 for 5 seconds replacing the existing effect
+						isMinion(loop-entity-2) is true:
+							if getSummoner(uuid of loop-entity-2) is loop-player:
+								apply regeneration 3 to loop-entity-2 for 10 seconds replacing the existing effect
+						if loop-entity-2 is a player:
+							loop-entity-2 is not loop-player:
+								send "&2~ ~ YOU FEEL A PULSATING ENDER FIELD ~ ~" to loop-entity-2
+
+
+	
+				
+		
+on death:
+	isMinion(victim) is true:
+		set {_caster} to getSummoner(uuid of victim)
+		hasClass({_caster}, "druid") is true:
+			victim is a polar bear:
+				set {rpgSkript::%{_caster}%::druidspawn} to true
+			victim is a wolf:
+				set {rpgSkript::%{_caster}%::druidspawn} to true
+			victim is a spider:
+				set {rpgSkript::%{_caster}%::druidspawn} to true
+			send "&cDruid Minion has Died!" to {_caster}
+	hasClass(attacker, "barbarian") is true:
+		set {rpgSkript::%attacker%::damageboost} to {rpgSkript::%attacker%::damageboost} + 0.05			
+				
 
 on damage:
+	damage cause is fall:
+		loop all entities in radius 15 around victim:
+			hasClass( loop-entity, "endwarden") is true:
+				canUseEndwardenAbilities( loop-entity ) is true:
+					hasClass( victim, "endwarden") is false:
+						if isMonster( victim ) is true:
+							set the damage to the damage * 5.0
+						if isMinion( victim ) is true:
+							if getSummoner( uuid of victim) is loop-entity:
+								set the damage to 0
+							else:
+								set the damage to the damage * 5.0
+							
+						else if isWearingLightOrLess( victim ) is true:
+							set the damage to the damage * 2.0
+						else if isWearingMediumOrLess( victim ) is true:
+							set the damage to the damage * 3.0
+						else:
+							set the damage to the damage * 4.0
+						apply weakness 1 without particles to the victim for 5 seconds replacing the existing effect
+						apply slowness 1 without particles to the victim for 5 seconds replacing the existing effect
+						send "&9~ YOU SUFFER EXTREME FALL DAMAGE FROM AN ENDWARDEN'S PRESENCE ~" to victim
+						send "&9~ YOU USE THE VOID TO CRUSH A FALLING ENEMY (%damage%) ~" to loop-entity
+		
+		
+	
 	isMinion(attacker) is true:
 		isMinion(victim) is true:
 			hasSameSummoner(attacker, victim) is true:
@@ -502,10 +835,74 @@ on damage:
 			getSummoner(uuid of the attacker) is the victim:
 				cancel the event
 				stop
+		attacker is an enderman:
+			if victim has potion effect levitation:
+				set the damage to the damage * 1.2
+			else:
+				chance of 50%:
+					apply levitation 1 without particles to the victim for 5 seconds replacing the existing effect
+					send "&9~ ~ YOU ARE LIFTED INTO THE AIR BY AN ENDWARDEN'S MINION ~ ~" to victim
+		attacker is a spider:
+			if victim has potion effect poison:
+				set the damage to the damage * 1.2
+			else:
+				chance of 50%:
+					apply poison 1 without particles to the victim for 5 seconds replacing the existing effect
+					send "&9~ ~ YOU ARE POISONED BY A DRUID'S MINION ~ ~" to victim
 
 		add 1 experience to getSummoner(uuid of attacker)
 
 	attacker is a player:
+
+		hasClass(attacker, "druid") is true:
+			event-projectile is set:
+				if {rpgSkript::%attacker%::humanshape} is true:
+					set the damage to the damage * 1.2
+			attacker's held item is a stick:
+				if {rpgSkript::%attacker%::humanshape} is true:
+					set the damage to 4.5
+			victim is an animal:
+				set the damage to the damage * 1.25
+			if {rpgSkript::%attacker%::humanshape} is false:
+				if attacker's held item is not air:
+					cancel the event
+					stop
+
+				if attacker's held item is air:
+					set the damage to 4
+
+			else if {rpgSkript::%attacker%::spidershape} is true:
+				if victim has potion effect poison:
+					set the damage to 6.5
+				else:
+					chance of 50%:
+						apply poison 1 without particles to the victim for 5 seconds replacing the existing effect
+						send "&9~ ~ YOU ARE POISONED BY A DRUID ~ ~" to victim
+			else if {rpgSkript::%attacker%::wolfshape} is true:
+				if victim is an animal:
+					set the damage to 8
+				else:
+					set the damage to 5
+			else if {rpgSkript::%attacker%::horseshape} is true:
+				if isMonster( victim ) is true:
+					set the damage to 5
+				if isMinion( victim ) is true:
+					set the damage to 5
+				else if isWearingMediumOrLess( victim ) is true:
+					set the damage to 7
+				else:
+					set the damage to 9
+			else if {rpgSkript::%attacker%::bearshape} is true:
+				set the damage to 6.5
+				chance of 50%:
+					set the damage to 8.5
+					send "&6~ ~ CRITICAL STRIKE! ~ ~" to attacker
+				chance of 25%:
+					apply weakness 1 without particles to the victim for 5 seconds replacing the existing effect
+					apply slowness 1 without particles to the victim for 5 seconds replacing the existing effect
+			else if {rpgSkript::%attacker%::batshape} is true:
+				set the damage to 1
+
 		hasClass(attacker, "rogue") is true:
 			canUseRogueAbilities(attacker) is true
 			set the damage to the damage * 2.0
@@ -515,6 +912,54 @@ on damage:
 			isMonster(victim) is true:
 				set the damage to the damage * 1.4
 				ignite the victim for 20 seconds
+		hasClass(attacker, "barbarian") is true:
+			canUseBarbarianAbilities( attacker ) is true:
+				event-projectile is set:
+					if hasResearch(attacker, "throwables") is true:
+						if event-projectile is an egg:
+							set the damage to 1
+						else if event-projectile is a snowball:
+							set the damage to 0.5
+							apply slowness 1 without particles to the victim for 3 seconds replacing the existing effect
+						else:
+							set the damage to the damage * 0.3
+					else:
+						set the damage to the damage * 0.3
+					stop
+				if victim has potion effect weakness:
+					set the damage to the damage * 1.025
+					if victim has potion effect slowness:
+						set the damage to the damage * 1.025
+						send "&c~ ~ CRITICAL STRIKE (%damage%)~ ~" to attacker
+				else if victim has potion effect slowness:
+					set the damage to the damage * 1.025
+					if victim has potion effect weakness:
+						set the damage to the damage * 1.025	
+						send "&c~ ~ CRITICAL STRIKE (%damage%) ~ ~" to attacker
+				else:
+					set the damage to the damage * 1.025
+
+				set the damage to the damage * {rpgSkript::%attacker%::damageboost}
+				chance of 20%:
+					set {rpgSkript::%attacker%::damageboost} to {rpgSkript::%attacker%::damageboost} + 0.05
+
+				if the damage is less than the health of the victim * 0.2:
+					hasResearch(attacker, "reckless_attack") is true:
+						set {_odamage} to the damage
+						if chance of 75%:
+							set the damage to the damage * 2.0
+						else:
+							set the damage to 0
+						send "&c~ ~ RECKLESS ATTACK! %{_odamage}% -> %damage% ~ ~" to attacker
+				
+		hasClass(attacker, "endwarden") is true:
+			if victim has potion effect levitation:
+				set the damage to the damage * 1.2
+			else:
+				chance of 20%:
+					apply levitation 1 without particles to the victim for 5 seconds replacing the existing effect
+					send "&9~ ~ YOU ARE LIFTED INTO THE AIR BY AN ENDWARDEN ~ ~" to victim
+
 			
 	victim is a player:
 		setMaxHealth(the victim)
@@ -552,7 +997,70 @@ on damage:
 				cancel the event
 			damage cause is wither potion effect:
 				cancel the event
-
+		hasClass(victim, "barbarian") is true:
+			damage cause is fall:
+				set the damage to the damage * 0.6
+				if {rpgSkript::%victim%::earthquake} is true:
+					set the damage to 0
+			event-projectile is set:
+				set the damage to the damage * 1.15
+				stop
+			canUseBarbarianAbilities(victim) is true:
+				damage cause is fall:
+					set the damage to the damage * 0.6
+					stop
+				set the damage to the damage * 0.9
+				if chance of 10%:
+					set {rpgSkript::%{_player}%::ragecooldown} to true
+					rageTrigger(victim)
+				else:
+					chance of 25%:
+						play sound "entity.player.attack.nodamage" at victim
+						send action bar "&2~ ~ EXPEL YOUR ATTACKER AND ASSUME A FIGHTING STANCE ~ ~" to victim
+						apply resistance 1 without particles to the victim for 10 seconds replacing the existing effect
+						loop all entities in radius 5 around victim:
+							loop-entity is not the victim:
+								set {_didHit} to true
+								apply slowness 3 to loop-entity for 7 seconds replacing the existing effect
+								damage loop-entity by 3
+								if hasResearch( victim, "poison_barbs" ) is true:
+									apply poison 1 without particles to loop-entity for 5 seconds replacing the existing effect
+								set {_vec} to normalized vector between victim and loop-entity
+								push loop-entity {_vec} with force 1.2
+								push loop-entity upwards with force 0.6
+		hasClass(victim, "endwarden") is true:
+			canUseEndwardenAbilities(victim) is true:
+				damage cause is fall:
+					health of victim is less than damage:
+						set the damage to maximum health of victim / 2
+						endTeleport( victim )
+						stop
+				health of victim is less than damage:
+					chance of 30:
+						set the damage to the damage / 2 
+						endTeleport(victim)
+						stop
+		hasClass(victim, "druid") is true:
+			canUseDruidAbilities(victim) is true:
+				if {rpgSkript::%victim%::humanshape} is true:
+					damage cause is poison:
+						cancel the event
+						stop
+				else if {rpgSkript::%victim%::spidershape} is true:
+					damage cause is poison:
+						heal the victim by 1
+						cancel the event
+						stop
+					damage cause is fall:
+						set the damage to the damage * 0.5
+				else if {rpgSkript::%victim%::horseshape} is true:
+					set the damage to the damage * 0.85
+				else if {rpgSkript::%victim%::bearshape} is true:
+					set the damage to the damage * 0.5
+				else if {rpgSkript::%victim%::batshape} is true:
+					set the damage to the damage * 1.25
+					damage cause is fall:
+						set the damage to 0
 on target:
 	isMinion(event-entity) is true:
 		target is a player:
@@ -581,6 +1089,19 @@ on target:
 	hasClass(target, "paladin") is true:
 		isMonster(event-entity) is true:
 			ignite the event-entity for 15 seconds
+	hasClass(target, "druid") is true:
+		if {rpgSkript::%target%batshape} is true:
+			cancel the event
+			stop
+		else if {rpgSkript::%target%::wolfshape} is true:
+			chance of 60%:
+				cancel the event
+				stop
+		else if {rpgSkript::%target%::spidershape} is true:
+			chance of 40%:
+				cancel the event
+				stop
+
 
 on item damage:
 	hasClass(player, "herobrine") is true:
@@ -769,6 +1290,10 @@ on jump:
 		player is sprinting
 		if canUseRogueAbilities(player) is true:
 			push the player horizontally forward with force 0.7
+	else if hasClass(player, "druid") is true:
+		player is sprinting
+		if {rpgSkript::%player%::horseshape} is true:
+			push the player horizontally forward with force 0.7
 
 on hunger meter change:
 	if hasClass(player, "herobrine") is true:
@@ -788,6 +1313,82 @@ on hunger meter change:
 
 on consume:
 	set {rpgSkript::%player%::eating} to true
+	if event-item is a water bottle:
+		hasClass(player, "endwarden") is true:
+			send "&2~ ~ Do we are have stupid? ~ ~" to player
+			wait 5 seconds
+			kill player
+	if event-item is a spider eye:
+		hasClass(player, "druid") is true:
+			cancel the event
+
+on enderman pickup: 
+	isMinion(event-entity) is true: 
+		cancel the event
+
+on spawn:
+	isMinion(event-entity) is true:
+		set {_caster} to getSummoner(uuid of event-entity)
+		hasClass({_caster}, "endwarden") is true:
+			event-entity is an enderman:
+				set maximum health of event-entity to 40 + level of {_caster} / 20
+				if maximum health of event-entity is greater than 60:
+					set maximum health of event-entity to 60
+				heal event-entity
+		hasClass({_caster}, "druid") is true:
+			event-entity is a wolf:
+				set maximum health of event-entity to 20 + level of {_caster} / 10
+				set movement speed attribute of event-entity to 1.4 * movement speed attribute of event-entity
+				set attack damage attribute of event-entity to 1 + (1.5 * ( level of {_caster} / 200 )) * attack damage attribute of event-entity
+				set armor attribute of event-entity to 6
+			event-entity is a spider:
+				set maximum health of event-entity to 30 + level of {_caster} / 7
+				set movement speed attribute of event-entity to 1.2 * movement speed attribute of event-entity
+				set attack damage attribute of event-entity to 1 + (1.7 * ( level of {_caster} / 200 )) * attack damage attribute of event-entity
+				set armor attribute of event-entity to 9
+			event-entity is a polar bear:
+				set maximum health of event-entity to 40 + level of {_caster} / 5
+				set movement speed attribute of event-entity to 1.2 * movement speed attribute of event-entity
+				set attack damage attribute of event-entity to 1 + (2.5 * ( level of {_caster} / 200 )) * attack damage attribute of event-entity
+				set armor attribute of event-entity to 12	
+			heal event-entity
+			send "&6 Max Health: %maximum health of event-entity% | Movement Speed: %movement speed attribute of event-entity% | Attack Damage: %attack damage attribute of event-entity%" to {_caster}
+			set {rpgSkript::%{_caster}%::druidspawn} to false
+
+
+on right click with (ender pearl or eye of ender):
+	hasClass(event-entity, "endwarden") is true:
+		event-entity's off hand item is an ender pearl:
+			cancel the event
+		event-entity's off hand item is an eye of ender:
+			cancel the event
+
+on right click with (string):
+	hasClass(event-entity, "druid") is true:
+		event-entity's held item is string:
+			cancel the event
+
+on mine:
+	event-block is a log:
+		hasClass(event-entity, "druid") is true:
+			canUseDruidAbilities(event-entity) is true:
+				if {rpgSkript::%event-entity%::humanshape} is true:
+					chance of 40%:
+						event-block is an oak log:
+							give event-entity 2 oak log
+						event-block is an spruce log:
+							give event-entity 2 spruce log
+						event-block is an birch log:
+							give event-entity 2 birch log
+						event-block is an dark oak log:
+							give event-entity 2 dark oak log
+						event-block is an jungle log:
+							give event-entity 2 jungle log
+						event-block is an acacia log:
+							give event-entity 2 acacia log
+						send "&6 Your God blesses your utility of the natural world" to event-entity
+
+
 
 
 
@@ -935,6 +1536,10 @@ on right click:
 	else:
 		send action bar "&cYour power attack is still on cooldown!" to the player
 
+	hasClass(player, "barbarian") is true:
+		canUseBarbarianAbilities(player) is true:
+			apply haste 1 without particles to the player for 10 seconds replacing the existing effect
+
 
 
 # Rogue
@@ -996,11 +1601,62 @@ on death of a monster:
 		add 1 diamond to the drops
 
 on death of an animal:
-	attacker is a player
-	hasClass(attacker, "rogue") is true
-	set {_x} to a random number between 0 and 1000
-	if {_x} < 80:
-		add 2 leather to the drops
+	attacker is a player:
+		hasClass(attacker, "rogue") is true:
+			set {_x} to a random number between 0 and 1000
+			if {_x} < 80:
+				add 2 leather to the drops
+		hasClass(attacker, "druid") is true:
+			if {rpgSkript::%attacker%::wolfshape} is true:
+				chance of 50%:
+					send "&aYour Wolf Powers increase your spoils earned from the hunt!" to the attacker
+					if victim is a sheep:
+						add 3 raw mutton to the drops
+						chance of 40%:
+							add 2 wool to the drops
+					if victim is a pig:
+						add 3 raw pork to the drops
+					if victim is a cow:
+						add 3 raw beef to the drops
+						chance of 40%:
+							add 2 leather to the drops
+					if victim is a horse:
+						add 3 leather to the drops
+					if victim is a donkey:
+						add 3 leather to the drops
+					if victim is a spider:
+						add 2 spider eye to the drops	
+					if victim is a bee:
+						add 2 honeycomb to the drops
+					if victim is a chicken:
+						add 3 raw chicken to the drops
+						chance of 40%:
+							add 2 feather to the drops
+						chance of 10%:
+							add 2 egg to the drops
+					add 5 experience to the attacker
+					
+	isMinion(attacker) is true:
+		set {_caster} to getSummoner(uuid of attacker)
+		hasClass({_caster}, "druid") is true:
+			chance of 25%:
+				send "&aYour God increases your spoils from the hunt!" to {_caster}
+				if victim is a sheep:
+					add 2 raw mutton to the drops
+				if victim is a pig:
+					add 2 raw pork to the drops
+				if victim is a cow:
+					add 2 raw beef to the drops
+					chance of 20%:
+						add 1 leather to the drops
+				if victim is a horse:
+					add 2 leather to the drops
+				if victim is a spider:
+					add 1 spider eye to the drops	
+				if victim is a bee:
+					add 1 honeycomb to the drops
+				if victim is a chicken:
+					add 2 raw chicken to the drops
 
 on death of a player:
 	hasClass(victim, "rogue") is true:
@@ -1023,13 +1679,64 @@ on death of a player:
 
 every 1 seconds:
 	loop all players:
-		hasClass(loop-player, "herobrine") is true
-		sunlight level at the loop-player is greater than 10
-		time in world of loop-player is not between 19:00 and 5:00
-		ignite the loop-player for 5 seconds
-		send action bar "&4The daylight burns!" to loop-player
-		damage loop-player by 12
-
+		hasClass(loop-player, "herobrine") is true:
+			sunlight level at the loop-player is greater than 10:
+				time in world of loop-player is not between 19:00 and 5:00:
+					ignite the loop-player for 5 seconds
+					send action bar "&4The daylight burns!" to loop-player
+					damage loop-player by 12
+		hasClass(loop-player, "endwarden") is true:
+			if block at loop-player is water:
+				send action bar "&4The water damages your ender skin!" to loop-player
+				damage loop-player by maximum health of loop-player / 8
+				apply slowness 1 to loop-player for 5 seconds replacing the existing effect
+				apply weakness 1 to loop-player for 8 seconds replacing the existing effect		
+			if weather in world of loop-player is rain:
+				sunlight level at the loop-player is 15:
+					send action bar "&4The rain damages your ender skin!" to loop-player
+					damage loop-player by maximum health of loop-player / 8	
+					apply slowness 1 to loop-player for 5 seconds replacing the existing effect
+					apply weakness 1 to loop-player for 8 seconds replacing the existing effect
+		hasClass(loop-player, "barbarian") is true:
+			loop-player is on ground:
+				hasResearch(loop-player, "leap") is true:
+					if {rpgSkript::%loop-player%::earthquake} is true:
+						loop all entities in radius 3 around loop-player:
+							if loop-entity-2 is not loop-player:
+								set {_edamage} to 2.5
+								if loop-player has potion effect strength:
+									set {_edamage} to {_edamage} * 1.15
+								if loop-entity-2 has potion effect weakness:
+									set {_edamage} to {_edamage}*1.25
+									send "&9~ CRITICAL (WEAKNESS 1.5x) ~" to loop-player
+									if loop-entity-2 has potion effect slowness:
+										set {_edamage} to {_edamage}*1.15
+										send "&9~ CRITICAL (SLOWNESS 1.25x) ~" to loop-player
+								else if loop-entity-2 has potion effect slowness:
+									set {_edamage} to {_edamage}*1.25
+									send "&9~ CRITICAL (SLOWNESS 1.5x) ~" to loop-player
+									if loop-entity-2 has potion effect weakness:
+										set {_edamage} to {_edamage}*1.15
+										send "&9~ CRITICAL (WEAKNESS 1.25x) ~" to loop-player
+								damage loop-entity-2 by {_edamage}
+								apply slowness 1 to loop-entity-2 for 7 seconds replacing the existing effect
+								set {_vec} to normalized vector between loop-player and loop-entity-2
+								push loop-entity-2 {_vec} with force 1.6
+								push loop-entity-2 upwards with force 0.9
+								send "&9~ CRUSHED BY BARBARIAN LEAP ~" to loop-entity-2
+						send "&9~ EARTHQUAKE! (%{_edamage}%) ~" to loop-player
+						loop blocks in radius 3 around loop-player:
+							loop-block is ice:
+								set loop-block to water
+							loop-block is packed ice:
+								set loop-block to ice
+							loop-block is blue ice:
+								set loop-block to packed ice
+							loop-block is leaves:
+								set loop-block to air
+							loop-block is glass:
+								set loop-block to air
+					set {rpgSkript::%loop-player%::earthquake} to false
 
 
 # Wizard
@@ -1074,6 +1781,15 @@ function setupMana(player: player):
 			set {_newMax} to (level of {_player}) * 1.5
 	else if hasClass({_player}, "necromancer") is true:
 		set {_newMax} to (level of {_player}) * 6 + 10
+	else if hasClass({_player}, "druid") is true:
+		set {_newMax} to (level of {_player}) * 6 + 10
+	else if hasClass({_player}, "endwarden") is true:
+		if {_player} is holding an ender pearl in offhand:
+			set {_newMax} to (level of {_player}) * 6 + 22
+		else if {_player} is holding an ender pearl in offhand:
+			set {_newMax} to (level of {_player}) * 7 + 30
+		else:
+			set {_newMax} to (level of {_player}) * 5 + 15
 	else if hasClass({_player}, "cleric") is true:
 		set {_newMax} to 1000
 	else if hasClass({_player}, "paladin") is true:
@@ -1108,6 +1824,10 @@ function regenMana(player: player):
 		else if isWearingMediumOrLess({_player}) is true:
 			set {_add} to {rpgSkript::maxMana::%{_player}%} / 70
 	else if hasClass({_player}, "necromancer") is true:
+		set {_add} to {rpgSkript::maxMana::%{_player}%} / 20
+	else if hasClass({_player}, "druid") is true:
+		set {_add} to {rpgSkript::maxMana::%{_player}%} / 20
+	else if hasClass({_player}, "endwarden") is true:
 		set {_add} to {rpgSkript::maxMana::%{_player}%} / 20
 	else if hasClass({_player}, "cleric") is true:
 		set {_add} to {rpgSkript::maxMana::%{_player}%} / 200
@@ -1216,6 +1936,14 @@ command /imbue <text>:
 			if takeItems( player, {_items::*}) is true:
 				set line lastLoreLine(player's held item) of (player's held item)'s lore to "&3Mana Boost"
 				send "&dYou imbue the item in your hand with Mana Boost!"
+			else:
+				send "&cYou do not have the required items for that property! Required: %{_items::*}%"
+				stop
+		else if arg 1 is "rage":
+			set {_items::*} to (1 netherite ingot and 12 gold ingot)
+			if takeItems( player, {_items::*} ) is true:
+				set line lastLoreLine(player's held item) of (player's held item)'s lore to "&3Rage Boost"
+				send "&dYou imbue the item in your hand with Rage Boost!"
 			else:
 				send "&cYou do not have the required items for that property! Required: %{_items::*}%"
 				stop
@@ -1722,48 +2450,51 @@ on right click with sugar:
 	play sound "entity.player.breath" with pitch 0.7 at player
 
 on right click with wheat:
-	hasClass(player, "wizard") is true
-	if subMana(event-player, 200) is false:
-		send "&cYou do not have enough Mana to cast the harvest spell!" to event-player
-		stop
-	send "&dYou wave your hands and your crops have been magically harvested!" to event-player
-	loop blocks in radius 50 of player:
-		set {_loc} to location of loop-block
-		loop-block is wheat:
-			break loop-block naturally
-			set loop-block to wheat
-			wait 2 ticks
-		loop-block is carrot plant:
-			break loop-block naturally
-			set loop-block to carrot plant
-			wait 2 ticks
-		loop-block is potato plant:
-			break loop-block naturally
-			set loop-block to potato plant
-			wait 2 ticks
-		loop-block is nether wart plant:
-			break loop-block naturally
-			set loop-block to nether wart plant
-			wait 2 ticks
-		loop-block is melon:
-			break loop-block naturally
-			wait 2 ticks
-		loop-block is pumpkin:
-			break loop-block naturally
-			wait 2 ticks
-		loop-block is bamboo:
-			block 1 meter below loop-block is bamboo
-			break loop-block naturally
-			wait 2 ticks
-		loop-block is sugar cane:
-			block 1 meter below loop-block is sugar cane
-			break loop-block naturally
-			wait 2 ticks
-		loop-block is sweet berry bush:
-			loop-block's age is 3
-			set loop-block's age to 1
-			drop 3 sweet berry at {_loc}
-			wait 2 ticks
+	if at least one of:
+		hasClass(player, "wizard") is true
+		hasClass(player, "druid") is true
+	then:
+		if subMana(event-player, 200) is false:
+			send "&cYou do not have enough Mana to cast the harvest spell!" to event-player
+			stop
+		send "&dYou wave your hands and your crops have been magically harvested!" to event-player
+		loop blocks in radius 50 of player:
+			set {_loc} to location of loop-block
+			loop-block is wheat:
+				break loop-block naturally
+				set loop-block to wheat
+				wait 2 ticks
+			loop-block is carrot plant:
+				break loop-block naturally
+				set loop-block to carrot plant
+				wait 2 ticks
+			loop-block is potato plant:
+				break loop-block naturally
+				set loop-block to potato plant
+				wait 2 ticks
+			loop-block is nether wart plant:
+				break loop-block naturally
+				set loop-block to nether wart plant
+				wait 2 ticks
+			loop-block is melon:
+				break loop-block naturally
+				wait 2 ticks
+			loop-block is pumpkin:
+				break loop-block naturally
+				wait 2 ticks
+			loop-block is bamboo:
+				block 1 meter below loop-block is bamboo
+				break loop-block naturally
+				wait 2 ticks
+			loop-block is sugar cane:
+				block 1 meter below loop-block is sugar cane
+				break loop-block naturally
+				wait 2 ticks
+			loop-block is sweet berry bush:
+				loop-block's age is 3
+				set loop-block's age to 1
+				drop 3 sweet berry at {_loc}
+				wait 2 ticks
 
 command /wizardresearch:
 	executable by: players
@@ -2012,6 +2743,18 @@ function calculateMaxMinions(summoner: player) :: number:
 			set {_count} to 18
 		isWearingLightOrLess({_summoner}) is true:
 			set {_count} to {_count} * 1.5
+		return floor({_count})
+	hasClass({_summoner}, "druid") is true:
+		set {_count} to 1
+	hasClass({_summoner}, "endwarden") is true:
+		set {_count} to 1
+		set {_count} to {_count} + level of {_summoner} / 10
+		{_count} is greater than 5:
+			set {_count} to 5
+		isWearingLightOrLess({_summoner}) is true:
+			set {_count} to {_count} * 2.0
+
+
 	return floor({_count})
 
 function cullMinions(summoner: player):
@@ -2079,3 +2822,751 @@ command /channel <text>:
 	executable by: players
 	trigger:
 		hasClass(player, "cleric") is true
+
+
+# Barbarian
+
+function rageTrigger(player: player):
+	if {rpgSkript::%{_player}%::ragecooldown} is true:
+		play sound "entity.player.attack.nodamage" at {_player}
+		send action bar "&2~ ~ RAGE! ~ ~" to {_player}
+		set {rpgSkript::%{_player}%::ragecooldown} to false
+		if {_player} has potion effect resistance:
+			apply resistance 2 without particles to {_player} for 30 seconds replacing the existing effect
+		else:
+			apply resistance 1 without particles to {_player} for 30 seconds replacing the existing effect
+		if {_player} has potion effect swiftness:
+			apply swiftness 3 without particles to {_player} for 30 seconds replacing the existing effect
+		else:
+			apply swiftness 2 without particles to {_player} for 30 seconds replacing the existing effect
+		if {_player} has potion effect jump boost:
+			apply jump boost 4 without particles to {_player} for 30 seconds replacing the existing effect
+		else:
+			apply jump boost 2 without particles to {_player} for 30 seconds replacing the existing effect
+		apply absorption 1 without particles to {_player} for 30 seconds replacing the existing effect
+		apply strength 1 without particles to {_player} for 30 seconds replacing the existing effect
+		if {_player} has potion effect haste:
+			apply haste 3 without particles to {_player} for 30 seconds replacing the existing effect
+		else:
+			apply haste 2 without particles to {_player} for 30 seconds replacing the existing effect
+		if {_player} has potion effect regeneration:
+			apply regeneration 2 without particles to {_player} for 30 seconds replacing the existing effect
+		else:
+			apply regeneration 1 without particles to {_player} for 30 seconds replacing the existing effect
+		set {rpgSkript::%{_player}%::raging} to true
+		wait 30 seconds
+		send "&2~ ~ Rage Cooldown Finished ~ ~" to {_player}
+		set {rpgSkript::%{_player}%::ragecooldown} to true
+		set {rpgSkript::%{_player}%::raging} to true
+	else:
+		send "&2~ ~ CANNOT RAGE RIGHT NOW ~ ~" to {_player}
+
+function setupRage(player: player):
+	if {rpgSkript::%{_player}%::rage} is not set:
+		set {rpgSkript::%{_player}%::rage} to 0
+	if {rpgSkript::%{_player}%::maxRage} is not set:
+		set {rpgSkript::%{_player}%::maxRage} to 0
+
+	set {_newRage} to 0
+	if hasClass({_player}, "barbarian") is true:
+		if {_player}'s off hand item is a banner:
+			set {_newRage} to floor((level of {_player}) / 7 ) + 2
+		else:
+			set {_newRage} to floor((level of {_player}) / 10 ) + 1
+
+	if hasImbue({_player}, "Rage Boost") is true:
+		set {_newRage} to {_newRage} + 0.25 * {_newRage} * countImbue({_player}, "Rage Boost")
+		
+	if {_newRage} is not {rpgSkript::%{_player}%::maxRage}:
+		set {rpgSkript::%{_player}%::maxRage} to {_newRage}
+		send "&dYour maximum Rage has changed to %{_newRage}%" to {_player}
+
+function checkRage(player: player):
+	setupRage({_player})
+	if {rpgSkript::%{_player}%::rage} > {rpgSkript::%{_player}%::maxRage}:
+		set {rpgSkript::%{_player}%::rage} to {rpgSkript::%{_player}%::maxRage}
+	if {rpgSkript::%{_player}%::rage} < 0:
+		set {rpgSkript::%{_player}%::rage} to 0
+
+function regenRage(player: player):
+	if {rpgSkript::%{_player}%::rage} is not set:
+		setupRage({_player})
+	if {rpgSkript::%{_player}%::maxRage} is not set:
+		setupRage({_player})
+
+	set {_add} to 0
+	if hasClass({_player}, "barbarian") is true:
+		set {_add} to {rpgSkript::%{_player}%::maxRage} / ( 300 + (level of {_player}) / 10 )
+
+	
+	addRage( {_player}, {_add} )
+
+function addRage(player: player, amount: number):
+	set {_before} to {rpgSkript::%{_player}%::rage}
+	set {rpgSkript::%{_player}%::rage} to {rpgSkript::%{_player}%::rage} + {_amount}
+	checkRage({_player})
+	if abs( {rpgSkript::%{_player}%::rage} - {_before} ) > 0.01:
+		displayRage({_player})
+
+function subRage(player: player, amount: number, print: boolean=true) :: boolean:
+	{_player} has permission "rpg.control":
+		return true
+	if {rpgSkript::%{_player}%::rage} is not set:
+		return false
+	if hasRage({_player}, {_amount}, {_print}) is true:
+		set {rpgSkript::%{_player}%::rage} to {rpgSkript::%{_player}%::rage} - {_amount}
+		checkRage({_player})
+		displayRage({_player})
+		return true
+	else:
+		return false
+
+function hasRage(player: player, amount: number, print: boolean=true) :: boolean:
+	{_player} has permission "rpg.control":
+		return true
+	if {_print} is true:
+		send "&3Rage: Have %{rpgSkript::%{_player}%::rage}%, Need %{_amount}%" to {_player}
+	if {rpgSkript::%{_player}%::rage} - {_amount} > -0.01:
+		return true
+	return false
+
+function displayRage(player: player):
+	set {_dispR} to {rpgSkript::%{_player}%::rage}
+	if {_dispR} < 0:
+		set {_dispR} to 0
+	send action bar "&3Rage: %{_dispR}% / %{rpgSkript::%{_player}%::maxRage}%" to {_player}
+
+command /barbarianresearch:
+	executable by: players
+	trigger:
+		hasClass(player, "barbarian") is false:
+			send "&dYou are not a barbarian!"
+			exit
+		set {_menu} to a new chest inventory with 6 rows named "&cBarbarian Research"
+		
+		populateBarbarianResearchMenu(player, {_menu})
+		
+		open {_menu} to player
+
+function populateBarbarianResearchMenu(player: player, menu: inventory):
+	set {_item} to red wool named "&7Poison Barbs"
+	if hasResearch({_player}, "poison_barbs") is true:
+		set {_item} to lime wool named "&ePoison Barbs"
+	set line 1 of {_item}'s lore to "&6Your repelling attack also inflicts poison on the enemy"
+	set slot 30 of {_menu} to {_item}
+	
+	set {_item} to red wool named "&7Leap"
+	if hasResearch({_player}, "leap") is true:
+		set {_item} to lime wool named "&eLeap"
+	set line 1 of {_item}'s lore to "&6R-Clicking Glowstone Dust causes you to leap in the air, creating an earthquake on impact"
+	set slot 31 of {_menu} to {_item}
+	
+	set {_item} to red wool named "&7Reckless Attack"
+	if hasResearch({_player}, "reckless_attack") is true:
+		set {_item} to lime wool named "&eReckless Attack"
+	set line 1 of {_item}'s lore to "&6-Rerolls low damage hits to either increase the damage or set it to 0"
+	set slot 32 of {_menu} to {_item}
+
+	set {_item} to red wool named "&7Throwables"
+	if hasResearch({_player}, "throwables") is true:
+		set {_item} to lime wool named "&ethrowables"
+	set line 1 of {_item}'s lore to "&6-Eggs and Snowballs can be used to deal damage when thrown."
+	set slot 33 of {_menu} to {_item}
+
+on inventory click:
+	name of event-inventory is "&cBarbarian Research"
+	cancel event
+
+	if index of event-slot is 30:
+		if hasResearch(player, "poison_barbs") is true:
+			deleteResearch(player, "poison_barbs")
+		else:
+			takeItems( player, (1 potion of poison) ) is false:
+				send "&4~ ~ Need 1 Potion of Poison for this Research ~ ~" to player
+				stop
+			addResearch(player, "poison_barbs")
+
+	if index of event-slot is 31:
+		if hasResearch(player, "leap") is true:
+			deleteResearch(player, "leap")
+		else:
+			takeItems( player, (1 potion of leaping and 16 ghast tear ) ) is false:
+				send "&4~ ~ Need 1 Potion of Leaping & 16 Ghast Tears for this Research ~ ~" to player
+				stop
+			addResearch(player, "leap")
+
+	if index of event-slot is 32:
+		if hasResearch(player, "reckless_attack") is true:
+			deleteResearch(player, "reckless_attack")
+		else:
+			takeItems( player, (32 red dye and 64 redstone dust ) ) is false:
+				send "&4~ ~ Need 32 Red Dye & 64 Redstone Dust for this Research ~ ~" to player
+				stop
+			addResearch(player, "reckless_attack")
+
+	if index of event-slot is 33:
+		if hasResearch(player, "throwables") is true:
+			deleteResearch(player, "throwables")
+		else:
+			takeItems( player, (16 egg, 16 snowball, and 32 red dye ) ) is false:
+				send "&4~ ~ Need 16 Eggs, 16 Snowballs, and 32 Red Dye for this Research ~ ~" to player
+				stop
+			addResearch(player, "throwables")
+	
+	populateBarbarianResearchMenu(player, event-inventory)
+
+function canUseBarbarianAbilities(player: player) :: boolean:
+	if {_player} has potion effect weakness:
+		return false
+	else if isWearingMediumOrLess({_player}) is true:
+		return true
+	else if {_player}'s off hand item is a shield:
+		return false
+	return false
+
+on right click with red dye:
+	hasClass(event-player, "barbarian") is true:
+		canUseBarbarianAbilities(event-player) is true:
+			if {rpgSkript::%event-player%::ragecooldown} is true:
+				subRage(event-player, 1) is true:
+					rageTrigger(event-player)
+			else:
+				send "&2~ ~ CANNOT RAGE RIGHT NOW ~ ~" to event-player
+
+on right click with glass bottle:
+	if hasClass(player, "barbarian") is true:
+		if canUseBarbarianAbilities(player) is true:
+			subRage(player, 1) is true:
+				set {_didHit} to false
+				loop all entities in radius 15 around player:
+					if loop-entity is not player:
+						set {_didHit} to true
+						apply slowness 1 to loop-entity for 15 seconds replacing the existing effect
+						apply weakness 1 to loop-entity for 15 seconds replacing the existing effect
+						set {_vec} to normalized vector between player and loop-entity
+				remove slowness from player
+				remove weakness from player
+				send action bar "&2~ ~ YOU BELLOW A TERRIFYING WAR CRY ~ ~" to player
+
+on right click with glowstone dust:
+	if hasClass(player, "barbarian") is true:
+		if canUseBarbarianAbilities(player) is true:
+			if hasResearch(player, "leap") is true:
+				if {rpgSkript::%player%::leap} is true:
+					subRage(player, 1) is true:
+						set {rpgSkript::%player%::earthquake} to true
+						set {rpgSkript::%player%::leap} to false
+						send "&9~ YOU LEAP INTO THE AIR ~" to player
+						push player forward with force 1.2	
+						push player upwards with force 1.5
+						wait 30 seconds
+						set {rpgSkript::%player%::leap} to true
+						send "&9~ LEAP COOLDOWN FINISHED ~" to player
+				else:
+					send "&9~ LEAP ON COOLDOWN ~" to player
+
+	
+		
+					
+
+# Endwarden
+function canUseEndwardenAbilities(player: player) :: boolean:
+	if block at {_player} is water:
+		return false
+	else if isWearingMediumOrLess({_player}) is true:
+		return true
+	
+	return true
+
+
+on right click with end crystal:
+	hasClass(event-player, "endwarden") is true:
+		canUseEndwardenAbilities(event-player) is true:
+			if level of event-player is greater than 50:
+				if {rpgSkript::%event-player%::mana} > 0:
+					set {_emana} to {rpgSkript::%event-player%::mana}
+					subMana(player, {rpgSkript::%event-player%::mana}) is true:
+						set {_didHit} to false
+						set {_btime} to generateTime({_emana}/80 + 5)
+						set {_wtime} to generateTime({_emana}/30 + 5)
+						loop all entities in radius 30 around event-player:
+							if loop-entity is not event-player:
+								if loop-entity is a player:
+									send action bar "&2~ ~ YOU HAVE BEEN CURSED BY THE VOID ~ ~" to loop-entity
+									play sound "block.end_portal.spawn" at loop-entity
+									set {_didHit} to true
+									apply blindness 2 to loop-entity for {_btime} replacing the existing effect
+									apply weakness 2 to loop-entity for {_wtime} replacing the existing effect
+									apply levitation 1 to the loop-entity for 5 seconds replacing the existing effect
+									set {_vec} to normalized vector between player and loop-entity
+								isMonster(loop-entity) is true:
+									set {_didHit} to true
+									apply weakness 2 to loop-entity for {_wtime} replacing the existing effect
+									apply levitation 1 to the loop-entity for 5 seconds replacing the existing effect
+									set {_vec} to normalized vector between player and loop-entity
+								isMinion(loop-entity) is true:
+									if getSummoner(uuid of loop-entity) is event-player:
+										set {_didHit} to true
+										apply haste 2 to loop-entity for {_wtime} replacing the existing effect
+										apply swiftness 2 to loop-entity for {_wtime} replacing the existing effect
+										apply regeneration 2 to loop-entity for {_wtime} replacing the existing effect
+										apply health boost 4 to loop-entity for {_wtime} replacing the existing effect
+										apply strength 1 to loop-entity for {_wtime} replacing the existing effect
+										heal loop-entity
+										set {_vec} to normalized vector between player and loop-entity
+									else:
+										apply weakness 2 to loop-entity for {_wtime} replacing the existing effect
+										apply levitation 1 to the loop-entity for 5 seconds replacing the existing effect
+							else:
+								set {_didHit} to true
+								apply haste 1 to loop-entity for {_btime} replacing the existing effect
+								apply swiftness 1 to loop-entity for {_btime} replacing the existing effect
+								apply regeneration 2 to loop-entity for {_btime} replacing the existing effect
+								apply health boost 6 to loop-entity for {_btime} replacing the existing effect
+								apply strength 1 to loop-entity for {_btime} replacing the existing effect
+								heal loop-entity
+								set {_vec} to normalized vector between player and loop-entity						
+						send action bar "&2~ ~ YOU CALL UPON THE POWER OF THE VOID TO CURSE YOUR ENEMIES ~ ~" to player
+						play sound "block.end_portal.spawn" at player
+
+on left click with end crystal:
+	hasClass(event-player, "endwarden") is true:
+		subMana(event-player, 300) is true:
+			send "&2~ ~ RADIATE AN ENDER FIELD ~ ~" to event-player
+			play sound "block.end_portal.spawn" at event-player
+			loop entities in radius 20 of event-player:
+				isMonster(loop-entity) is true:
+					chance of 50%:
+						apply levitation 1 to the loop-entity for 5 seconds replacing the existing effect
+				loop-entity is a player:
+					loop-entity is not event-player:
+						chance of 25:
+							apply levitation 1 to the loop-entity for 5 seconds replacing the existing effect
+							send "&2~ ~ AN END FIELD WASHES OVER YOU ~ ~" to loop-entity
+				isMinion(loop-entity) is true:
+					if getSummoner(uuid of loop-entity) is event-player:
+						apply regeneration 1 to loop-entity for 10 seconds replacing the existing effect
+					else:
+						apply levitation 1 to the loop-entity for 5 seconds replacing the existing effect
+							
+
+on right click with phantom membrane:
+	if {rpgSkript::%event-player%::eteleport} is true:
+		endTeleport(event-player)
+		wait 25 seconds
+		set {rpgSkript::%event-player%::eteleport} to true
+		send "&cTeleport Cooldown Finished!" to event-player
+	else:
+		send "&cTeleport on Cooldown!" to event-player
+function endTeleport( player: player):
+	hasClass({_player}, "endwarden") is true:
+		canUseEndwardenAbilities({_player}) is true:
+			set {_loc} to {_player}'s targeted block
+			set {_loc} to location 1 meter above {_loc}
+			set pitch of {_loc} to pitch of {_player}
+			set yaw of {_loc} to yaw of {_player}
+
+			set {_canTp} to true
+			if block at {_loc} is solid:
+				set {_canTp} to false
+			if block 1 meter above {_loc} is solid:
+				set {_canTp} to false
+			if {_canTp} is false:
+				send "&cCannot teleport there!" to {_player}
+				stop
+		
+			if subMana({_player}, 40) is false:
+				send "&cYou do not have enough Mana to teleport!" to {_player}
+				stop
+			set {rpgSkript::%{_player}%::eteleport} to false
+			send "&dYou teleport to your target location!" to {_player}
+			play sound "entity.enderman.teleport" at {_player}
+			teleport {_player} to {_loc}
+			wait 2 ticks
+			play sound "entity.enderman.teleport" at {_player}
+			loop entities in radius 5 of {_player}:
+				loop-entity is not {_player}:
+					if isMinion( loop-entity ) is false:
+						apply levitation 1 to the loop-entity for 5 seconds replacing the existing effect
+					if getSummoner(uuid of loop-entity ) is not {_player}:
+						apply levitation 1 to the loop-entity for 5 seconds replacing the existing effect
+
+on left click with phantom membrane:
+	hasClass(event-player, "endwarden") is true:
+		canUseEndwardenAbilities(event-player) is true:
+			subMana(event-player, 100) is true:
+				play sound "entity.enderman.teleport" at event-player
+				send "&dYou cast a spell to quicken your minions!" to event-player
+				loop entities in radius 10 of event-player:
+					isMinion(loop-entity) is true:
+						getSummoner(uuid of loop-entity) is event-player:
+							apply haste 1 to the loop-entity for 20 seconds replacing the existing effect
+							apply swiftness 1 to the loop-entity for 20 seconds replacing the existing effect
+
+on left click with shulker shell:
+	hasClass(event-player, "endwarden") is true:
+		canUseEndwardenAbilities(event-player) is true:
+			subMana(event-player, 100) is true:
+				play sound "entity.enderman.teleport" at event-player
+				send "&dYou cast a spell to harden your minions!" to event-player
+				loop entities in radius 10 of event-player:
+					isMinion(loop-entity) is true:
+						getSummoner(uuid of loop-entity) is event-player:
+							apply resistance 1 to the loop-entity for 20 seconds replacing the existing effect
+							apply health boost 2 to the loop-entity for 20 seconds replacing the existing effect
+							heal loop-entity
+on right click with shulker shell:
+	if level of event-player is greater than 25:
+		hasClass(event-player, "endwarden") is true:
+			canUseEndwardenAbilities(event-player) is true:
+				subMana(event-player, 150) is true:
+					play sound "minecraft:entity.shulker_box.close1" with pitch 0.7 at player
+					send "&dYour skins hardens like a shulker!" to event-player
+					apply resistance 5 to the event-player for 20 seconds replacing the existing effect
+					apply health boost 5 to the event-player for 20 seconds replacing the existing effect
+					apply slowness 5 to the event-player for 20 seconds replacing the existing effect
+					heal event-player
+					loop entities in radius 5 of event-player:
+						loop-entity is not event-player:
+							if isMinion( loop-entity ) is false:
+								apply levitation 1 to the loop-entity for 5 seconds replacing the existing effect
+							else:
+								getSummoner(uuid of loop-entity) is not event-player:
+									apply levitation 1 to the loop-entity for 5 seconds replacing the existing effect
+	
+on left click with purple dye:
+	hasClass(event-player, "endwarden") is true:
+		canUseEndwardenAbilities(event-player) is true:
+			play sound "entity.player.breath" with pitch 3.0 at player
+			loop getMinions(event-player):
+				event-player's targeted entity is not set:
+				reset target of loop-value
+				make loop-value pathfind to event-player's targeted block at speed 1.4
+				event-player's targeted entity is set:
+					set target of loop-value to event-player's targeted entity
+
+on right click with purple dye:
+	hasClass(player, "endwarden") is true
+	if subMana(command executor, 30) is false:
+		send "&cYou do not have enough Mana to summon an Enderman!" to command executor
+		stop
+	send "&dYou summon an Enderman!" to command executor
+	set {_player} to the player
+	spawn 1 enderman at the player:
+		setupMinion(the enderman, {_player})
+			
+
+# Druid
+		
+function canUseDruidAbilities(player: player) :: boolean:
+	if {_player} has potion effect wither:
+		return false	
+	if isWearingLightOrLess({_player}) is true:
+		return true
+	return false
+			
+function canUseShapeshiftAbilities(player: player) :: boolean:
+	if isWearingNothing({_player}) is true:
+		return true
+	return false
+
+command /druidresearch:
+	executable by: players
+	trigger:
+		hasClass(player, "druid") is false:
+			send "&dYou are not a druid!"
+			exit
+		set {_menu} to a new chest inventory with 6 rows named "&cDruid Research"
+		
+		populateDruidResearchMenu(player, {_menu})
+		
+		open {_menu} to player
+
+function populateDruidResearchMenu(player: player, menu: inventory):
+	set {_item} to red wool named "&7Polar Bear"
+	if hasResearch({_player}, "polar_bear") is true:
+		set {_item} to lime wool named "&ePolar Bear"
+	set line 1 of {_item}'s lore to "&6Replaces Wolf summon with Polar Bear"
+	set slot 30 of {_menu} to {_item}
+
+	set {_item} to red wool named "&7Wildshape Charges"
+	if hasResearch({_player}, "wildshape_charges") is true:
+		set {_item} to lime wool named "&ewildshape_charges"
+	set line 1 of {_item}'s lore to "&6Grants the user one more Wildshape Charge per level"
+	set slot 31 of {_menu} to {_item}
+
+
+on inventory click:
+	name of event-inventory is "&cDruid Research"
+	cancel event
+
+	if index of event-slot is 30:
+		if hasResearch(player, "polar_bear") is true:
+			deleteResearch(player, "polar_bear")
+		else:
+			addResearch(player, "polar_bear")
+
+	if index of event-slot is 31:
+		if hasResearch(player, "wildshape_charge") is true:
+			if takeItems( player, (32 leather, 32 egg, and 16 poppy ) ) is false:
+				send "&cDo not have the necessary items to level this up! Items Needed: 32 Leather, 32 Egg, and 16 Poppy" to player
+				stop
+			addResearch(player, "wildshape_charge_2")
+		else:
+			if takeItems( player, (16 egg and 8 dandelion ) ) is false:
+				send "&cDo not have the necessary items to unlock this! Items Needed: 16 Egg and 8 Dandelion" to player
+				stop
+			addResearch(player, "wildshape_charge")
+
+	
+	populateDruidResearchMenu(player, event-inventory)
+
+on right click with leather:
+	if {rpgSkript::%player%::druidspawn} is true:
+		if hasResearch(player, "polar_bear") is false:									
+			hasClass(player, "druid") is true
+			if subMana(command executor, 30) is false:
+				send "&cYou do not have enough Mana to summon a Wolf!" to command executor
+				stop
+			send "&dYou summon a wolf!" to command executor
+			set {_player} to the player
+			spawn 1 wolf at the player:
+				setupMinion(the wolf, {_player})
+		else:
+			hasClass(player, "druid") is true
+			if subMana(command executor, 60) is false:
+				send "&cYou do not have enough Mana to summon a Polar Bear!" to command executor
+				stop
+			send "&dYou summon a Polar Bear!" to command executor
+			set {_player} to the player
+			spawn 1 polar bear at the player:
+				setupMinion(the polar bear, {_player})
+	else:
+		send "&cYou already have a druid minion!" to command executor
+
+on right click with spider eye:									
+	hasClass(player, "druid") is true
+	if {rpgSkript::%player%::druidspawn} is true:
+		if subMana(command executor, 40) is false:
+			send "&cYou do not have enough Mana to summon a Spider!" to command executor
+			stop
+		send "&dYou summon a Spider!" to command executor
+		set {_player} to the player
+		spawn 1 spider at the player:
+			setupMinion(the spider, {_player})
+	else:
+		send "&cYou already have a druid minion!" to command executor	
+
+on left click with leather:
+	hasClass(event-player, "druid") is true:
+		canUseDruidAbilities(event-player) is true:
+			play sound "entity.player.breath" with pitch 3.0 at event-player
+			loop getMinions(event-player):
+				event-player's targeted entity is not set:
+				reset target of loop-value
+				make loop-value pathfind to event-player's targeted block at speed 1.4
+				event-player's targeted entity is set:
+					set target of loop-value to event-player's targeted entity
+
+on right click with string:
+	hasClass(event-player, "druid") is true:
+		canUseDruidAbilities(event-player) is true:
+			if {rpgSkript::%event-player%::cobweb} is true:
+				if at least one of:
+					{rpgSkript::%event-player%::humanshape} is true
+					{rpgSkript::%event-player%::spidershape} is true
+				then:
+					subMana(event-player, 50) is true:	
+						set {rpgSkript::%event-player%::cobweb} to false
+						set {_loc} to event-player's targeted block
+						loop all blocks in radius 3 around {_loc}:
+							if loop-block is air:
+								set loop-block to cobweb
+						loop 6 times:
+							loop all entities in radius 3 around {_loc}:
+								loop-entity is not event-player:
+									isMinion(loop-entity) is true:
+										getSummoner(uuid of loop-entity) is event-player:
+											stop
+									damage loop-entity by 1.5
+							wait 0.5 seconds
+						loop all blocks in radius 3 around {_loc}:
+							if loop-block is cobweb:
+								set loop-block to air
+						wait 5 seconds
+						set {rpgSkript::%event-player%::cobweb} to true
+						send "&cCobweb Cooldown Finished!" to event-player
+				else:
+					send "&6Must be in Human or Spider form to use!" to event-player
+			else:
+				send "&aCobweb on Cooldown!" to event-player
+
+on right click with fermented spider eye:
+	hasClass(event-player, "druid") is true:
+		canUseDruidAbilities(event-player) is true:
+			subMana(event-player, 50) is true:	
+				set {_loc} to event-player's targeted block
+				loop all entities in radius 3 around {_loc}:
+					if loop-entity is not event-player:
+						isMinion(loop-entity) is true:
+							getSummoner(uuid of loop-entity) is event-player:
+								stop
+						damage loop-entity by 2
+						apply poison 1 without particles to loop-entity for 5 seconds replacing the existing effect
+						send "&9~ ~ HIT BY DRUID POISON SPLASH ~ ~" to loop-entity
+
+on right click with glistering melon slice:
+	hasClass(event-player, "druid") is true:
+		canUseDruidAbilities(event-player) is true:
+			subMana(event-player, 50) is true:
+				loop all entities in radius 15 around event-player:
+					isMinion(loop-entity) is true:
+						getSummoner(uuid of loop-entity) is event-player:
+							apply resistance 2 to the loop-entity for 10 seconds replacing the existing effect
+							apply regeneration 3 to the loop-entity for 10 seconds replacing the existing effect
+							apply strength 2 to the loop-entity for 10 seconds replacing the existing effect
+				send "&9~ ~ DRUID MINION HEALED AND BUFFED ~ ~" to event-player
+				wait 10 seconds
+				send "&9~ ~ DRUID MINION BUFF ENDED ~ ~" to event-player
+
+command /wildshape <text>:
+	description: Shapeshift into an Animilistic Form
+	executable by: players
+	trigger:
+		if hasClass(command executor, "druid") is true:
+			if canUseDruidAbilities(command executor) is true:
+				if arg 1 is "human":
+					set {rpgSkript::%command executor%::spidershape} to false
+					set {rpgSkript::%command executor%::horseshape} to false
+					set {rpgSkript::%command executor%::batshape} to false
+					set {rpgSkript::%command executor%::bearshape} to false
+					set {rpgSkript::%command executor%::wolfshape} to false
+					set {rpgSkript::%command executor%::humanshape} to true
+				else if subWildshape(command executor, 1) is false:
+					send "&9~ ~ Not enough Wildshape to shapeshift. Must have 1 Wildshape ~ ~" to command executor
+					stop
+				else if arg 1 is "bat":
+					set {rpgSkript::%command executor%::spidershape} to false
+					set {rpgSkript::%command executor%::horseshape} to false
+					set {rpgSkript::%command executor%::batshape} to true
+					set {rpgSkript::%command executor%::bearshape} to false
+					set {rpgSkript::%command executor%::wolfshape} to false
+					set {rpgSkript::%command executor%::humanshape} to false
+				else if arg 1 is "bear":
+					set {rpgSkript::%command executor%::spidershape} to false
+					set {rpgSkript::%command executor%::horseshape} to false
+					set {rpgSkript::%command executor%::batshape} to false
+					set {rpgSkript::%command executor%::bearshape} to true
+					set {rpgSkript::%command executor%::wolfshape} to false
+					set {rpgSkript::%command executor%::humanshape} to false
+				else if arg 1 is "wolf":
+					set {rpgSkript::%command executor%::spidershape} to false
+					set {rpgSkript::%command executor%::horseshape} to false
+					set {rpgSkript::%command executor%::batshape} to false
+					set {rpgSkript::%command executor%::bearshape} to false
+					set {rpgSkript::%command executor%::wolfshape} to true
+					set {rpgSkript::%command executor%::humanshape} to false
+				else if arg 1 is "horse":
+					set {rpgSkript::%command executor%::spidershape} to false
+					set {rpgSkript::%command executor%::horseshape} to true
+					set {rpgSkript::%command executor%::batshape} to false
+					set {rpgSkript::%command executor%::bearshape} to false
+					set {rpgSkript::%command executor%::wolfshape} to false
+					set {rpgSkript::%command executor%::humanshape} to false
+				else if arg 1 is "spider":
+					set {rpgSkript::%command executor%::spidershape} to true
+					set {rpgSkript::%command executor%::horseshape} to false
+					set {rpgSkript::%command executor%::batshape} to false
+					set {rpgSkript::%command executor%::bearshape} to false
+					set {rpgSkript::%command executor%::wolfshape} to false
+					set {rpgSkript::%command executor%::humanshape} to false
+				else:
+					send "&9~ ~ Not a valid Wildshape. Valid Wildshapes: bat, bear, wolf, spider, horse, & human ~ ~" to command executor
+					stop
+				send "&9~ ~ Successfuly wild shaped ~ ~" to command executor
+				wait 3 seconds
+				heal command executor
+
+				
+			else:
+				send "&9~ ~ Cannot shapeshift right now ~ ~" to command executor
+
+		else:
+			send "&9~ ~ Shapeshift? You're no druid ~ ~" to command executor
+
+function setupWildshape(player: player):
+	if {rpgSkript::%{_player}%::wildshape} is not set:
+		set {rpgSkript::%{_player}%::wildshape} to 0
+	if {rpgSkript::%{_player}%::maxWildshape} is not set:
+		set {rpgSkript::%{_player}%::maxWildshape} to 0
+
+	set {_newWildshape} to 0
+	if hasClass({_player}, "druid") is true:
+		set {_newWildshape} to 1
+		if hasResearch({_player}, "wildshape_charges") is true:
+			set {_newWildshape} to {_newWildshape} + 1	
+		if hasResearch({_player}, "wildshape_charges_2") is true:
+			set {_newWildshape} to {_newWildshape} + 1
+
+	if hasImbue({_player}, "Wildshape Boost") is true:
+		set {_newWildshape} to {_newWildshape} + 0.5 * {_newWildshape} * countImbue({_player}, "Wildshape Boost")
+		
+	if {_newWildshape} is not {rpgSkript::%{_player}%::maxWildshape}:
+		set {rpgSkript::%{_player}%::maxWildshape} to {_newWildshape}
+		send "&dYour maximum Wildshape has changed to %{_newWildshape}%" to {_player}
+
+function checkWildshape(player: player):
+	setupWildshape({_player})
+	if {rpgSkript::%{_player}%::wildshape} > {rpgSkript::%{_player}%::maxWildshape}:
+		set {rpgSkript::%{_player}%::wildshape} to {rpgSkript::%{_player}%::maxWildshape}
+	if {rpgSkript::%{_player}%::wildshape} < 0:
+		set {rpgSkript::%{_player}%::wildshape} to 0
+
+function regenWildshape(player: player):
+	if {rpgSkript::%{_player}%::wildshape} is not set:
+		setupRage({_player})
+	if {rpgSkript::%{_player}%::maxWildshape} is not set:
+		setupRage({_player})
+
+	set {_add} to 0
+	if hasClass({_player}, "druid") is true:
+		set {_add} to {rpgSkript::%{_player}%::maxWildshape}
+
+	
+	addWildshape( {_player}, {_add} )
+
+function addWildshape(player: player, amount: number):
+	set {_before} to {rpgSkript::%{_player}%::wildshape}
+	set {rpgSkript::%{_player}%::wildshape} to {rpgSkript::%{_player}%::wildshape} + {_amount}
+	checkWildshape({_player})
+	if abs( {rpgSkript::%{_player}%::wildshape} - {_before} ) > 0.01:
+		displayWildshape({_player})
+
+function subWildshape(player: player, amount: number, print: boolean=true) :: boolean:
+	{_player} has permission "rpg.control":
+		return true
+	if {rpgSkript::%{_player}%::wildshape} is not set:
+		return false
+	if hasWildshape({_player}, {_amount}, {_print}) is true:
+		set {rpgSkript::%{_player}%::wildshape} to {rpgSkript::%{_player}%::wildshape} - {_amount}
+		checkWildshape({_player})
+		displayWildshape({_player})
+		return true
+	else:
+		return false
+
+function hasWildshape(player: player, amount: number, print: boolean=true) :: boolean:
+	{_player} has permission "rpg.control":
+		return true
+	if {_print} is true:
+		send "&3Wildshape: Have %{rpgSkript::%{_player}%::wildshape}%, Need %{_amount}%" to {_player}
+	if {rpgSkript::%{_player}%::wildshape} - {_amount} > -0.01:
+		return true
+	return false
+
+function displayWildshape(player: player):
+	set {_dispW} to {rpgSkript::%{_player}%::wildshape}
+	if {_dispW} < 0:
+		set {_dispW} to 0
+	send action bar "&3Wildshape: %{_dispR}% / %{rpgSkript::%{_player}%::maxWildshape}%" to {_player}
+				
