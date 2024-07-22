@@ -758,15 +758,15 @@ every 10 seconds:
 								wait 20 ticks
 
 every 15 seconds:
-	
 	loop all players:
-		
 		hasClass(loop-player, "endwarden") is true:
 			chance of 25%:
 				subMana(loop-player, 100) is true:
 					send "&2~ ~ RADIATE AN ENDER FIELD ~ ~" to loop-player
 					play sound "block.end_portal.spawn" at loop-player
 					loop entities in radius 20 of loop-player:
+						loop-entity-2 is loop-player:
+							continue
 						isMonster(loop-entity-2) is true:
 							chance of 50%:
 								apply levitation 1 to the loop-entity-2 for 5 seconds replacing the existing effect
@@ -776,10 +776,6 @@ every 15 seconds:
 						if loop-entity-2 is a player:
 							loop-entity-2 is not loop-player:
 								send "&2~ ~ YOU FEEL A PULSATING ENDER FIELD ~ ~" to loop-entity-2
-
-
-	
-				
 		
 on death:
 	isMinion(victim) is true:
