@@ -95,6 +95,8 @@ on chat:
 		set the message to "&6[&9Paladin&6]&r %message%"
 	hasClass(player, "cleric") is true:
 		set the message to "&3[&eCleric&3]&r %message%"
+	hasClass(player, "sorceror") is true:
+		set the message to "&e[&cSorceror&e]&r %message%"
 	hasClass(player, "necromancer") is true:
 		set the message to "&c[&7Necromancer&c]&r %message%"
 	hasClass(player, "herobrine") is true:
@@ -1777,6 +1779,8 @@ function setupMana(player: player):
 			set {_newMax} to (level of {_player}) * 1.5
 	else if hasClass({_player}, "necromancer") is true:
 		set {_newMax} to (level of {_player}) * 6 + 10
+	else if hasClass({_player}, "sorceror") is true:
+		set {_newMax} to 400
 	else if hasClass({_player}, "druid") is true:
 		set {_newMax} to (level of {_player}) * 6 + 10
 	else if hasClass({_player}, "endwarden") is true:
@@ -1817,6 +1821,8 @@ function regenMana(player: player):
 			set {_add} to {rpgSkript::maxMana::%{_player}%} / 40
 		else if isWearingMediumOrLess({_player}) is true:
 			set {_add} to {rpgSkript::maxMana::%{_player}%} / 70
+	else if hasClass({_player}, "sorceror") is true:
+		set {_add} to {rpgSkript::maxMana::%{_player}%} / 55
 	else if hasClass({_player}, "necromancer") is true:
 		set {_add} to {rpgSkript::maxMana::%{_player}%} / 20
 	else if hasClass({_player}, "druid") is true:
@@ -1902,7 +1908,6 @@ function arcaneSense(message: text):
 	loop all players:
 		hasClass(loop-player, "wizard") is true:
 			send "&d%{_message}%" to loop-player
-
 
 on death of a player:
     hasClass(victim, "wizard") is true:
