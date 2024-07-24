@@ -2909,18 +2909,10 @@ on right click with glowstone dust:
 	if hasClass(player, "barbarian") is true:
 		if canUseBarbarianAbilities(player) is true:
 			if hasResearch(player, "leap") is true:
-				if {rpgSkript::%player%::leap} is true:
-					subRage(player, 1) is true:
-						set {rpgSkript::%player%::earthquake} to true
-						set {rpgSkript::%player%::leap} to false
-						send "&9~ YOU LEAP INTO THE AIR ~" to player
-						push player forward with force 1.2	
-						push player upwards with force 1.2
-						wait 30 seconds
-						set {rpgSkript::%player%::leap} to true
-						send "&9~ LEAP COOLDOWN FINISHED ~" to player
-				else:
-					send "&9~ LEAP ON COOLDOWN ~" to player
+				subRage(player, 1) is true:
+					set {rpgSkript::%player%::earthquake} to true
+					push player horizontally forward with force 1.9
+					push player upwards with force 0.95
 
 
 
