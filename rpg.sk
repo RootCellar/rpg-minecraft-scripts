@@ -2839,13 +2839,13 @@ function populateBarbarianResearchMenu(player: player, menu: inventory):
 	set {_item} to red wool named "&7Reckless Attack"
 	if hasResearch({_player}, "reckless_attack") is true:
 		set {_item} to lime wool named "&eReckless Attack"
-	set line 1 of {_item}'s lore to "&6-Rerolls low damage hits to either increase the damage or set it to 0"
+	set line 1 of {_item}'s lore to "&6Rerolls low damage hits to either increase the damage or set it to 0"
 	set slot 32 of {_menu} to {_item}
 
 	set {_item} to red wool named "&7Throwables"
 	if hasResearch({_player}, "throwables") is true:
 		set {_item} to lime wool named "&ethrowables"
-	set line 1 of {_item}'s lore to "&6-Eggs and Snowballs can be used to deal damage when thrown."
+	set line 1 of {_item}'s lore to "&6Eggs and Snowballs can be used to deal damage when thrown."
 	set slot 33 of {_menu} to {_item}
 
 on inventory click:
