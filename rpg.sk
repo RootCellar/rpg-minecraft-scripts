@@ -920,11 +920,9 @@ on damage:
 					set the damage to 0
 			event-projectile is set:
 				set the damage to the damage * 1.15
-				stop
 			canUseBarbarianAbilities(victim) is true:
 				damage cause is fall:
 					set the damage to the damage * 0.6
-					stop
 				set the damage to the damage * 0.9
 				if chance of 10%:
 					set {rpgSkript::%{_player}%::ragecooldown} to true
@@ -966,6 +964,7 @@ on damage:
 					set the damage to the damage * 1.25
 					damage cause is fall:
 						set the damage to 0
+						
 on target:
 	isMinion(event-entity) is true:
 		target is a player:
@@ -2925,11 +2924,12 @@ on right click with glowstone dust:
 				else:
 					send "&9~ LEAP ON COOLDOWN ~" to player
 
-	
-		
-					
+
 
 # Endwarden
+
+
+
 function canUseEndwardenAbilities(player: player) :: boolean:
 	if block at {_player} is water:
 		return false
