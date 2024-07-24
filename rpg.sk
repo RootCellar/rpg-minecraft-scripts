@@ -535,10 +535,10 @@ every 1 seconds:
 			set line 11 of loop-player's scoreboard to "&4 Rage: %{rpgSkript::%loop-player%::rage}% / %{rpgSkript::%loop-player%::maxRage}%"
 
 		hasClass(loop-player, "rogue") is true:
-			set line 9 of loop-player's scoreboard to "Monsters: %countEntities(monsters within 20 meters of loop-player)%"
-			set line 8 of loop-player's scoreboard to "Animals: %countEntities(animals within 30 meters of loop-player)%"
-			set line 7 of loop-player's scoreboard to "Players: %countEntities(players within 50 meters of loop-player)%"
-			set line 6 of loop-player's scoreboard to "Items on Ground: %countEntities(dropped items within 30 meters of loop-player)%"
+			set line 4 of loop-player's scoreboard to "Monsters: %countEntities(monsters within 20 meters of loop-player)%"
+			set line 3 of loop-player's scoreboard to "Animals: %countEntities(animals within 30 meters of loop-player)%"
+			set line 2 of loop-player's scoreboard to "Players: %countEntities(players within 50 meters of loop-player)%"
+			set line 1 of loop-player's scoreboard to "Items on Ground: %countEntities(dropped items within 30 meters of loop-player)%"
 
 every 4 ticks:
 	loop all players:
