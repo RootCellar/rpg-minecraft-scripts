@@ -754,7 +754,6 @@ on death:
 				set {rpgSkript::%{_caster}%::druidspawn} to true
 			victim is a spider:
 				set {rpgSkript::%{_caster}%::druidspawn} to true
-			send "&cDruid Minion has Died!" to {_caster}
 	hasClass(attacker, "barbarian") is true:
 		set {rpgSkript::%attacker%::damageboost} to {rpgSkript::%attacker%::damageboost} + 0.05
 
@@ -1003,7 +1002,6 @@ on target:
 				cancel the event
 				stop
 
-
 on item damage:
 	hasClass(player, "herobrine") is true:
 		cancel the event
@@ -1013,11 +1011,9 @@ on item damage:
 	hasClass(player, "warrior") is true:
 		chance of 45%:
 			cancel the event
-			#send "&cSaved durability"
 	hasClass(player, "rogue") is true:
 		chance of 25%:
 			cancel the event
-			#send "&2Saved durability"
 
 function generateLootHelmet() :: item:
 	set {_item} to a leather helmet
