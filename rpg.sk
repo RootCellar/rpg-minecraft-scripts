@@ -2908,21 +2908,6 @@ on right click with red dye:
 			else:
 				send "&2~ ~ CANNOT RAGE RIGHT NOW ~ ~" to event-player
 
-on right click with glass bottle:
-	if hasClass(player, "barbarian") is true:
-		if canUseBarbarianAbilities(player) is true:
-			subRage(player, 1) is true:
-				set {_didHit} to false
-				loop all entities in radius 15 around player:
-					if loop-entity is not player:
-						set {_didHit} to true
-						apply slowness 1 to loop-entity for 15 seconds replacing the existing effect
-						apply weakness 1 to loop-entity for 15 seconds replacing the existing effect
-						set {_vec} to normalized vector between player and loop-entity
-				remove slowness from player
-				remove weakness from player
-				send action bar "&2~ ~ YOU BELLOW A TERRIFYING WAR CRY ~ ~" to player
-
 on right click with glowstone dust:
 	if hasClass(player, "barbarian") is true:
 		if canUseBarbarianAbilities(player) is true:
