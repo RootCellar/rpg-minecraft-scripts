@@ -754,8 +754,9 @@ on death:
 	isMonster(victim) is true:
 		chance of 4%:
 			set {_item} to generateRandomLoot()
-				hasAnyImbue({_item}) is true:
-					add {_item} to the drops
+			hasAnyImbue({_item}) is true:
+				scriptDebugBroadcastType("loot", "Added %{_item}% to mob loot")
+				add {_item} to the drops
 
 	isMinion(victim) is true:
 		set {_caster} to getSummoner(uuid of victim)
