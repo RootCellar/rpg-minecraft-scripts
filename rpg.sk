@@ -2934,29 +2934,22 @@ on right click with end crystal:
 				if {rpgSkript::%event-player%::mana} > 0:
 					set {_emana} to {rpgSkript::%event-player%::mana}
 					subMana(player, {rpgSkript::%event-player%::mana}) is true:
-						set {_didHit} to false
-						set {_btime} to generateTime({_emana}/80 + 5)
-						set {_wtime} to generateTime({_emana}/30 + 5)
+						set {_btime} to generateTime( min( {_emana}/80 + 5, 15 ) )
+						set {_wtime} to generateTime( min( {_emana}/30 + 5, 15 ) )
 						loop all entities in radius 30 around event-player:
 							if loop-entity is not event-player:
 								if loop-entity is a player:
-									send action bar "&2~ ~ YOU HAVE BEEN CURSED BY THE VOID ~ ~" to loop-entity
 									play sound "block.end_portal.spawn" at loop-entity
-									set {_didHit} to true
 									apply blindness 2 to loop-entity for {_btime} replacing the existing effect
-									apply weakness 2 to loop-entity for {_wtime} replacing the existing effect
+									apply weakness 1 to loop-entity for {_wtime} replacing the existing effect
 									apply levitation 1 to the loop-entity for 5 seconds replacing the existing effect
-									set {_vec} to normalized vector between player and loop-entity
 								isMonster(loop-entity) is true:
-									set {_didHit} to true
-									apply weakness 2 to loop-entity for {_wtime} replacing the existing effect
+									apply weakness 1 to loop-entity for {_wtime} replacing the existing effect
 									apply levitation 1 to the loop-entity for 5 seconds replacing the existing effect
-									set {_vec} to normalized vector between player and loop-entity
 								isMinion(loop-entity) is true:
 									if getSummoner(uuid of loop-entity) is not event-player:
 										apply weakness 1 to loop-entity for {_wtime} replacing the existing effect
-										apply levitation 1 to the loop-entity for 5 seconds replacing the existing effect					
-						send action bar "&2~ ~ YOU CALL UPON THE POWER OF THE VOID TO CURSE YOUR ENEMIES ~ ~" to player
+										apply levitation 1 to the loop-entity for 5 seconds replacing the existing effect
 						play sound "block.end_portal.spawn" at player
 
 on left click with end crystal:
