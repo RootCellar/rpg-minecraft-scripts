@@ -1614,42 +1614,14 @@ every 1 seconds:
 		hasClass(loop-player, "barbarian") is true:
 			loop-player is on ground:
 				hasResearch(loop-player, "leap") is true:
-					if {rpgSkript::%loop-player%::earthquake} is true:
-						loop all entities in radius 3 around loop-player:
-							if loop-entity-2 is not loop-player:
-								set {_edamage} to 2.5
-								if loop-player has potion effect strength:
-									set {_edamage} to {_edamage} * 1.15
-								if loop-entity-2 has potion effect weakness:
-									set {_edamage} to {_edamage}*1.25
-									send "&9~ CRITICAL (WEAKNESS 1.5x) ~" to loop-player
-									if loop-entity-2 has potion effect slowness:
-										set {_edamage} to {_edamage}*1.15
-										send "&9~ CRITICAL (SLOWNESS 1.25x) ~" to loop-player
-								else if loop-entity-2 has potion effect slowness:
-									set {_edamage} to {_edamage}*1.25
-									send "&9~ CRITICAL (SLOWNESS 1.5x) ~" to loop-player
-									if loop-entity-2 has potion effect weakness:
-										set {_edamage} to {_edamage}*1.15
-										send "&9~ CRITICAL (WEAKNESS 1.25x) ~" to loop-player
-								damage loop-entity-2 by {_edamage}
-								apply slowness 1 to loop-entity-2 for 7 seconds replacing the existing effect
-								set {_vec} to normalized vector between loop-player and loop-entity-2
-								push loop-entity-2 {_vec} with force 1.6
-								push loop-entity-2 upwards with force 0.9
-								send "&9~ CRUSHED BY BARBARIAN LEAP ~" to loop-entity-2
-						send "&9~ EARTHQUAKE! (%{_edamage}%) ~" to loop-player
-						loop blocks in radius 3 around loop-player:
-							loop-block is ice:
-								set loop-block to water
-							loop-block is packed ice:
-								set loop-block to ice
-							loop-block is blue ice:
-								set loop-block to packed ice
-							loop-block is leaves:
-								set loop-block to air
-							loop-block is glass:
-								set loop-block to air
+					{rpgSkript::%loop-player%::earthquake} is true
+					loop all entities in radius 3 around loop-player:
+						loop-entity-2 is not loop-player
+						damage loop-entity-2 by 3.0
+						apply slowness 1 to loop-entity-2 for 7 seconds replacing the existing effect
+						set {_vec} to normalized vector between loop-player and loop-entity-2
+						push loop-entity-2 {_vec} with force 1.6
+						push loop-entity-2 upwards with force 0.9
 					set {rpgSkript::%loop-player%::earthquake} to false
 
 
