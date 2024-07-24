@@ -3160,13 +3160,9 @@ on right click with spider eye:
 	else:
 		send "&cYou already have a druid minion!" to command executor	
 
-on right click with (string):
-	hasClass(event-entity, "druid") is true:
-		event-entity's held item is string:
-			cancel the event
-
 on right click with string:
 	hasClass(event-player, "druid") is true:
+		cancel the event
 		canUseDruidAbilities(event-player) is true:
 			if {rpgSkript::%event-player%::cobweb} is true:
 				if at least one of:
