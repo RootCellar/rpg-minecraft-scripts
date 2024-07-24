@@ -1017,17 +1017,24 @@ on target:
 				stop
 
 on item damage:
+	hasLore(event-item, "unbreakable") is true:
+		cancel the event
+		stop
 	hasClass(player, "herobrine") is true:
 		cancel the event
+		stop
 	hasClass(player, "paladin") is true:
 		subMana(player, 2, false) is true:
 			cancel the event
+			stop
 	hasClass(player, "warrior") is true:
 		chance of 45%:
 			cancel the event
+			stop
 	hasClass(player, "rogue") is true:
 		chance of 25%:
 			cancel the event
+			stop
 
 function generateLootHelmet() :: item:
 	set {_item} to a leather helmet
