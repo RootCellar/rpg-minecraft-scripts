@@ -2682,7 +2682,16 @@ command /channel <text>:
 	executable by: players
 	trigger:
 		hasClass(player, "cleric") is true
-
+		arg 1 is "regen":
+			subMana(player, 300) is false:
+				send "&cYou do not have enough mana to bless nearby allies with regeneration!" to player
+				stop
+			loop players in radius 10 of player:
+				apply regeneration to loop-player for 120 seconds replacing the existing effect
+			play sound "item.trident.thunder" with pitch 2.0 at player
+			send "&6You bless your allies with regeneration!" to player
+		else:
+			send "&cUnrecognized ability" to player
 
 # Barbarian
 
