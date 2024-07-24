@@ -231,6 +231,11 @@ function lastLoreLine(item: item) :: number:
 		set {_x} to {_x} + 1
 	return {_x}
 
+function hasAnyImbue(item: item) :: boolean:
+	if lastLoreLine({_item}) is 1:
+		return false
+	return true
+
 function addImbue(item: item, imbue: text) :: item:
 	set line lastLoreLine({_item}) of ({_item})'s lore to {_imbue}
 	scriptDebugBroadcastType("imbue", "%{_item}% imbue %{_imbue}%")
@@ -745,6 +750,13 @@ every 10 seconds:
 
 on death:
 	removeAllEffects(victim)
+
+	isMonster(victim) is true:
+		chance of 4%:
+			set {_item} to generateRandomLoot()
+				hasAnyImbue({_item}) is true:
+					add {_item} to the drops
+
 	isMinion(victim) is true:
 		set {_caster} to getSummoner(uuid of victim)
 		hasClass({_caster}, "druid") is true:
@@ -754,6 +766,7 @@ on death:
 				set {rpgSkript::%{_caster}%::druidspawn} to true
 			victim is a spider:
 				set {rpgSkript::%{_caster}%::druidspawn} to true
+
 	hasClass(attacker, "barbarian") is true:
 		set {rpgSkript::%attacker%::damageboost} to {rpgSkript::%attacker%::damageboost} + 0.05
 
@@ -1119,9 +1132,29 @@ function generateLootBoots() :: item:
 
 	return {_item}
 
+function generateRandomLoot() :: item:
+	scriptDebugBroadcastType("loot", "Generating random loot item")
+	
+	chance of 10%:
+		set {_item} to generateLootHelmet()
+	chance of 10%:
+		set {_item} to generateLootChestplate()
+	chance of 10%:
+		set {_item} to generateLootLeggings()
+	chance of 10%:
+		set {_item} to generateLootBoots()
+
+	return {_item}
+
 on loot generate:
 	scriptDebugBroadcastType("loot", "Loot table generated")
 
+	set {_item} to generateRandomLoot()
+
+	hasAnyImbue({_item}) is true:
+		add {_item} to the loot
+		scriptDebugBroadcastType("loot", "Added %{_item}% to the loot")
+	
 command /rpgloot <text>:
 	executable by: players
 	trigger:
@@ -1134,6 +1167,27 @@ command /rpgloot <text>:
 			giveItem(player, generateLootLeggings())
 		arg 1 is "boots":
 			giveItem(player, generateLootBoots())
+
+command /rpgrandloot:
+	executable by: players
+	trigger:
+		player has permission "rpg.control"
+		set {_x} to 0
+		while hasAnyImbue({_item}) is false:
+			set {_item} to generateRandomLoot()
+			set {_x} to {_x} + 1
+
+		give {_item} to player
+		send "&cTook %{_x}% rolls" to player
+
+on chunk generate:
+	scriptDebugBroadcastType("chunk", "Chunk Generated")
+
+on chunk load:
+	scriptDebugBroadcastType("chunk", "Chunk Loaded")
+
+on chunk unload:
+	scriptDebugBroadcastType("chunk", "Chunk Unloaded")
 
 function generateTime(seconds: number) :: time span:
 	set {_time} to 0 seconds
