@@ -2987,6 +2987,7 @@ on right click with phantom membrane:
 		send "&cTeleport Cooldown Finished!" to event-player
 	else:
 		send "&cTeleport on Cooldown!" to event-player
+
 function endTeleport( player: player):
 	hasClass({_player}, "endwarden") is true:
 		canUseEndwardenAbilities({_player}) is true:
@@ -3013,12 +3014,6 @@ function endTeleport( player: player):
 			teleport {_player} to {_loc}
 			wait 2 ticks
 			play sound "entity.enderman.teleport" at {_player}
-			loop entities in radius 5 of {_player}:
-				loop-entity is not {_player}:
-					if isMinion( loop-entity ) is false:
-						apply levitation 1 to the loop-entity for 5 seconds replacing the existing effect
-					if getSummoner(uuid of loop-entity ) is not {_player}:
-						apply levitation 1 to the loop-entity for 5 seconds replacing the existing effect
 
 on left click with phantom membrane:
 	hasClass(event-player, "endwarden") is true:
@@ -3072,7 +3067,7 @@ function canUseDruidAbilities(player: player) :: boolean:
 	if isWearingLightOrLess({_player}) is true:
 		return true
 	return false
-			
+
 function canUseShapeshiftAbilities(player: player) :: boolean:
 	if isWearingNothing({_player}) is true:
 		return true
