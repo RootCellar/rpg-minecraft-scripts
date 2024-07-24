@@ -1147,7 +1147,6 @@ function generateTime(seconds: number) :: time span:
 		add 1 to {_count}
 	return {_time}
 
-
 on sprint toggle:
 	if hasClass(player, "herobrine") is true:
 		player is not sprinting:
@@ -1250,19 +1249,6 @@ on spawn:
 			fullHeal(event-entity)
 			#send "&6 Max Health: %maximum health of event-entity% | Movement Speed: %movement speed attribute of event-entity% | Attack Damage: %attack damage attribute of event-entity%" to {_caster}
 			set {rpgSkript::%{_caster}%::druidspawn} to false
-
-
-on right click with (ender pearl or eye of ender):
-	hasClass(event-entity, "endwarden") is true:
-		event-entity's off hand item is an ender pearl:
-			cancel the event
-		event-entity's off hand item is an eye of ender:
-			cancel the event
-
-on right click with (string):
-	hasClass(event-entity, "druid") is true:
-		event-entity's held item is string:
-			cancel the event
 
 
 
@@ -2988,7 +2974,13 @@ on left click with end crystal:
 						apply regeneration 1 to loop-entity for 10 seconds replacing the existing effect
 					else:
 						apply levitation 1 to the loop-entity for 5 seconds replacing the existing effect
-							
+
+on right click with (ender pearl or eye of ender):
+	hasClass(event-entity, "endwarden") is true:
+		event-entity's off hand item is an ender pearl:
+			cancel the event
+		event-entity's off hand item is an eye of ender:
+			cancel the event
 
 on right click with phantom membrane:
 	if {rpgSkript::%event-player%::eteleport} is true:
@@ -3175,6 +3167,11 @@ on right click with spider eye:
 			setupMinion(the spider, {_player})
 	else:
 		send "&cYou already have a druid minion!" to command executor	
+
+on right click with (string):
+	hasClass(event-entity, "druid") is true:
+		event-entity's held item is string:
+			cancel the event
 
 on right click with string:
 	hasClass(event-player, "druid") is true:
