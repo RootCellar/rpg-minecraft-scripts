@@ -2877,10 +2877,10 @@ on inventory click:
 function canUseBarbarianAbilities(player: player) :: boolean:
 	if {_player} has potion effect weakness:
 		return false
-	else if isWearingMediumOrLess({_player}) is true:
-		return true
 	else if {_player}'s off hand item is a shield:
 		return false
+	else if isWearingMediumOrLess({_player}) is true:
+		return true
 	return false
 
 on right click with red dye:
@@ -2935,9 +2935,7 @@ function canUseEndwardenAbilities(player: player) :: boolean:
 		return false
 	else if isWearingMediumOrLess({_player}) is true:
 		return true
-	
-	return true
-
+	return false
 
 on right click with end crystal:
 	hasClass(event-player, "endwarden") is true:
