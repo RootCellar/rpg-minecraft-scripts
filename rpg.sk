@@ -438,6 +438,17 @@ function generateIndex(entity: entity) :: text:
 	scriptDebugBroadcastType("generateIndex", "%{_index}%")
 	return {_index}
 
+function removeAllEffects(entity: entity):
+	set {_index} to generateIndex({_entity})
+	loop {rpgSkript::effects::%{_index}%::*}:
+		removeEffect({_entity}, loop-index)
+
+function removeEffect(entity: entity, name: string):
+	scriptDebugBroadcastType("effect", "Removing Effect %{_name}% from %{_entity}%")
+	set {_index} to generateIndex({_entity})
+	delete {rpgSkript::effects::%{_index}%::%{_name}%}
+	delete {rpgSkript::effects::%{_index}%::%{_name}%::*}
+
 function applyEffect(entity: entity, name: string, duration: timespan):
 	scriptDebugBroadcastType("effect", "Applying Effect %{_name}% to %{_entity}% for %{_duration}%")
 	set {_index} to generateIndex({_entity})
@@ -733,6 +744,7 @@ every 10 seconds:
 								wait 20 ticks
 
 on death:
+	removeAllEffects(victim)
 	isMinion(victim) is true:
 		set {_caster} to getSummoner(uuid of victim)
 		hasClass({_caster}, "druid") is true:
