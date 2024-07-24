@@ -414,6 +414,9 @@ on heal:
 	entity is not alive:
 		cancel the event
 
+function fullHeal(entity: entity):
+	heal({_entity}, max health of {_entity})
+
 function heal(entity: entity, amount: number) :: boolean:
 	if {_entity} is not alive:
 		return false
@@ -1218,7 +1221,7 @@ on spawn:
 		hasClass({_caster}, "endwarden") is true:
 			event-entity is an enderman:
 				set maximum health of event-entity to 10
-				heal event-entity
+				fullHeal(event-entity)
 		hasClass({_caster}, "druid") is true:
 			event-entity is a wolf:
 				set maximum health of event-entity to 10
@@ -1232,7 +1235,7 @@ on spawn:
 				set maximum health of event-entity to 16
 				set movement speed attribute of event-entity to 1.2 * movement speed attribute of event-entity
 				set armor attribute of event-entity to 5
-			heal event-entity
+			fullHeal(event-entity)
 			#send "&6 Max Health: %maximum health of event-entity% | Movement Speed: %movement speed attribute of event-entity% | Attack Damage: %attack damage attribute of event-entity%" to {_caster}
 			set {rpgSkript::%{_caster}%::druidspawn} to false
 
@@ -3269,8 +3272,6 @@ command /wildshape <text>:
 					send "&9~ ~ Not a valid Wildshape. Valid Wildshapes: bat, bear, wolf, spider, horse, & human ~ ~" to command executor
 					stop
 				send "&9~ ~ Successfuly wild shaped ~ ~" to command executor
-				wait 3 seconds
-				heal command executor
 
 				
 			else:
