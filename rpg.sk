@@ -2900,13 +2900,10 @@ function canUseBarbarianAbilities(player: player) :: boolean:
 	return false
 
 on right click with red dye:
-	hasClass(event-player, "barbarian") is true:
-		canUseBarbarianAbilities(event-player) is true:
-			if {rpgSkript::%event-player%::ragecooldown} is true:
-				subRage(event-player, 1) is true:
-					rageTrigger(event-player)
-			else:
-				send "&2~ ~ CANNOT RAGE RIGHT NOW ~ ~" to event-player
+	hasClass(event-player, "barbarian") is true
+	canUseBarbarianAbilities(event-player) is true
+	subRage(event-player, 1) is true:
+		rageTrigger(event-player)
 
 on right click with glowstone dust:
 	if hasClass(player, "barbarian") is true:
