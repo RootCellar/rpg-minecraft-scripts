@@ -2723,22 +2723,12 @@ command /channel <text>:
 # Barbarian
 
 function rageTrigger(player: player):
-	if {rpgSkript::%{_player}%::ragecooldown} is true:
-		play sound "entity.player.attack.nodamage" at {_player}
-		send action bar "&2~ ~ RAGE! ~ ~" to {_player}
-		set {rpgSkript::%{_player}%::ragecooldown} to false
-		apply resistance 1 without particles to {_player} for 30 seconds replacing the existing effect
-		apply swiftness 1 without particles to {_player} for 30 seconds replacing the existing effect
-		apply strength 2 without particles to {_player} for 30 seconds replacing the existing effect
-		apply haste 2 without particles to {_player} for 30 seconds replacing the existing effect
-		apply regeneration 1 without particles to {_player} for 30 seconds replacing the existing effect
-		set {rpgSkript::%{_player}%::raging} to true
-		wait 30 seconds
-		send "&2~ ~ Rage Cooldown Finished ~ ~" to {_player}
-		set {rpgSkript::%{_player}%::ragecooldown} to true
-		set {rpgSkript::%{_player}%::raging} to true
-	else:
-		send "&2~ ~ CANNOT RAGE RIGHT NOW ~ ~" to {_player}
+	play sound "entity.player.attack.nodamage" at {_player}
+	apply resistance 1 without particles to {_player} for 30 seconds replacing the existing effect
+	apply swiftness 1 without particles to {_player} for 30 seconds replacing the existing effect
+	apply strength 2 without particles to {_player} for 30 seconds replacing the existing effect
+	apply haste 2 without particles to {_player} for 30 seconds replacing the existing effect
+	apply regeneration 1 without particles to {_player} for 30 seconds replacing the existing effect
 
 function setupRage(player: player):
 	if {rpgSkript::%{_player}%::rage} is not set:
