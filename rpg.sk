@@ -658,46 +658,6 @@ every 2 seconds:
 			if {rpgSkript::%loop-player%::eteleport} is not set:
 				set {rpgSkript::%loop-player%::eteleport} to true
 
-every 10 seconds:
-	loop all players:
-		hasClass(loop-player, "druid") is true:
-			canUseDruidAbilities(loop-player) is true:
-				if {rpgSkript::%loop-player%::humanshape} is true:
-					loop all blocks in radius 10 around loop-player:
-						chance of 5%:
-							if loop-block is wheat:
-								apply bone meal to loop-block
-								wait 20 ticks
-							if loop-block is carrot plant:
-								apply bone meal to loop-block
-								wait 20 ticks
-							if loop-block is potato plant:
-								apply bone meal to loop-block
-								wait 20 ticks
-							if loop-block is melon stem:
-								apply bone meal to loop-block
-								wait 20 ticks
-							if loop-block is pumpkin stem:
-								apply bone meal to loop-block
-								wait 20 ticks
-							if loop-block is sweet berry bush:
-								apply bone meal to loop-block
-								wait 20 ticks
-							if loop-block is beetroot plant:
-								apply bone meal to loop-block
-								wait 20 ticks
-							if loop-block is sugar cane:
-								block above loop-block is air:
-									block below loop-block is not sugar cane:
-										set block above loop-block to sugar cane
-								wait 20 ticks
-							if loop-block is bamboo:
-								block above loop-block is air:
-									set block above loop-block to bamboo
-								wait 20 ticks
-							if loop-block is a sapling:
-								apply bone meal to loop-block
-								wait 20 ticks
 
 on death:
 	removeAllEffects(victim)
@@ -2949,10 +2909,54 @@ on right click with purple dye:
 	set {_player} to the player
 	spawn 1 enderman at the player:
 		setupMinion(the enderman, {_player})
-			
+
+
 
 # Druid
-		
+
+
+
+every 10 seconds:
+	loop all players:
+		hasClass(loop-player, "druid") is true:
+			canUseDruidAbilities(loop-player) is true:
+				if {rpgSkript::%loop-player%::humanshape} is true:
+					loop all blocks in radius 10 around loop-player:
+						chance of 5%:
+							if loop-block is wheat:
+								apply bone meal to loop-block
+								wait 20 ticks
+							if loop-block is carrot plant:
+								apply bone meal to loop-block
+								wait 20 ticks
+							if loop-block is potato plant:
+								apply bone meal to loop-block
+								wait 20 ticks
+							if loop-block is melon stem:
+								apply bone meal to loop-block
+								wait 20 ticks
+							if loop-block is pumpkin stem:
+								apply bone meal to loop-block
+								wait 20 ticks
+							if loop-block is sweet berry bush:
+								apply bone meal to loop-block
+								wait 20 ticks
+							if loop-block is beetroot plant:
+								apply bone meal to loop-block
+								wait 20 ticks
+							if loop-block is sugar cane:
+								block above loop-block is air:
+									block below loop-block is not sugar cane:
+										set block above loop-block to sugar cane
+								wait 20 ticks
+							if loop-block is bamboo:
+								block above loop-block is air:
+									set block above loop-block to bamboo
+								wait 20 ticks
+							if loop-block is a sapling:
+								apply bone meal to loop-block
+								wait 20 ticks
+
 function canUseDruidAbilities(player: player) :: boolean:
 	if {_player} has potion effect wither:
 		return false	
