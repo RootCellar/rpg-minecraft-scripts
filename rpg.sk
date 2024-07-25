@@ -564,6 +564,7 @@ every 2 seconds:
 		regenMana(loop-player)
 
 		setupRage(loop-player)
+		setupWildshape(loop-player)
 
 		cullMinions(loop-player)
 		
@@ -635,11 +636,8 @@ every 2 seconds:
 					set {rpgSkript::%loop-player%::damageboost} to {rpgSkript::%loop-player%::damagemin}
 
 		hasClass(loop-player, "druid") is true:
-
-			setupWildshape(loop-player)
 			time in world of loop-player is between 23:00 and 1:00:
-				if {rpgSkript::%loop-player%::humanshape} is true:
-					regenWildshape(loop-player)
+				regenWildshape(loop-player)
 
 			if {rpgSkript::%loop-player%::druidspawn} is not set:
 				set {rpgSkript::%loop-player%::druidspawn} to true
@@ -657,7 +655,6 @@ every 2 seconds:
 				set {rpgSkript::%loop-player%::spidershape} to false
 			if {rpgSkript::%loop-player%::humanshape} is not set:
 				set {rpgSkript::%loop-player%::humanshape} to true
-			
 
 			if canUseShapeshiftAbilities(loop-player) is true:
 				if {rpgSkript::%loop-player%::batshape} is true:
