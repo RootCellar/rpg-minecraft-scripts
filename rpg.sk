@@ -576,7 +576,7 @@ every 2 seconds:
 			loop-player's knockback resistance attribute is not 0.7:
 				set loop-player's knockback resistance attribute to 0.7
 			apply haste 2 without particles to the loop-player for 30 seconds replacing the existing effect
-			apply strength 2 without particles to the loop-player for 30 seconds replacing the existing effect
+			apply strength 1 without particles to the loop-player for 30 seconds replacing the existing effect
 		hasClass(loop-player, "paladin") is true:
 			heal(loop-player, 2)
 			loop entities in radius 50 of loop-player:
