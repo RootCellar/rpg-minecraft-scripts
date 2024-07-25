@@ -806,15 +806,6 @@ on damage:
 					push victim upwards with force 0.8
 					broadcast "&ct"
 
-		hasClass(attacker, "endwarden") is true:
-			if victim has potion effect levitation:
-				set the damage to the damage * 1.2
-			else:
-				chance of 20%:
-					apply levitation 1 without particles to the victim for 5 seconds replacing the existing effect
-					send "&9~ ~ YOU ARE LIFTED INTO THE AIR BY AN ENDWARDEN ~ ~" to victim
-
-			
 	victim is a player:
 		setMaxHealth(the victim)
 
