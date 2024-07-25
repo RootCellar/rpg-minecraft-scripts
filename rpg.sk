@@ -844,7 +844,7 @@ on damage:
 				cancel the event
 		hasClass(victim, "barbarian") is true:
 			event-projectile is set:
-				set the damage to the damage * 1.15
+				set the damage to the damage * 1.3
 			canUseBarbarianAbilities(victim) is true:
 				if chance of 5%:
 					rageTrigger(victim)
