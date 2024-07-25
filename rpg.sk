@@ -940,21 +940,6 @@ on damage:
 				if chance of 10%:
 					set {rpgSkript::%{_player}%::ragecooldown} to true
 					rageTrigger(victim)
-				else:
-					chance of 25%:
-						play sound "entity.player.attack.nodamage" at victim
-						send action bar "&2~ ~ EXPEL YOUR ATTACKER AND ASSUME A FIGHTING STANCE ~ ~" to victim
-						apply resistance 1 without particles to the victim for 10 seconds replacing the existing effect
-						loop all entities in radius 5 around victim:
-							loop-entity is not the victim:
-								set {_didHit} to true
-								apply slowness 1 to loop-entity for 7 seconds replacing the existing effect
-								damage loop-entity by 3
-								if hasResearch( victim, "poison_barbs" ) is true:
-									apply poison 1 without particles to loop-entity for 5 seconds replacing the existing effect
-								set {_vec} to normalized vector between victim and loop-entity
-								push loop-entity {_vec} with force 1.2
-								push loop-entity upwards with force 0.6
 		hasClass(victim, "endwarden") is true:
 			canUseEndwardenAbilities(victim) is true:
 				damage cause is fall:
