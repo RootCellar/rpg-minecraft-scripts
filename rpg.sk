@@ -3201,12 +3201,9 @@ on right click with glistering melon slice:
 				loop all entities in radius 15 around event-player:
 					isMinion(loop-entity) is true:
 						getSummoner(uuid of loop-entity) is event-player:
-							apply resistance 2 to the loop-entity for 10 seconds replacing the existing effect
-							apply regeneration 3 to the loop-entity for 10 seconds replacing the existing effect
-							apply strength 2 to the loop-entity for 10 seconds replacing the existing effect
-				send "&9~ ~ DRUID MINION HEALED AND BUFFED ~ ~" to event-player
-				wait 10 seconds
-				send "&9~ ~ DRUID MINION BUFF ENDED ~ ~" to event-player
+							apply resistance 2 to the loop-entity for 15 seconds replacing the existing effect
+							apply regeneration 2 to the loop-entity for 15 seconds replacing the existing effect
+							apply strength 2 to the loop-entity for 15 seconds replacing the existing effect
 
 command /wildshape <text>:
 	description: Shapeshift into an Animilistic Form
@@ -3263,11 +3260,8 @@ command /wildshape <text>:
 					send "&9~ ~ Not a valid Wildshape. Valid Wildshapes: bat, bear, wolf, spider, horse, & human ~ ~" to command executor
 					stop
 				send "&9~ ~ Successfuly wild shaped ~ ~" to command executor
-
-				
 			else:
 				send "&9~ ~ Cannot shapeshift right now ~ ~" to command executor
-
 		else:
 			send "&9~ ~ Shapeshift? You're no druid ~ ~" to command executor
 
