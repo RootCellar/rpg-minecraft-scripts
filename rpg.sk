@@ -1468,7 +1468,16 @@ on death of a player:
 		keep the items
 		clear drops
 		send "&aYou may have died, but they'll never get your items!" to the victim
+		stop
+	loop the drops:
+		hasLore(loop-item, "ethereal") is true:
+			remove loop-item from the drops
+			add loop-item to {rpgSkript::onRespawn::%victim%::*}
 
+on respawn:
+	loop {rpgSkript::onRespawn::%player%::*}:
+		give loop-value to the player
+	delete {rpgSkript::onRespawn::%player%::*}
 
 
 # Herobrine?
