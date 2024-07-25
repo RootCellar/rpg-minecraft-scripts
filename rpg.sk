@@ -658,6 +658,11 @@ every 2 seconds:
 			if {rpgSkript::%loop-player%::eteleport} is not set:
 				set {rpgSkript::%loop-player%::eteleport} to true
 
+on connect:
+	broadcast "&e%player% is connecting..."
+
+on server list ping:
+	#broadcast "&eServer pinged"
 
 on death:
 	removeAllEffects(victim)
