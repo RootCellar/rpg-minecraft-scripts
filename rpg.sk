@@ -596,44 +596,6 @@ every 2 seconds:
 		hasClass(loop-player, "barbarian") is true:
 			canUseBarbarianAbilities(loop-player) is true:
 				regenRage(loop-player)
-				if {rpgSkript::%loop-player%::ragecooldown} is not set:
-					set {rpgSkript::%loop-player%::ragecooldown} to true
-				if {rpgSkript::%loop-player%::damageboost} is not set:
-					set {rpgSkript::%loop-player%::damageboost} to 1.0
-				if {rpgSkript::%loop-player%::damagemin} is not set:
-					set {rpgSkript::%loop-player%::damagemin} to 1.25
-				if {rpgSkript::%loop-player%::raging} is not set:
-					set {rpgSkript::%loop-player%::raging} to false
-				if {rpgSkript::%loop-player%::leap} is not set:
-					set {rpgSkript::%loop-player%::leap} to true
-				if at least one of:
-					loop-player's off hand item is a sword
-					loop-player's held item is a sword
-				then:
-					apply resistance 1 without particles to the loop-player for 3 seconds replacing the existing effect	
-				if at least one of:
-					loop-player's off hand item is an axe
-					loop-player's held item is an axe
-				then:
-					set {rpgSkript::%loop-player%::damagemin} to 1.5
-					if {rpgSkript::%loop-player%::raging} is true:
-						set {rpgSkript::%loop-player%::damagemin} to 2.0	
-				else:
-					set {rpgSkript::%loop-player%::damagemin} to 1.25
-				loop-player's off hand item is a pickaxe:
-					apply haste 1 without particles to the loop-player for 3 seconds replacing the existing effect
-					loop-player's held item is a pickaxe:
-						apply haste 2 without particles to the loop-player for 3 seconds replacing the existing effect
-				loop-player's off hand item is a shovel:
-					apply swiftness 1 without particles to the loop-player for 3 seconds replacing the existing effect
-					loop-player's held item is a shovel:
-						apply swiftness 2 without particles to the loop-player for 3 seconds replacing the existing effect
-				loop-player's off hand item is a hoe:
-					apply regeneration 1 without particles to the loop-player for 3 seconds replacing the existing effect
-				chance of 50%:
-					set {rpgSkript::%loop-player%::damageboost} to {rpgSkript::%loop-player%::damageboost} - 0.05
-				if {rpgSkript::%loop-player%::damageboost} is less than {rpgSkript::%loop-player%::damagemin}:
-					set {rpgSkript::%loop-player%::damageboost} to {rpgSkript::%loop-player%::damagemin}
 
 		hasClass(loop-player, "druid") is true:
 			time in world of loop-player is between 23:00 and 1:00:
