@@ -824,9 +824,7 @@ on damage:
 			damage cause is freeze:
 				cancel the event
 		hasClass(victim, "warrior") is true:
-			set {_odamage} to the damage
-			set {_newdamage} to {_odamage} * 0.65
-			set the damage to {_newdamage}
+			set the damage to the damage * 0.65
 		hasClass(victim, "rogue") is true:
 			canUseRogueAbilities(victim) is true
 			damage cause is fall:
