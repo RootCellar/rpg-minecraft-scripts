@@ -662,6 +662,35 @@ on connect:
 on server list ping:
 	#broadcast "&eServer pinged"
 
+function getTag(item: item, name: text) :: text:
+	set {_value} to tag {_name} of nbt of {_item}
+	scriptDebugBroadcastType("tag", "%{_item}% tag %{_name}%: %{_value}%")
+	return {_value}
+
+on right click with glass bottle:
+	hasLore(event-item, "holding") is true
+	set {_id} to getTag(event-item, "holdingId")
+	scriptDebugBroadcastType("holding", "ID: %{_id}%")
+	if {_id} is not set:
+		scriptDebugBroadcastType("holding", "ID not set, creating new holding inventory")
+		set {_id} to a random UUID
+		{rpgSkript::holding::%{_id}%} is not set:
+			scriptDebugBroadcastType("holding", "New ID: %{_id}%")
+			set {rpgSkript::holding::%{_id}%} to 1
+			set tag "holdingId" of nbt of event-item to {_id}
+	set {_inv} to chest inventory with 6 rows named "&eBottle of Holding"
+	loop 6*9 times:
+		set slot (loop-value)-1 of {_inv} to {rpgSkript::holding::%{_id}%::%loop-value%}
+	open {_inv} to player
+
+on inventory close:
+	if event-inventory's name is "&eBottle of Holding":
+		set {_id} to getTag(player's held item, "holdingId")
+		{_id} is not set:
+			scriptDebugBroadcastType("holding", "ID not set, cannot save inventory")
+		loop 6*9 times:
+			set {rpgSkript::holding::%{_id}%::%loop-value%} to slot (loop-value)-1 of event-inventory
+
 on death:
 	removeAllEffects(victim)
 	
