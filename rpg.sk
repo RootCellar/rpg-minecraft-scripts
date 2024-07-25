@@ -2748,7 +2748,7 @@ function setupRage(player: player):
 
 	set {_newRage} to 0
 	if hasClass({_player}, "barbarian") is true:
-		set {_newRage} to 1
+		set {_newRage} to 5
 
 	if hasImbue({_player}, "Rage Boost") is true:
 		set {_newRage} to {_newRage} + 0.25 * {_newRage} * countImbue({_player}, "Rage Boost")
