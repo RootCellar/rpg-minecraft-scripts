@@ -2861,6 +2861,8 @@ on right click with red dye:
 		rageTrigger(event-player)
 
 on right click with glowstone dust:
+	player is sprinting
+	player is on the ground
 	if hasClass(player, "barbarian") is true:
 		if canUseBarbarianAbilities(player) is true:
 			if hasResearch(player, "leap") is true:
