@@ -776,7 +776,7 @@ on damage:
 				if victim is an animal:
 					set the damage to 3
 				else:
-					set the damage to 2.5
+					set the damage to 2
 			else if {rpgSkript::%attacker%::bearshape} is true:
 				set the damage to 3
 			else if {rpgSkript::%attacker%::batshape} is true:
