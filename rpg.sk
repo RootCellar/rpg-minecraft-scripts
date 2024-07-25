@@ -1258,23 +1258,21 @@ function fellTree(block: block, depth: number=1):
 		loop blocks in radius 2 of {_block}:
 			fellTree(loop-block, {_depth} + 1)
 
-on craft:
+on preparing craft:
 	hasClass(player, "warrior") is true
 	if hasResearch(player, "master_smith") is true:
-		wait 1 tick
 		event-item is any sword:
-			enchant the cursor slot of player with sharpness 1
+			enchant the event-slot with sharpness 1
 		event-item is any pickaxe:
-			enchant the cursor slot of player with efficiency 1
+			enchant the event-slot with efficiency 1
 		event-item is any axe:
-			enchant the cursor slot of player with efficiency 1
+			enchant the event-slot with efficiency 1
 		event-item is any shovel:
-			enchant the cursor slot of player with unbreaking 1
+			enchant the event-slot with unbreaking 1
 		event-item is any hoe:
-			enchant the cursor slot of player with unbreaking 1
+			enchant the event-slot with unbreaking 1
 		event-item is any armor:
-			enchant the cursor slot of player with protection 1
-	
+			enchant the event-slot with protection 1
 
 on right click:
 	hasClass(player, "warrior") is true
