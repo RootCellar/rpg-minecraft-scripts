@@ -792,45 +792,20 @@ on damage:
 				set the damage to the damage * 1.4
 				ignite the victim for 20 seconds
 		hasClass(attacker, "barbarian") is true:
-			canUseBarbarianAbilities( attacker ) is true:
-				event-projectile is set:
-					if hasResearch(attacker, "throwables") is true:
-						if event-projectile is an egg:
-							set the damage to 1
-						else if event-projectile is a snowball:
-							set the damage to 0.5
-							apply slowness 1 without particles to the victim for 3 seconds replacing the existing effect
-						else:
-							set the damage to the damage * 0.3
-					else:
-						set the damage to the damage * 0.3
-					stop
-				if victim has potion effect weakness:
-					set the damage to the damage * 1.025
-					if victim has potion effect slowness:
-						set the damage to the damage * 1.025
-						send "&c~ ~ CRITICAL STRIKE (%damage%)~ ~" to attacker
-				else if victim has potion effect slowness:
-					set the damage to the damage * 1.025
-					if victim has potion effect weakness:
-						set the damage to the damage * 1.025	
-						send "&c~ ~ CRITICAL STRIKE (%damage%) ~ ~" to attacker
-				else:
-					set the damage to the damage * 1.025
+			if event-projectile is set:
+				set the damage to the damage * 0.65
+			else if canUseBarbarianAbilities( attacker ) is true:
+				broadcast the damage
+				set the damage to the damage * 1.5
+				broadcast the damage
+				attacker is holding air:
+					set {_vec} to vector between attacker and victim
+					set y component of {_vec} to 0
+					set {_vec} to normalized {_vec}
+					push victim {_vec} with force 1.2
+					push victim upwards with force 0.8
+					broadcast "&ct"
 
-				set the damage to the damage * {rpgSkript::%attacker%::damageboost}
-				chance of 20%:
-					set {rpgSkript::%attacker%::damageboost} to {rpgSkript::%attacker%::damageboost} + 0.05
-
-				if the damage is less than the health of the victim * 0.2:
-					hasResearch(attacker, "reckless_attack") is true:
-						set {_odamage} to the damage
-						if chance of 75%:
-							set the damage to the damage * 2.0
-						else:
-							set the damage to 0
-						send "&c~ ~ RECKLESS ATTACK! %{_odamage}% -> %damage% ~ ~" to attacker
-				
 		hasClass(attacker, "endwarden") is true:
 			if victim has potion effect levitation:
 				set the damage to the damage * 1.2
