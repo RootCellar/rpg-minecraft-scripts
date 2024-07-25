@@ -600,9 +600,7 @@ every 2 seconds:
 		hasClass(loop-player, "druid") is true:
 			time in world of loop-player is between 23:00 and 1:00:
 				regenWildshape(loop-player)
-
-			if {rpgSkript::%loop-player%::druidspawn} is not set:
-				set {rpgSkript::%loop-player%::druidspawn} to true
+				
 			if {rpgSkript::%loop-player%::cobweb} is not set:
 				set {rpgSkript::%loop-player%::cobweb} to true
 			if {rpgSkript::%loop-player%::batshape} is not set:
@@ -666,26 +664,13 @@ on server list ping:
 
 on death:
 	removeAllEffects(victim)
-
+	
 	isMonster(victim) is true:
 		chance of 4%:
 			set {_item} to generateRandomLoot()
 			hasAnyImbue({_item}) is true:
 				scriptDebugBroadcastType("loot", "Added %{_item}% to mob loot")
 				add {_item} to the drops
-
-	isMinion(victim) is true:
-		set {_caster} to getSummoner(uuid of victim)
-		hasClass({_caster}, "druid") is true:
-			victim is a polar bear:
-				set {rpgSkript::%{_caster}%::druidspawn} to true
-			victim is a wolf:
-				set {rpgSkript::%{_caster}%::druidspawn} to true
-			victim is a spider:
-				set {rpgSkript::%{_caster}%::druidspawn} to true
-
-	hasClass(attacker, "barbarian") is true:
-		set {rpgSkript::%attacker%::damageboost} to {rpgSkript::%attacker%::damageboost} + 0.05
 
 on damage:
 	damage cause is fall:
@@ -1161,8 +1146,6 @@ on spawn:
 				set movement speed attribute of event-entity to 1.2 * movement speed attribute of event-entity
 				set armor attribute of event-entity to 5
 			fullHeal(event-entity)
-			#send "&6 Max Health: %maximum health of event-entity% | Movement Speed: %movement speed attribute of event-entity% | Attack Damage: %attack damage attribute of event-entity%" to {_caster}
-			set {rpgSkript::%{_caster}%::druidspawn} to false
 
 
 
@@ -2494,7 +2477,6 @@ function calculateMaxMinions(summoner: player) :: number:
 		isWearingLightOrLess({_summoner}) is true:
 			set {_count} to {_count} * 2.0
 
-
 	return floor({_count})
 
 function cullMinions(summoner: player):
@@ -3026,40 +3008,34 @@ on inventory click:
 	populateDruidResearchMenu(player, event-inventory)
 
 on right click with leather:
-	if {rpgSkript::%player%::druidspawn} is true:
-		if hasResearch(player, "polar_bear") is false:									
-			hasClass(player, "druid") is true
-			if subMana(command executor, 30) is false:
-				send "&cYou do not have enough Mana to summon a Wolf!" to command executor
-				stop
-			send "&dYou summon a wolf!" to command executor
-			set {_player} to the player
-			spawn 1 wolf at the player:
-				setupMinion(the wolf, {_player})
-		else:
-			hasClass(player, "druid") is true
-			if subMana(command executor, 60) is false:
-				send "&cYou do not have enough Mana to summon a Polar Bear!" to command executor
-				stop
-			send "&dYou summon a Polar Bear!" to command executor
-			set {_player} to the player
-			spawn 1 polar bear at the player:
-				setupMinion(the polar bear, {_player})
+	if hasResearch(player, "polar_bear") is false:									
+		hasClass(player, "druid") is true
+		if subMana(command executor, 30) is false:
+			send "&cYou do not have enough Mana to summon a Wolf!" to command executor
+			stop
+		send "&dYou summon a wolf!" to command executor
+		set {_player} to the player
+		spawn 1 wolf at the player:
+			setupMinion(the wolf, {_player})
 	else:
-		send "&cYou already have a druid minion!" to command executor
+		hasClass(player, "druid") is true
+		if subMana(command executor, 60) is false:
+			send "&cYou do not have enough Mana to summon a Polar Bear!" to command executor
+			stop
+		send "&dYou summon a Polar Bear!" to command executor
+		set {_player} to the player
+		spawn 1 polar bear at the player:
+			setupMinion(the polar bear, {_player})
 
 on right click with spider eye:									
 	hasClass(player, "druid") is true
-	if {rpgSkript::%player%::druidspawn} is true:
-		if subMana(command executor, 40) is false:
-			send "&cYou do not have enough Mana to summon a Spider!" to command executor
-			stop
-		send "&dYou summon a Spider!" to command executor
-		set {_player} to the player
-		spawn 1 spider at the player:
-			setupMinion(the spider, {_player})
-	else:
-		send "&cYou already have a druid minion!" to command executor	
+	if subMana(command executor, 40) is false:
+		send "&cYou do not have enough Mana to summon a Spider!" to command executor
+		stop
+	send "&dYou summon a Spider!" to command executor
+	set {_player} to the player
+	spawn 1 spider at the player:
+		setupMinion(the spider, {_player})
 
 on right click with string:
 	hasClass(event-player, "druid") is true:
