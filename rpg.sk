@@ -3273,11 +3273,7 @@ function setupWildshape(player: player):
 
 	set {_newWildshape} to 0
 	if hasClass({_player}, "druid") is true:
-		set {_newWildshape} to 1
-		if hasResearch({_player}, "wildshape_charges") is true:
-			set {_newWildshape} to {_newWildshape} + 1	
-		if hasResearch({_player}, "wildshape_charges_2") is true:
-			set {_newWildshape} to {_newWildshape} + 1
+		set {_newWildshape} to 3
 
 	if hasImbue({_player}, "Wildshape Boost") is true:
 		set {_newWildshape} to {_newWildshape} + 0.5 * {_newWildshape} * countImbue({_player}, "Wildshape Boost")
@@ -3301,7 +3297,7 @@ function regenWildshape(player: player):
 
 	set {_add} to 0
 	if hasClass({_player}, "druid") is true:
-		set {_add} to {rpgSkript::%{_player}%::maxWildshape}
+		set {_add} to 1
 	
 	addWildshape( {_player}, {_add} )
 
