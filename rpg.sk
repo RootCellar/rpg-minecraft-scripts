@@ -3194,20 +3194,6 @@ on right click with string:
 			else:
 				send "&aCobweb on Cooldown!" to event-player
 
-on right click with fermented spider eye:
-	hasClass(event-player, "druid") is true:
-		canUseDruidAbilities(event-player) is true:
-			subMana(event-player, 50) is true:	
-				set {_loc} to event-player's targeted block
-				loop all entities in radius 3 around {_loc}:
-					if loop-entity is not event-player:
-						isMinion(loop-entity) is true:
-							getSummoner(uuid of loop-entity) is event-player:
-								stop
-						damage loop-entity by 2
-						apply poison 1 without particles to loop-entity for 5 seconds replacing the existing effect
-						send "&9~ ~ HIT BY DRUID POISON SPLASH ~ ~" to loop-entity
-
 on right click with glistering melon slice:
 	hasClass(event-player, "druid") is true:
 		canUseDruidAbilities(event-player) is true:
