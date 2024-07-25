@@ -927,18 +927,10 @@ on damage:
 			damage cause is wither potion effect:
 				cancel the event
 		hasClass(victim, "barbarian") is true:
-			damage cause is fall:
-				set the damage to the damage * 0.6
-				if {rpgSkript::%victim%::earthquake} is true:
-					set the damage to 0
 			event-projectile is set:
 				set the damage to the damage * 1.15
 			canUseBarbarianAbilities(victim) is true:
-				damage cause is fall:
-					set the damage to the damage * 0.6
-				set the damage to the damage * 0.9
 				if chance of 10%:
-					set {rpgSkript::%{_player}%::ragecooldown} to true
 					rageTrigger(victim)
 		hasClass(victim, "endwarden") is true:
 			canUseEndwardenAbilities(victim) is true:
