@@ -846,7 +846,7 @@ on damage:
 			event-projectile is set:
 				set the damage to the damage * 1.15
 			canUseBarbarianAbilities(victim) is true:
-				if chance of 10%:
+				if chance of 5%:
 					rageTrigger(victim)
 		hasClass(victim, "endwarden") is true:
 			canUseEndwardenAbilities(victim) is true:
@@ -2605,11 +2605,10 @@ command /channel <text>:
 
 function rageTrigger(player: player):
 	play sound "entity.player.attack.nodamage" at {_player}
-	apply resistance 1 without particles to {_player} for 30 seconds replacing the existing effect
-	apply swiftness 1 without particles to {_player} for 30 seconds replacing the existing effect
-	apply strength 2 without particles to {_player} for 30 seconds replacing the existing effect
-	apply haste 2 without particles to {_player} for 30 seconds replacing the existing effect
-	apply regeneration 1 without particles to {_player} for 30 seconds replacing the existing effect
+	apply resistance 1 without particles to {_player} for 15 seconds replacing the existing effect
+	apply swiftness 1 without particles to {_player} for 15 seconds replacing the existing effect
+	apply strength 1 without particles to {_player} for 15 seconds replacing the existing effect
+	apply regeneration 1 without particles to {_player} for 15 seconds replacing the existing effect
 
 function setupRage(player: player):
 	if {rpgSkript::%{_player}%::rage} is not set:
