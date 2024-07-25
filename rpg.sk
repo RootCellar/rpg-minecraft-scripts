@@ -3217,5 +3217,5 @@ function displayWildshape(player: player):
 	set {_dispW} to {rpgSkript::%{_player}%::wildshape}
 	if {_dispW} < 0:
 		set {_dispW} to 0
-	send action bar "&6Wildshape: %{_dispR}% / %{rpgSkript::%{_player}%::maxWildshape}%" to {_player}
+	send action bar "&6Wildshape: %{_dispW}% / %{rpgSkript::%{_player}%::maxWildshape}%" to {_player}
 				
