@@ -32,6 +32,7 @@ function scriptActionConsoleMessageType(type: string, message: text):
 	{@logActions} is true:
 		shouldPrintActionType({_type}) is true:
 			send "{@consolePrefix} {@prefix} %{_type}% &e%{_message}%" to console
+	#scriptActionBroadcastType({_type}, {_message})
 
 command /logaction <string> <boolean>:
 	trigger:
@@ -52,14 +53,56 @@ command /logactionreset:
 		send "&cEnabled action types reset" to command executor
 
 on craft:
-	scriptActionConsoleMessageType("craft", "%event-player% crafted %event-item%")
+	event-item is not air:
+		scriptActionConsoleMessageType("craft", "%event-player% crafted %event-item%")
 
 on death:
 	attacker is a player:
 		scriptActionConsoleMessageType("combat", "%attacker% killed %victim%")
+	victim is a player:
+		scriptActionConsoleMessageType("combat", "%victim% was killed by %attacker%")
 
 on damage:
+	event is cancelled:
+		stop
 	attacker is a player:
-		scriptActionConsoleMessageType("combat", "%attacker% deals %the damage% damage to %victim%")
+		scriptActionConsoleMessageType("combat", "%attacker% swings at %victim% for %the damage% damage")
 	victim is a player:
-		scriptActionConsoleMessageType("combat", "%victim% takes %the damage% damage from %damage cause%")
+		set {_cause} to damage cause
+		attacker is set:
+			set {_cause} to attacker
+		scriptActionConsoleMessageType("combat", "%victim% hit for %the damage% damage from %{_cause}%")
+
+on tool break:
+	scriptActionConsoleMessageType("item", "%event-player% breaks %event-item% (%event-item's enchantments%)")
+
+on drop:
+	scriptActionConsoleMessageType("item", "%event-entity% drops %event-item% (%event-item's enchantments%)")
+
+on pick up:
+	scriptActionConsoleMessageType("item", "%event-entity% picks up %event-item% (%event-item's enchantments%)")
+
+on level change:
+	scriptActionConsoleMessageType("exp", "%event-player%'s level is now %level of event-player%")
+
+on player world change:
+	scriptActionConsoleMessageType("world", "%event-player% enters world %world of event-player%")
+
+on weather change:
+	scriptActionConsoleMessageType("world", "%event-world%'s weather changes to %weather in event-world%")
+
+on respawn:
+	scriptActionConsoleMessageType("combat", "%event-player% revives")
+
+on smelt:
+	scriptActionConsoleMessageType("smelt", "a furnace smelts %plain ore slot of event-block%")
+
+on fuel burn:
+	scriptActionConsoleMessageType("smelt", "a furnace burns %plain fuel slot of event-block%")
+
+on enchant:
+	scriptActionConsoleMessageType("enchant", "%event-player% enchants %event-item% with %applied enchantments%")
+
+on armor change:
+	event-item is not air:
+		scriptActionConsoleMessageType("equip", "%event-player% equips %event-item% (%event-item's enchantments%)")
