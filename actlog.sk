@@ -1,0 +1,65 @@
+Options:
+	prefix: &e[&6Action Log&e]&r
+	consolePrefix: &6[&8Console&6]&r
+	logActions: true
+
+function logAction(message: text):
+	log "%{_message}%" to "action/main.log"
+
+function actionBroadcast(message: text):
+	broadcast "{@prefix} &e%{_message}%"
+
+function actionConsoleMessage(message: text):
+	send "{@consolePrefix} {@prefix} &e%{_message}%" to console
+
+function shouldPrintActionType(type: string) :: boolean:
+	if {actionLog::action::%{_type}%} is not set:
+		set {actionLog::action::%{_type}%} to true
+	return {actionLog::action::%{_type}%}
+
+function scriptActionBroadcast(message: text):
+	scriptActionBroadcastType("main", {_message})
+
+function scriptActionBroadcastType(type: string, message: text):
+	{@logActions} is true:
+		shouldPrintActionType({_type}) is true:
+			broadcast "{@prefix} %{_type}% &e%{_message}%"
+
+function scriptActionConsoleMessage(message: text):
+	scriptActionConsoleMessageType("main", {_message})
+
+function scriptActionConsoleMessageType(type: string, message: text):
+	{@logActions} is true:
+		shouldPrintActionType({_type}) is true:
+			send "{@consolePrefix} {@prefix} %{_type}% &e%{_message}%" to console
+
+command /logaction <string> <boolean>:
+	trigger:
+		command executor has permission "actionLog.control"
+		set {actionLog::action::%arg 1%} to arg 2
+		send "&eAction logging changed" to command executor
+
+command /loggedactions:
+	trigger:
+		command executor has permission "actionLog.control"
+		loop {actionLog::action::*}:
+			send "&e%loop-index% -> %loop-value%" to command executor
+
+command /logactionreset:
+	trigger:
+		command executor has permission "actionLog.control"
+		delete {actionLog::action::*}
+		send "&cEnabled action types reset" to command executor
+
+on craft:
+	scriptActionConsoleMessageType("craft", "%event-player% crafted %event-item%")
+
+on death:
+	attacker is a player:
+		scriptActionConsoleMessageType("combat", "%attacker% killed %victim%")
+
+on damage:
+	attacker is a player:
+		scriptActionConsoleMessageType("combat", "%attacker% deals %the damage% damage to %victim%")
+	victim is a player:
+		scriptActionConsoleMessageType("combat", "%victim% takes %the damage% damage from %damage cause%")
