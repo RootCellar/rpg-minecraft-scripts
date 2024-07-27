@@ -33,6 +33,7 @@ function scriptActionConsoleMessageType(type: string, message: text):
 		shouldPrintActionType({_type}) is true:
 			send "{@consolePrefix} {@prefix} %{_type}% &e%{_message}%" to console
 	#scriptActionBroadcastType({_type}, {_message})
+	logAction("%{_type}% -> %{_message}%")
 
 command /logaction <string> <boolean>:
 	trigger:
