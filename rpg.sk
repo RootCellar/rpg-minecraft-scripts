@@ -604,9 +604,10 @@ every 2 seconds:
 		hasClass(loop-player, "druid") is true:
 			time in world of loop-player is between 23:00 and 1:00:
 				regenWildshape(loop-player)
-				
-			if {rpgSkript::%loop-player%::cobweb} is not set:
-				set {rpgSkript::%loop-player%::cobweb} to true
+			block at loop-player is water:
+				apply dolphin's grace to loop-player for 5 seconds replacing the existing effect
+				apply water breathing to loop-player for 5 seconds replacing the existing effect
+			
 			if {rpgSkript::%loop-player%::batshape} is not set:
 				set {rpgSkript::%loop-player%::batshape} to false
 			if {rpgSkript::%loop-player%::bearshape} is not set:
