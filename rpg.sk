@@ -774,16 +774,13 @@ on damage:
 			if event-projectile is set:
 				set the damage to the damage * 0.65
 			else if canUseBarbarianAbilities( attacker ) is true:
-				broadcast the damage
 				set the damage to the damage * 1.5
-				broadcast the damage
 				attacker is holding air:
 					set {_vec} to vector between attacker and victim
 					set y component of {_vec} to 0
 					set {_vec} to normalized {_vec}
 					push victim {_vec} with force 1.2
 					push victim upwards with force 0.8
-					broadcast "&ct"
 
 	victim is a player:
 		setMaxHealth(the victim)
