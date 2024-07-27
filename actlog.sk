@@ -79,6 +79,12 @@ on tool break:
 on drop:
 	scriptActionConsoleMessageType("item", "%event-entity% drops %event-item% (%event-item's enchantments%)")
 
+on consume:
+	scriptActionConsoleMessageType("item", "%event-entity% consumes %plain event-item%")
+
+on item despawn:
+	scriptActionConsoleMessageType("item", "%event-item% (%event-item's enchantments%) despawning")
+
 on pick up:
 	scriptActionConsoleMessageType("item", "%event-entity% picks up %event-item% (%event-item's enchantments%)")
 
