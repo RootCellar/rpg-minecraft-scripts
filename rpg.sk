@@ -3051,8 +3051,9 @@ on inventory click:
 	populateDruidResearchMenu(player, event-inventory)
 
 on right click with leather:
-	if hasResearch(player, "polar_bear") is false:									
-		hasClass(player, "druid") is true
+	hasClass(player, "druid") is true
+	canUseDruidAbilities(event-player) is true
+	if hasResearch(player, "polar_bear") is false:
 		if subMana(command executor, 30) is false:
 			send "&cYou do not have enough Mana to summon a Wolf!" to command executor
 			stop
@@ -3061,7 +3062,6 @@ on right click with leather:
 		spawn 1 wolf at the player:
 			setupMinion(the wolf, {_player})
 	else:
-		hasClass(player, "druid") is true
 		if subMana(command executor, 60) is false:
 			send "&cYou do not have enough Mana to summon a Polar Bear!" to command executor
 			stop
@@ -3072,6 +3072,7 @@ on right click with leather:
 
 on right click with spider eye:									
 	hasClass(player, "druid") is true
+	canUseDruidAbilities(event-player) is true
 	if subMana(command executor, 40) is false:
 		send "&cYou do not have enough Mana to summon a Spider!" to command executor
 		stop
