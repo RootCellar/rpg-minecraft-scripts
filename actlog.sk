@@ -57,6 +57,9 @@ on craft:
 	event-item is not air:
 		scriptActionConsoleMessageType("craft", "%event-player% crafted %event-item%")
 
+on fish:
+	scriptActionConsoleMessageType("fish", "%event-player% fishes")
+
 on death:
 	attacker is a player:
 		scriptActionConsoleMessageType("combat", "%attacker% killed %victim%")
