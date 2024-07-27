@@ -221,6 +221,7 @@ function setMaxHealth(player: player):
 	if hasImbue({_player}, "Health Boost") is true:
 		set {_newMax} to ({_newMax} + {_newMax} * 0.15 * countImbue({_player}, "Health Boost"))
 
+	set {_newMax} to ceil({_newMax})
 	if {_player}'s maximum health is not {_newMax}:
 		set {_player}'s maximum health to {_newMax}
 		send "&cYour maximum health has changed to %{_newMax}% hearts" to {_player}
@@ -1543,7 +1544,8 @@ function setupMana(player: player):
 
 	if hasImbue({_player}, "Mana Boost") is true:
 		set {_newMax} to {_newMax} + 0.25 * {_newMax} * countImbue({_player}, "Mana Boost")
-		
+
+	set {_newMax} to floor({_newMax})
 	if {_newMax} is not {rpgSkript::maxMana::%{_player}%}:
 		set {rpgSkript::maxMana::%{_player}%} to {_newMax}
 		send "&3Your maximum mana has changed to %{_newMax}%" to {_player}
@@ -2619,7 +2621,8 @@ function setupRage(player: player):
 
 	if hasImbue({_player}, "Rage Boost") is true:
 		set {_newRage} to {_newRage} + 0.25 * {_newRage} * countImbue({_player}, "Rage Boost")
-		
+
+	set {_newRage} to floor({_newRage})
 	if {_newRage} is not {rpgSkript::%{_player}%::maxRage}:
 		set {rpgSkript::%{_player}%::maxRage} to {_newRage}
 		send "&4Your maximum Rage has changed to %{_newRage}%" to {_player}
@@ -3198,7 +3201,8 @@ function setupWildshape(player: player):
 
 	if hasImbue({_player}, "Wildshape Boost") is true:
 		set {_newWildshape} to {_newWildshape} + 0.5 * {_newWildshape} * countImbue({_player}, "Wildshape Boost")
-		
+
+	set {_newWildshape} to floor({_newWildshape})
 	if {_newWildshape} is not {rpgSkript::%{_player}%::maxWildshape}:
 		set {rpgSkript::%{_player}%::maxWildshape} to {_newWildshape}
 		send "&6Your maximum Wildshape has changed to %{_newWildshape}%" to {_player}
