@@ -207,6 +207,9 @@ function setMaxHealth(player: player):
 		set {_newMax} to 10
 
 	hasClass({_player}, "druid") is true:
+		sun light level at {_player} is greater than 5:
+			set {_newMax} to {_newMax} * 1.20
+	
 		if {rpgSkript::%{_player}%::batshape} is true:
 			set {_newMax} to 0.25 * {_newMax} 
 		else if {rpgSkript::%{_player}%::wolfshape} is true:
