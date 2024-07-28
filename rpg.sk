@@ -732,7 +732,8 @@ on damage:
 				chance of 20%:
 					apply poison 1 without particles to the victim for 5 seconds replacing the existing effect
 
-		add 1 experience to getSummoner(uuid of attacker)
+		hasClass(getSummoner(uuid of attacker), "necromancer") is true:
+			add 1 experience to getSummoner(uuid of attacker)
 
 	attacker is a player:
 
