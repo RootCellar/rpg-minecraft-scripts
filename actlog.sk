@@ -2,9 +2,11 @@ Options:
 	prefix: &e[&6Action Log&e]&r
 	consolePrefix: &6[&8Console&6]&r
 	logActions: true
+	logToFile: false
 
 function logAction(message: text):
-	log "%{_message}%" to "action/main.log"
+	{@logToFile} is true:
+		log "%{_message}%" to "action/main.log"
 
 function actionBroadcast(message: text):
 	broadcast "{@prefix} &e%{_message}%"
