@@ -616,7 +616,6 @@ every 2 seconds:
 				chance of 20%:
 					ignite loop-entity-2 for 5 seconds
 		hasClass(loop-player, "herobrine") is true:
-			#enable flight for loop-player
 			heal(loop-player, 2)
 			loop-player's knockback resistance attribute is not 0.9:
 				set loop-player's knockback resistance attribute to 0.9
@@ -652,20 +651,14 @@ every 2 seconds:
 						apply blindness 2 without particles to the loop-player for 10 seconds replacing the existing effect
 					else:
 						apply night vision 2 without particles to the loop-player for 10 seconds replacing the existing effect
-					enable flight for loop-player
 				if {rpgSkript::%loop-player%::wolfshape} is true:
 					apply night vision 2 without particles to the loop-player for 10 seconds replacing the existing effect
 					apply swiftness 1 without particles to the loop-player for 3 seconds replacing the existing effect
-					disable flight for loop-player
 				if {rpgSkript::%loop-player%::horseshape} is true:
 					apply swiftness 2 without particles to the loop-player for 3 seconds replacing the existing effect
 					apply jump boost 2 without particles to the loop-player for 3 seconds replacing the existing effect
-					disable flight for loop-player
-				if {rpgSkript::%loop-player%::spidershape} is true:
-					disable flight for loop-player
 				if {rpgSkript::%loop-player%::bearshape} is true:
 					apply strength 2 without particles to the loop-player for 3 seconds replacing the existing effect
-					disable flight for loop-player
 			else:
 				set {rpgSkript::%loop-player%::bearshape} to false
 				set {rpgSkript::%loop-player%::horseshape} to false
@@ -674,9 +667,6 @@ every 2 seconds:
 				set {rpgSkript::%loop-player%::batshape} to false
 				set {rpgSkript::%loop-player%::humanshape} to true
 
-				if hasClass(loop-player, "herobrine") is false:
-					if {rpgSkript::%loop-player%::batshape} is false:
-						disable flight for loop-player
 			canUseDruidAbilities(loop-player) is true:	
 				loop all blocks in radius 5 around loop-player:
 					if loop-block is a flower:
