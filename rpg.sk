@@ -74,6 +74,9 @@ on join:
 	send "&3   - Upon dying, the gods may resurrect the cleric to continue the fight!" to player
 	send "&3   - Pray to the gods for a chance to get what you wish for" to player
 	send "&3   - Channel powerful divine magic" to player
+
+	send "&3 - New Class: Artificer. Manipulate magic and technology!" to player
+	send "&3   - Use commands to enhance items!" to player
 	
 	send "&3 - Items can now be imbued to grant classes while you are wearing/holding them" to player
 	send "&3 - Warrior no longer gets slowness when they take damage" to player
@@ -107,6 +110,8 @@ on chat:
 		set the message to "&0[&9Endwarden&0]&r %message%"
 	hasClass(player, "druid") is true:
 		set the message to "&6[&aDruid&6]&r %message%"
+	hasClass(player, "artificer") is true:
+		set the message to "&7[&bArtificer&7]&r %message%"
 
 function rpgLog(message: text):
 	log "%{_message}%" to "rpg/main.log"
@@ -226,6 +231,15 @@ function setMaxHealth(player: player):
 	if {_player}'s maximum health is not {_newMax}:
 		set {_player}'s maximum health to {_newMax}
 		send "&cYour maximum health has changed to %{_newMax}% hearts" to {_player}
+
+function canFly(player: player):: boolean:
+	if {rpgSkript::%{_player}%::batshape} is true:
+		return true
+	if {_player}'s gamemode is not survival:
+		return true
+	if hasClass({_player}, "herobrine") is true:
+		return true
+	return false
 
 function lastLoreLine(item: item) :: number:
 	set {_x} to 1
@@ -506,6 +520,8 @@ function drawEffects(entity: entity):
 			show water drip at (location of {_entity} ~ vector {_x}, {_y}, {_z})
 	hasEffect({_entity}, "test4") is true:
 		show rollDice(3, 3) (electric spark with offset of 0.3, 0.5, 0.3) at (location of {_entity} ~ vector 0, 1, 0)
+	hasEffect({_entity}, "hallowed") is true:
+		show rollDice(3, 3) (electric spark with offset of 0.3, 0.5, 0.3) at (location of {_entity} ~ vector 0, 1, 0)
 
 command /rpgeffect <text> <timespan>:
 	trigger:
@@ -554,6 +570,17 @@ every 4 ticks:
 			{_drawn::%uuid of loop-entity-2%} is not set:
 				drawEffects(loop-entity-2)
 				set {_drawn::%uuid of loop-entity-2%} to 0
+
+every 5 ticks:
+	loop all entities:
+		drawEffects(loop-entity)
+		hasEffect(loop-entity, "hallowed") is true:
+			if isMonster(loop-entity) is true:
+				damage loop-entity by 1
+			else if hasClass(loop-entity, "paladin") is true:
+				heal(loop-entity, 0.5)
+			else:
+				damage loop-entity by 0.5
 
 every 2 seconds:
 
@@ -658,6 +685,11 @@ every 2 seconds:
 		hasClass(loop-player, "endwarden") is true:
 			if {rpgSkript::%loop-player%::eteleport} is not set:
 				set {rpgSkript::%loop-player%::eteleport} to true
+
+		if canFly(loop-player) is true:
+			enable flight for loop-player
+		else:
+			disable flight for loop-player
 
 on connect:
 	broadcast "&e%player% is connecting..."
@@ -787,6 +819,11 @@ on damage:
 					push victim {_vec} with force 1.2
 					push victim upwards with force 0.8
 
+		if hasImbue(attacker, "vampiric") is true:
+			set {_heal} to 0.5 + 0.5 * countImbue(attacker, "vampiric")
+			heal(attacker, {_heal})
+		if hasImbue(attacker, "hallowed") is true:
+			applyEffect(victim, "hallowed", 10 seconds)
 	victim is a player:
 		setMaxHealth(the victim)
 
@@ -1543,6 +1580,8 @@ function setupMana(player: player):
 			set {_newMax} to (level of {_player}) * 5 + 15
 	else if hasClass({_player}, "cleric") is true:
 		set {_newMax} to 1000
+	else if hasClass({_player}, "artificer") is true:
+		set {_newMax} to 100
 	else if hasClass({_player}, "paladin") is true:
 		set {_newMax} to 30
 
@@ -1583,6 +1622,8 @@ function regenMana(player: player):
 		set {_add} to {rpgSkript::maxMana::%{_player}%} / 20
 	else if hasClass({_player}, "endwarden") is true:
 		set {_add} to {rpgSkript::maxMana::%{_player}%} / 20
+	else if hasClass({_player}, "artificer") is true:
+		set {_add} to {rpgSkript::maxMana::%{_player}%} / 40
 	else if hasClass({_player}, "cleric") is true:
 		set {_add} to {rpgSkript::maxMana::%{_player}%} / 200
 	else if hasClass({_player}, "paladin") is true:
@@ -3269,4 +3310,69 @@ function displayWildshape(player: player):
 	if {_dispW} < 0:
 		set {_dispW} to 0
 	send action bar "&6Wildshape: %{_dispW}% / %{rpgSkript::%{_player}%::maxWildshape}%" to {_player}
+
+
+
+# Artificer
+
+
+
+command /fix:
+	executable by: players
+	trigger:
+		if hasClass(player, "artificer") is true:
+			subMana(player, 100) is false:
+				send "&cNot enough Mana to fix this item" to the player
+				stop
+			send "&bYou successfully repair your held item!" to the player
+			repair player's held item
+		else:
+			send "&cYou are not an Artificer" to the player		
+
+command /artifice <number> <text>:
+	executable by: players
+	trigger:
+		if hasClass(player, "artificer") is true:
+			{rpgSkript::%player%::lastArtifice} is not set:
+				set {rpgSkript::%player%::lastArtifice} to 30 minutes ago
+			difference between {rpgSkript::%player%::lastArtifice} and now is less than 2 minutes:
+				send "&cYou must wait before you can attempt to artifice an item again!" to player
+				stop
+			set {rpgSkript::%player%::lastArtifice} to now
+			subMana(player, arg 1) is false:
+				send "&cYou do not have that amount of mana available" to the player
+				stop
+			set {_odds} to 0.0
+			set {_focus} to arg 1
+			set {_imbue} to arg 2
+			set {_item} to player's held item
+			if {_focus} is less than 101:
+				set {_odds} to {_focus} / 2000
+			else:
+				set {_odds} to 0.05
+				set {_focus} to {_focus} - 100
+				set {_odds} to {_odds} + {_focus} * 0.00005
+			send "&bYou attempt to artifice an item!" to player
+			wait 5 ticks
+			if chance of {_odds}:
+				if {_item} is a glass bottle:
+					set player's held item to addImbue({_item}, "&bHolding")
+					send "&bYou successfully add holding to the bottle!" to the player
+				else:
+					if at least one of:
+						{_imbue} is "vampiric"
+						{_imbue} is "hallowed"
+					then:
+						set player's held item to addImbue({_item}, "&b%{_imbue}%")
+					else:
+						send "&cNot a valid Artifice Imbuement!" to the player		
+						stop
+					send "&bYou successfully artifice your held item!" to the player
+					
+			else:
+				send "&cFailed attempt!" to the player
+				stop
+				
+		else:
+			send "&cYou are not an Artificer" to the player	
 				
