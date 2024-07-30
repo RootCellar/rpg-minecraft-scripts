@@ -2639,7 +2639,11 @@ command /channel <text>:
 		else:
 			send "&cUnrecognized ability" to player
 
+
+
 # Barbarian
+
+
 
 function rageTrigger(player: player):
 	play sound "entity.player.attack.nodamage" at {_player}
