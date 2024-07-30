@@ -3336,13 +3336,14 @@ command /artifice <number> <text>:
 			set {_imbue} to arg 2
 			set {_item} to player's held item
 			if {_focus} is less than 101:
-				set {_odds} to {_focus} / 2000
+				set {_odds} to {_focus} / 666
 			else:
-				set {_odds} to 0.05
+				set {_odds} to 0.15
 				set {_focus} to {_focus} - 100
 				set {_odds} to {_odds} + {_focus} * 0.00005
 			send "&bYou attempt to artifice an item!" to player
 			wait 5 ticks
+			scriptDebugBroadcastType("artifice", "Artifice odds: %{_odds}%")
 			if chance of {_odds}:
 				if {_item} is a glass bottle:
 					set player's held item to addImbue({_item}, "&bHolding")
