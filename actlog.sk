@@ -117,4 +117,4 @@ on enchant:
 
 on armor change:
 	event-item is not air:
-		scriptActionConsoleMessageType("equip", "%event-player% equips %event-item% (%event-item's enchantments%)")
+		# scriptActionConsoleMessageType("equip", "%event-player% equips %event-item% (%event-item's enchantments%)")
