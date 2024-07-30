@@ -69,6 +69,7 @@ on death:
 		scriptActionConsoleMessageType("combat", "%victim% was killed by %attacker%")
 
 on damage:
+	wait 5 ticks
 	event is cancelled:
 		stop
 	attacker is a player:
