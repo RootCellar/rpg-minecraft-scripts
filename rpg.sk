@@ -2375,7 +2375,7 @@ on death:
 		deleteMinion(uuid of the victim)
 		clear drops
 	else:
-		loop players in radius 80 of the victim:
+		loop players in radius 50 of the victim:
 			hasClass(loop-player, "necromancer") is true:
 				add 1 experience to the loop-player
 				play sound "entity.experience_orb.pickup" with pitch 0.6 at the loop-player
