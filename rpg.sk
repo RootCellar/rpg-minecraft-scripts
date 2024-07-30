@@ -702,7 +702,7 @@ on death:
 			set {_item} to generateRandomLoot()
 			hasAnyImbue({_item}) is true:
 				scriptDebugBroadcastType("loot", "Added %{_item}% to mob loot")
-				add {_item} to the drops
+				# add {_item} to the drops
 
 on damage:
 	damage cause is fall:
