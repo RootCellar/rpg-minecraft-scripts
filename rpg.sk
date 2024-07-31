@@ -616,8 +616,8 @@ every 2 seconds:
 				loop-entity-2 is not loop-player
 				apply slowness 1 to the loop-entity-2 for 20 seconds replacing the existing effect
 				apply weakness 1 to the loop-entity-2 for 20 seconds replacing the existing effect
-				chance of 20%:
-					ignite loop-entity-2 for 5 seconds
+				chance of 30%:
+					applyEffect(loop-entity-2, "hallowed", 8 seconds)
 		hasClass(loop-player, "herobrine") is true:
 			heal(loop-player, 2)
 			loop-player's knockback resistance attribute is not 0.9:
@@ -793,7 +793,7 @@ on damage:
 		hasClass(attacker, "paladin") is true:
 			isMonster(victim) is true:
 				set the damage to the damage * 1.4
-				ignite the victim for 20 seconds
+				applyEffect(victim, "hallowed", 8 seconds)
 		hasClass(attacker, "barbarian") is true:
 			if event-projectile is set:
 				set the damage to the damage * 0.65
@@ -905,7 +905,7 @@ on target:
 			stop
 	hasClass(target, "paladin") is true:
 		isMonster(event-entity) is true:
-			ignite the event-entity for 15 seconds
+			applyEffect(event-entity, "hallowed", 8 seconds)
 	hasClass(target, "druid") is true:
 		if {rpgSkript::%target%::wolfshape} is true:
 			chance of 60%:
