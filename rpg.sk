@@ -1076,13 +1076,13 @@ function generateLootBoots() :: item:
 function generateRandomLoot() :: item:
 	scriptDebugBroadcastType("loot", "Generating random loot item")
 	
-	chance of 10%:
+	chance of 1%:
 		set {_item} to generateLootHelmet()
-	chance of 10%:
+	chance of 1%:
 		set {_item} to generateLootChestplate()
-	chance of 10%:
+	chance of 1%:
 		set {_item} to generateLootLeggings()
-	chance of 10%:
+	chance of 1%:
 		set {_item} to generateLootBoots()
 
 	return {_item}
@@ -1093,8 +1093,9 @@ on loot generate:
 	set {_item} to generateRandomLoot()
 
 	hasAnyImbue({_item}) is true:
-		add {_item} to the loot
-		scriptDebugBroadcastType("loot", "Added %{_item}% to the loot")
+		chance of 1%:
+			add {_item} to the loot
+			scriptDebugBroadcastType("loot", "Added %{_item}% to the loot")
 
 command /rpgloot <text>:
 	executable by: players
