@@ -1,8 +1,12 @@
 # Ideas
 
 - log on connect and on server list ping
-
 - make monsters more powerful
+
+- create script to keep track of block changes
+  - provide function to determine if a block is natural or not
+
+
 
 # Herobrine
 
