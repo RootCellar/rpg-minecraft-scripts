@@ -573,7 +573,6 @@ every 4 ticks:
 
 every 5 ticks:
 	loop all entities:
-		drawEffects(loop-entity)
 		hasEffect(loop-entity, "hallowed") is true:
 			if isMonster(loop-entity) is true:
 				damage loop-entity by 1
