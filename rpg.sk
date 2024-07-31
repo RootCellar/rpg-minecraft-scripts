@@ -524,8 +524,16 @@ function drawEffects(entity: entity):
 		show rollDice(3, 3) (electric spark with offset of 0.3, 0.5, 0.3) at (location of {_entity} ~ vector 0, 1, 0)
 	hasEffect({_entity}, "hallowed") is true:
 		show rollDice(3, 3) (electric spark with offset of 0.3, 0.5, 0.3) at (location of {_entity} ~ vector 0, 1, 0)
+	hasEffect({_entity}, "shocking") is true:
+		show rollDice(3, 3) (end rod with offset of 0.3, 0.5, 0.3) at (location of {_entity} ~ vector 0, 1, 0)
 	hasEffect({_entity}, "bleeding") is true:
 		show rollDice(3, 3) (red dust with offset of 0.3, 0.5, 0.3) at (location of {_entity} ~ vector 0, 1, 0)
+	hasEffect({_entity}, "mana leak") is true:
+		loop 5 times:
+			set {_x} to a random number between -0.5 and 0.5
+			set {_y} to 1.0
+			set {_z} to a random number between -0.5 and 0.5
+			show blue dust at (location of {_entity} ~ vector {_x}, {_y}, {_z})
 
 command /rpgeffect <text> <timespan>:
 	trigger:
@@ -586,6 +594,25 @@ every 1 seconds:
 				damage loop-entity by 0.5
 		hasEffect(loop-entity, "bleeding") is true:
 			damage loop-entity by 0.05 * maximum health of loop-entity
+		hasEffect(loop-entity, "Mana Leak") is true:
+			loop-entity is a player
+			set {_loss} to ({rpgSkript::maxMana::%loop-entity%} / 40) / 2
+			subMana(loop-entity, {_loss}, false)
+		hasEffect(loop-entity, "Shocking") is true:
+			apply slowness 255 without particles to the loop-entity for 2 seconds replacing the existing effect
+			loop all entities in radius 5 around loop-entity:
+				loop-entity-2 is not loop-entity-1
+				hasEffect(loop-entity-2, "Shocking") is false
+				damage loop-entity-2 by 1
+				applyEffect(loop-entity-2, "Shocking", 0.1 seconds)
+				set {_vec} to vector between loop-entity-1 and loop-entity-2
+				set y component of {_vec} to 0
+				set {_vec} to normalized {_vec}
+				push loop-entity-2 {_vec} with force 1.4
+				push loop-entity-2 upwards with force 0.8
+				chance of 30%:
+					hasEffect(loop-entity-2, "Shocking") is false:
+						applyEffect(loop-entity-2, "Shocking", 2 seconds)
 
 every 2 seconds:
 
@@ -813,9 +840,13 @@ on damage:
 			heal(attacker, {_heal})
 		if hasLore(attacker's held item, "hallowed") is true:
 			applyEffect(victim, "hallowed", 10 seconds)
+		if hasLore(attacker's held item, "shocking") is true:
+			applyEffect(victim, "shocking", 2 seconds)
 		if hasLore(attacker's held item, "bleeding") is true:
 			if hasClass(victim, "Warrior") is false:
 				applyEffect(victim, "bleeding", 10 seconds)
+		if hasLore(attacker's held item, "Mana Leak") is true:
+			applyEffect(victim, "Mana Leak", 10 seconds)
 
 	victim is a player:
 		setMaxHealth(the victim)
@@ -3361,6 +3392,8 @@ command /artifice <number> <text>:
 						{_imbue} is "vampiric"
 						{_imbue} is "hallowed"
 						{_imbue} is "bleeding"
+						{_imbue} is "shocking"
+						{_imbue} is "mana leak"
 					then:
 						set player's held item to addImbue({_item}, "&b%{_imbue}%")
 					else:
