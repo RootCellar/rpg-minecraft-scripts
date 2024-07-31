@@ -1557,7 +1557,7 @@ function setupMana(player: player):
 		if isWearingLightOrLess({_player}) is true:
 			set {_newMax} to (level of {_player}) * 9
 		else if isWearingMediumOrLess({_player}) is true:
-			set {_newMax} to (level of {_player}) * 7
+			set {_newMax} to (level of {_player}) * 5
 		else:
 			set {_newMax} to (level of {_player}) * 1.5
 	else if hasClass({_player}, "necromancer") is true:
