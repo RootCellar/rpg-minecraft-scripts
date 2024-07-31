@@ -1842,6 +1842,7 @@ command /pocket:
 			send "&cYou do not have enough Mana to cast the pocket spell!" to command executor
 			stop
 		send "&dYou open a rift and reach into your enderchest!" to command executor
+		play sound "entity.enderman.teleport" at command executor
 		make command executor run command "/enderchest" as op
 
 command /cast <text>:
