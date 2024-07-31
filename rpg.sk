@@ -764,32 +764,26 @@ on damage:
 	attacker is a player:
 
 		hasClass(attacker, "druid") is true:
-			attacker's held item is a stick:
-				if {rpgSkript::%attacker%::humanshape} is true:
+			if {rpgSkript::%attacker%::humanshape} is true:
+				attacker's held item is a stick:
 					set the damage to 2.0
-			if {rpgSkript::%attacker%::humanshape} is false:
+			else:
 				if attacker's held item is not air:
 					cancel the event
 					stop
-
-				if attacker's held item is air:
+				if {rpgSkript::%attacker%::spidershape} is true:
+					if victim has potion effect poison:
+						set the damage to 1.5
+					else:
+						chance of 30%:
+							apply poison 1 without particles to the victim for 5 seconds replacing the existing effect
+				else if {rpgSkript::%attacker%::wolfshape} is true:
+					set the damage to 1.5
+					applyEffect(victim, "bleeding", 8 seconds)
+				else if {rpgSkript::%attacker%::bearshape} is true:
 					set the damage to 3
-
-			else if {rpgSkript::%attacker%::spidershape} is true:
-				if victim has potion effect poison:
-					set the damage to 3
-				else:
-					chance of 30%:
-						apply poison 1 without particles to the victim for 5 seconds replacing the existing effect
-			else if {rpgSkript::%attacker%::wolfshape} is true:
-				if victim is an animal:
-					set the damage to 3
-				else:
-					set the damage to 2
-			else if {rpgSkript::%attacker%::bearshape} is true:
-				set the damage to 3
-			else if {rpgSkript::%attacker%::batshape} is true:
-				set the damage to 0
+				else if {rpgSkript::%attacker%::batshape} is true:
+					set the damage to 0
 
 		hasClass(attacker, "rogue") is true:
 			canUseRogueAbilities(attacker) is true
