@@ -987,8 +987,6 @@ function generateLootHelmet() :: item:
 	chance of 4%:
 		set {_item} to addImbue({_item}, "&bPaladin Class")
 	chance of 4%:
-		set {_item} to addImbue({_item}, "&3Wizard Class")
-	chance of 4%:
 		set {_item} to addImbue({_item}, "&2Rogue Class")
 	chance of 4%:
 		set {_item} to addImbue({_item}, "&cWarrior Class")
@@ -1012,8 +1010,6 @@ function generateLootChestplate() :: item:
 		set {_item} to addImbue({_item}, "&eCleric Class")
 	chance of 4%:
 		set {_item} to addImbue({_item}, "&bPaladin Class")
-	chance of 4%:
-		set {_item} to addImbue({_item}, "&3Wizard Class")
 	chance of 4%:
 		set {_item} to addImbue({_item}, "&2Rogue Class")
 	chance of 4%:
@@ -1039,8 +1035,6 @@ function generateLootLeggings() :: item:
 	chance of 4%:
 		set {_item} to addImbue({_item}, "&bPaladin Class")
 	chance of 4%:
-		set {_item} to addImbue({_item}, "&3Wizard Class")
-	chance of 4%:
 		set {_item} to addImbue({_item}, "&2Rogue Class")
 	chance of 4%:
 		set {_item} to addImbue({_item}, "&cWarrior Class")
@@ -1064,8 +1058,6 @@ function generateLootBoots() :: item:
 		set {_item} to addImbue({_item}, "&eCleric Class")
 	chance of 4%:
 		set {_item} to addImbue({_item}, "&bPaladin Class")
-	chance of 4%:
-		set {_item} to addImbue({_item}, "&3Wizard Class")
 	chance of 4%:
 		set {_item} to addImbue({_item}, "&2Rogue Class")
 	chance of 4%:
