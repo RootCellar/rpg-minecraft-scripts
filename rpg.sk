@@ -1913,7 +1913,7 @@ every tick:
 
 		if difference between {rpgSkript::fireballs::%loop-index%::time} and now is greater than 10 seconds:
 			delete {rpgSkript::fireballs::%loop-index%}
-		
+
 		y of (vector of {_loc}) is greater than 300:
 			explodeFireball(loop-index)
 			rpgLog("Cleared stray fireball")
@@ -1922,7 +1922,7 @@ every tick:
 			explodeFireball(loop-index)
 			rpgLog("Cleared stray fireball")
 			continue
-			
+
 		set {_delta} to {rpgSkript::fireballs::%loop-index%::v}
 		set vector length of {_delta} to 0.25
 		set {_distance} to vector length of {rpgSkript::fireballs::%loop-index%::v}
@@ -1974,7 +1974,7 @@ every tick:
 
 		if difference between {rpgSkript::cryoballs::%loop-index%::time} and now is greater than 10 seconds:
 			delete {rpgSkript::cryoballs::%loop-index%}
-		
+
 		y of (vector of {_loc}) is greater than 300:
 			explodeCryoball(loop-index)
 			rpgLog("Cleared stray cryoball")
@@ -1983,7 +1983,7 @@ every tick:
 			explodeCryoball(loop-index)
 			rpgLog("Cleared stray cryoball")
 			continue
-			
+
 		set {_delta} to {rpgSkript::cryoballs::%loop-index%::v}
 		set vector length of {_delta} to 0.25
 		set {_distance} to vector length of {rpgSkript::cryoballs::%loop-index%::v}
@@ -2197,7 +2197,7 @@ on right click with amethyst shard:
 	if {_canTp} is false:
 		send "&cCannot blink there!" to event-player
 		stop
-		
+
 	if subMana(event-player, 80) is false:
 		send "&cYou do not have enough Mana to cast the blink spell!" to event-player
 		stop
