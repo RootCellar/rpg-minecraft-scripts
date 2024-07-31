@@ -583,8 +583,7 @@ every 1 seconds:
 			else:
 				damage loop-entity by 0.5
 		hasEffect(loop-entity, "bleeding") is true:
-			if isMonster(loop-entity) is true:
-				damage loop-entity by 0.05 * maximum health of loop-entity
+			damage loop-entity by 0.05 * maximum health of loop-entity
 
 every 2 seconds:
 
