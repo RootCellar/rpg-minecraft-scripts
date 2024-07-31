@@ -229,6 +229,9 @@ function setMaxHealth(player: player):
 	if hasImbue({_player}, "Health Boost") is true:
 		set {_newMax} to ({_newMax} + {_newMax} * 0.15 * countImbue({_player}, "Health Boost"))
 
+	if hasImbue({_player}, "Golem") is true:
+		set {_newMax} to {_newMax} * 1.2
+
 	set {_newMax} to ceil({_newMax})
 	if {_player}'s maximum health is not {_newMax}:
 		set {_player}'s maximum health to {_newMax}
@@ -713,6 +716,10 @@ every 2 seconds:
 		else:
 			disable flight for loop-player
 
+		hasImbue(loop-player, "golem") is true:
+			apply strength 2 without particles to the loop-player for 5 seconds replacing the existing effect
+			apply slowness 1 without particles to the loop-player for 5 seconds replacing the existing effect
+
 on connect:
 	broadcast "&e%player% is connecting..."
 
@@ -910,7 +917,25 @@ on damage:
 					set the damage to the damage * 1.25
 					damage cause is fall:
 						set the damage to 0
-						
+
+		hasImbue(victim, "mana shield") is true:
+			subMana(victim, the damage * 7.0, false) is true
+			set {_reduction} to 1 - (0.15 * countImbue(victim, "mana shield") )
+			if {_reduction} is less than 0.5:
+				set {_reduction} to 0.5
+			set the damage to the damage * {_reduction}
+
+		hasImbue(victim, "flame shield") is true:
+			set {_loc} to the victim's location
+			set {_loc} to the location 1 meter above {_loc}
+			show mob spawner flames at {_loc}
+			event-projectile is set:
+				delete event-projectile
+				cancel the event
+				stop
+			set the damage to the damage * 0.85
+			ignite the attacker for 5 seconds
+
 on target:
 	isMinion(event-entity) is true:
 		target is a player:
@@ -3360,6 +3385,9 @@ command /artifice <number> <text>:
 				send "&cYou must wait before you can attempt to artifice an item again!" to player
 				stop
 			set {rpgSkript::%player%::lastArtifice} to now
+			canArtifice(player's held item) is false:
+				send "&cThis item has been artificed the max amount of times!" to the player
+				stop
 			subMana(player, arg 1) is false:
 				send "&cYou do not have that amount of mana available" to the player
 				stop
@@ -3381,23 +3409,97 @@ command /artifice <number> <text>:
 					set player's held item to addImbue({_item}, "&bHolding")
 					send "&bYou successfully add holding to the bottle!" to the player
 				else:
-					if at least one of:
-						{_imbue} is "vampiric"
-						{_imbue} is "hallowed"
-						{_imbue} is "bleeding"
-						{_imbue} is "shocking"
-						{_imbue} is "mana leak"
-					then:
-						set player's held item to addImbue({_item}, "&b%{_imbue}%")
+					if isArmorArtificeImbue({_imbue}) is true:
+						if at least one of:
+							player's held item is any armor
+							player's held item is a shield
+						then:
+							set player's held item to addImbue({_item}, "&b%{_imbue}%")
+						else:
+							send "&cWrong item for that Artifice! %{_imbue}% must goes on Armor!" to the player
+					else if isWeaponArtificeImbue({_imbue}) is true:
+						if at least one of:
+							player's held item is a sword
+							player's held item is an axe
+							player's held item is a bow
+							player's held item is a crossbow
+							player's held item is a trident
+						then:
+							set player's held item to addImbue({_item}, "&b%{_imbue}%")
+						else:
+							send "&cWrong item for that Artifice! %{_imbue}% must goes on Weapons!" to the player
+					else if isToolArtificeImbue({_imbue}) is true:
+						if at least one of:
+							player's held item is a pickaxe
+							player's held item is an axe
+							player's held item is a shovel
+							player's held item is a hoe
+							player's held item are shears
+						then:
+							set player's held item to addImbue({_item}, "&b%{_imbue}%")
+						else:
+							send "&cWrong item for that Artifice! %{_imbue}% must goes on Tools!" to the player
 					else:
-						send "&cNot a valid Artifice Imbuement!" to the player		
+						send "&cNot a Valid Artifice!" to the player
 						stop
 					send "&bYou successfully artifice your held item!" to the player
-					
 			else:
 				send "&cFailed attempt!" to the player
 				stop
-				
 		else:
 			send "&cYou are not an Artificer" to the player	
-				
+
+function isArtificeImbue(imbue: text) :: boolean:
+	if at least one of:
+		{_imbue} is "vampiric"
+		{_imbue} is "hallowed"
+		{_imbue} is "bleeding"
+		{_imbue} is "shocking"
+		{_imbue} is "mana leak"
+		{_imbue} is "golem"
+	then:
+		return true
+	return false
+
+function isArmorArtificeImbue(imbue: text) :: boolean:
+	if at least one of:
+		{_imbue} is "golem"
+		{_imbue} is "mana shield"
+		{_imbue} is "flame shield"
+	then:
+		return true
+	return false
+
+function isWeaponArtificeImbue(imbue: text) :: boolean:
+	if at least one of:
+		{_imbue} is "vampiric"
+		{_imbue} is "hallowed"
+		{_imbue} is "bleeding"
+		{_imbue} is "shocking"
+		{_imbue} is "mana leak"
+	then:
+		return true
+	return false
+
+function isToolArtificeImbue(imbue: text) :: boolean:
+	if at least one of:
+		{_imbue} is "excavation"
+	then:
+		return true
+	return false
+
+function canArtifice(item: item) :: boolean:
+	if lastLoreLine({_item}) > 3:
+		return false
+	return true
+
+on mine of (sand or gravel or dirt):
+	hasLore(event-player's held item, "excavator") is true:
+		loop all blocks in radius 1 around event-block:
+			if at least one of:
+				loop-block is sand
+				loop-block is gravel
+				loop-block is dirt
+			then:
+				break loop-block naturally using diamond shovel
+
