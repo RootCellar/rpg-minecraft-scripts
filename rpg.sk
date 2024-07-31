@@ -204,6 +204,8 @@ function setMaxHealth(player: player):
 		set {_newMax} to 15
 	else if hasClass({_player}, "wizard") is true:
 		set {_newMax} to 8
+	else if hasClass({_player}, "sorceror") is true:
+		set {_newMax} to 8
 	else if hasClass({_player}, "endwarden") is true:
 		set {_newMax} to 8
 	else:
@@ -1747,7 +1749,7 @@ command /send <player>:
 	description: Magically send what you are holding to another player!
 	executable by: players
 	trigger:
-		hasClass(player, "wizard") is true
+		( hasClass(player, "wizard") or hasClass(player, "sorceror") ) is true
 		if subMana(command executor, 10) is false:
 			message "&cYou do not have enough Mana!"
 			stop
@@ -1846,7 +1848,7 @@ command /cast <text>:
 	description: Cast a spell
 	executable by: players
 	trigger:
-		hasClass(player, "wizard") is true
+		( hasClass(player, "wizard") or hasClass(player, "sorceror") ) is true
 		if arg 1 is "conjure":
 			if subMana(command executor, 1500) is false:
 				send "&cYou do not have enough Mana to cast the conjure spell!" to command executor
@@ -2038,7 +2040,7 @@ on inventory close:
 on right click with stick:
 	player's held item is not a plain stick:
 		stop trigger
-	hasClass(player, "wizard") is true
+	( hasClass(player, "wizard") or hasClass(player, "sorceror") ) is true
 	if subMana(event-player, 5) is false:
 		send "&cYou do not have enough Mana to cast the firebolt spell!" to event-player
 		stop
@@ -2049,7 +2051,7 @@ on right click with stick:
 	show mob spawner flames at (the location 1 block above the player's location)
 
 on right click with gunpowder:
-	hasClass(player, "wizard") is true
+	( hasClass(player, "wizard") or hasClass(player, "sorceror") ) is true
 	if subMana(event-player, 100) is false:
 		send "&cYou do not have enough Mana to cast the explosion spell!" to event-player
 		stop
@@ -2064,7 +2066,7 @@ on right click with gunpowder:
 	show mob spawner flames at (the location 1 block above the player's location)
 
 on right click with nether quartz:
-	hasClass(player, "wizard") is true
+	( hasClass(player, "wizard") or hasClass(player, "sorceror") ) is true
 	if subMana(event-player, 200) is false:
 		send "&cYou do not have enough Mana to cast the smite spell!" to event-player
 		stop
@@ -2082,7 +2084,7 @@ on right click with nether quartz:
 	show mob spawner flames at (the location 1 block above the player's location)
 
 on right click with iron nugget:
-	hasClass(player, "wizard") is true
+	( hasClass(player, "wizard") or hasClass(player, "sorceror") ) is true
 	if subMana(event-player, 180) is false:
 		send "&cYou do not have enough Mana to cast the shatter spell!" to event-player
 		stop
@@ -2098,11 +2100,11 @@ on right click with iron nugget:
 	show mob spawner flames at (the location 1 block above the player's location)
 
 on right click with magma cream:
-	hasClass(player, "wizard") is true
+	( hasClass(player, "wizard") or hasClass(player, "sorceror") ) is true
 	make player execute command "/cast fireball"
 
 on right click with flint:
-	hasClass(player, "wizard") is true
+	( hasClass(player, "wizard") or hasClass(player, "sorceror") ) is true
 	if subMana(event-player, 18) is false:
 		send "&cYou do not have enough Mana to cast the ignite spell!" to event-player
 		stop
@@ -2142,7 +2144,7 @@ on right click with blaze rod:
 	create a fake explosion at the player
 
 on right click with diamond:
-	hasClass(player, "wizard") is true
+	( hasClass(player, "wizard") or hasClass(player, "sorceror") ) is true
 	if subMana(event-player, 300) is false:
 		send "&cYou do not have enough Mana to cast the lightning spell!" to event-player
 		stop
