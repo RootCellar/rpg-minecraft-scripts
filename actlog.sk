@@ -63,6 +63,7 @@ on fish:
 	scriptActionConsoleMessageType("fish", "%event-player% fishes")
 
 on death:
+	wait 5 ticks
 	attacker is a player:
 		scriptActionConsoleMessageType("combat", "%attacker% killed %victim%")
 	victim is a player:
