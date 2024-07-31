@@ -522,6 +522,8 @@ function drawEffects(entity: entity):
 		show rollDice(3, 3) (electric spark with offset of 0.3, 0.5, 0.3) at (location of {_entity} ~ vector 0, 1, 0)
 	hasEffect({_entity}, "hallowed") is true:
 		show rollDice(3, 3) (electric spark with offset of 0.3, 0.5, 0.3) at (location of {_entity} ~ vector 0, 1, 0)
+	hasEffect({_entity}, "bleeding") is true:
+		show rollDice(3, 3) (red dust with offset of 0.3, 0.5, 0.3) at (location of {_entity} ~ vector 0, 1, 0)
 
 command /rpgeffect <text> <timespan>:
 	trigger:
@@ -571,7 +573,7 @@ every 4 ticks:
 				drawEffects(loop-entity-2)
 				set {_drawn::%uuid of loop-entity-2%} to 0
 
-every 5 ticks:
+every 1 seconds:
 	loop all entities:
 		hasEffect(loop-entity, "hallowed") is true:
 			if isMonster(loop-entity) is true:
@@ -580,6 +582,9 @@ every 5 ticks:
 				heal(loop-entity, 0.5)
 			else:
 				damage loop-entity by 0.5
+		hasEffect(loop-entity, "bleeding") is true:
+			if isMonster(loop-entity) is true:
+				damage loop-entity by 0.05 * maximum health of loop-entity
 
 every 2 seconds:
 
@@ -808,11 +813,15 @@ on damage:
 					push victim {_vec} with force 1.2
 					push victim upwards with force 0.8
 
-		if hasImbue(attacker, "vampiric") is true:
+		if hasLore(attacker's held item, "vampiric") is true:
 			set {_heal} to 0.5 + 0.5 * countImbue(attacker, "vampiric")
 			heal(attacker, {_heal})
-		if hasImbue(attacker, "hallowed") is true:
+		if hasLore(attacker's held item, "hallowed") is true:
 			applyEffect(victim, "hallowed", 10 seconds)
+		if hasLore(attacker's held item, "bleeding") is true:
+			if hasClass(victim, "Warrior") is false:
+				applyEffect(victim, "bleeding", 10 seconds)
+
 	victim is a player:
 		setMaxHealth(the victim)
 
@@ -3355,6 +3364,7 @@ command /artifice <number> <text>:
 					if at least one of:
 						{_imbue} is "vampiric"
 						{_imbue} is "hallowed"
+						{_imbue} is "bleeding"
 					then:
 						set player's held item to addImbue({_item}, "&b%{_imbue}%")
 					else:
