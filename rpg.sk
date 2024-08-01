@@ -232,6 +232,9 @@ function setMaxHealth(player: player):
 	if hasImbue({_player}, "Golem") is true:
 		set {_newMax} to {_newMax} * 1.2
 
+	hasEffect({_player}, "disease") is true:
+		set {_newMax} to {_newMax} * 0.8
+
 	set {_newMax} to ceil({_newMax})
 	if {_player}'s maximum health is not {_newMax}:
 		set {_player}'s maximum health to {_newMax}
@@ -531,6 +534,8 @@ function drawEffects(entity: entity):
 		show rollDice(3, 3) (end rod with offset of 0.3, 0.5, 0.3) at (location of {_entity} ~ vector 0, 1, 0)
 	hasEffect({_entity}, "bleeding") is true:
 		show rollDice(3, 3) (red dust with offset of 0.3, 0.5, 0.3) at (location of {_entity} ~ vector 0, 1, 0)
+	hasEffect({_entity}, "disease") is true:
+		show rollDice(3, 3) (falling spore blossom with offset of 0.3, 0.5, 0.3) at (location of {_entity} ~ vector 0, 1, 0)
 	hasEffect({_entity}, "mana leak") is true:
 		loop 5 times:
 			set {_x} to a random number between -0.5 and 0.5
@@ -598,26 +603,38 @@ every 1 seconds:
 			else:
 				damage loop-entity by 0.5
 		hasEffect(loop-entity, "bleeding") is true:
-			damage loop-entity by 0.05 * maximum health of loop-entity
-		hasEffect(loop-entity, "Mana Leak") is true:
+			if hasClass(loop-entity, "warrior") is false:
+				damage loop-entity by 0.05 * maximum health of loop-entity
+		hasEffect(loop-entity, "mana_leak") is true:
 			loop-entity is a player
 			set {_loss} to ({rpgSkript::maxMana::%loop-entity%} / 40) / 2
 			subMana(loop-entity, {_loss}, false)
-		hasEffect(loop-entity, "Shocking") is true:
+		hasEffect(loop-entity, "shocking") is true:
 			apply slowness 255 without particles to the loop-entity for 2 seconds replacing the existing effect
 			loop all entities in radius 5 around loop-entity:
 				loop-entity-2 is not loop-entity-1
-				hasEffect(loop-entity-2, "Shocking") is false
+				hasEffect(loop-entity-2, "shocking") is false
 				damage loop-entity-2 by 1
-				applyEffect(loop-entity-2, "Shocking", 0.1 seconds)
+				applyEffect(loop-entity-2, "shocking", 0.1 seconds)
 				set {_vec} to vector between loop-entity-1 and loop-entity-2
 				set y component of {_vec} to 0
 				set {_vec} to normalized {_vec}
 				push loop-entity-2 {_vec} with force 1.4
 				push loop-entity-2 upwards with force 0.8
 				chance of 30%:
-					hasEffect(loop-entity-2, "Shocking") is false:
-						applyEffect(loop-entity-2, "Shocking", 2 seconds)
+					hasEffect(loop-entity-2, "shocking") is false:
+						applyEffect(loop-entity-2, "shocking", 2 seconds)
+		hasEffect(loop-entity, "disease") is true:
+			hasClass(loop-entity, "paladin") is false
+			loop-entity is not a zombie
+			loop-entity is not a skeleton
+			chance of 10%:
+				damage loop-entity by 1.5
+			loop all entities in radius 5 around loop-entity:
+				loop-entity-2 is not loop-entity-1
+				loop-entity-2 is a mob
+				chance of 30%:
+					applyEffect(loop-entity-2, "disease", 30 seconds)
 
 every 2 seconds:
 
@@ -852,10 +869,11 @@ on damage:
 		if hasLore(attacker's held item, "shocking") is true:
 			applyEffect(victim, "shocking", 2 seconds)
 		if hasLore(attacker's held item, "bleeding") is true:
-			if hasClass(victim, "Warrior") is false:
-				applyEffect(victim, "bleeding", 10 seconds)
-		if hasLore(attacker's held item, "Mana Leak") is true:
-			applyEffect(victim, "Mana Leak", 10 seconds)
+			applyEffect(victim, "bleeding", 10 seconds)
+		if hasLore(attacker's held item, "mana_leak") is true:
+			applyEffect(victim, "mana_leak", 10 seconds)
+		if hasLore(attacker's held item, "disease") is true:
+			applyEffect(victim, "disease", 30 seconds)
 
 	victim is a player:
 		setMaxHealth(the victim)
@@ -3377,7 +3395,7 @@ command /fix:
 		else:
 			send "&cYou are not an Artificer" to the player		
 
-command /artifice <number> <text>:
+command /artifice <text>:
 	executable by: players
 	trigger:
 		if hasClass(player, "artificer") is true:
@@ -3390,78 +3408,55 @@ command /artifice <number> <text>:
 			canArtifice(player's held item) is false:
 				send "&cThis item has been artificed the max amount of times!" to the player
 				stop
-			subMana(player, arg 1) is false:
+			subMana(player, 100) is false:
 				send "&cYou do not have that amount of mana available" to the player
 				stop
-			set {_odds} to 0.0
-			set {_focus} to arg 1
-			set {_imbue} to arg 2
-			set {_item} to player's held item
-			if {_focus} is less than 101:
-				set {_odds} to {_focus} / 666
-			else:
-				set {_odds} to 0.15
-				set {_focus} to {_focus} - 100
-				set {_odds} to {_odds} + {_focus} * 0.00005
-			send "&bYou attempt to artifice an item!" to player
-			wait 5 ticks
-			scriptDebugBroadcastType("artifice", "Artifice odds: %{_odds}%")
-			if chance of {_odds}:
-				if {_item} is a glass bottle:
-					set player's held item to addImbue({_item}, "&bHolding")
-					send "&bYou successfully add holding to the bottle!" to the player
-				else:
-					if isArmorArtificeImbue({_imbue}) is true:
-						if at least one of:
-							player's held item is any armor
-							player's held item is a shield
-						then:
-							set player's held item to addImbue({_item}, "&b%{_imbue}%")
-						else:
-							send "&cWrong item for that Artifice! %{_imbue}% must goes on Armor!" to the player
-					else if isWeaponArtificeImbue({_imbue}) is true:
-						if at least one of:
-							player's held item is a sword
-							player's held item is an axe
-							player's held item is a bow
-							player's held item is a crossbow
-							player's held item is a trident
-						then:
-							set player's held item to addImbue({_item}, "&b%{_imbue}%")
-						else:
-							send "&cWrong item for that Artifice! %{_imbue}% must goes on Weapons!" to the player
-					else if isToolArtificeImbue({_imbue}) is true:
-						if at least one of:
-							player's held item is a pickaxe
-							player's held item is an axe
-							player's held item is a shovel
-							player's held item is a hoe
-							player's held item are shears
-						then:
-							set player's held item to addImbue({_item}, "&b%{_imbue}%")
-						else:
-							send "&cWrong item for that Artifice! %{_imbue}% must goes on Tools!" to the player
-					else:
-						send "&cNot a Valid Artifice!" to the player
-						stop
-					send "&bYou successfully artifice your held item!" to the player
-			else:
-				send "&cFailed attempt!" to the player
-				stop
-		else:
-			send "&cYou are not an Artificer" to the player	
 
-function isArtificeImbue(imbue: text) :: boolean:
-	if at least one of:
-		{_imbue} is "vampiric"
-		{_imbue} is "hallowed"
-		{_imbue} is "bleeding"
-		{_imbue} is "shocking"
-		{_imbue} is "mana leak"
-		{_imbue} is "golem"
-	then:
-		return true
-	return false
+			if isArmorArtificeImbue({_imbue}) is true:
+				if at least one of:
+					player's held item is any armor
+					player's held item is a shield
+				then:
+					if takeItems(player, getItemCostForArtificerImbue({_imbue})) is true:
+						set player's held item to addImbue({_item}, "&b%{_imbue}%")
+					else:
+						send "&cYou do not have the required items to add that imbuement!" to player
+				else:
+					send "&cWrong item for that Artifice! %{_imbue}% must goes on Armor!" to the player
+			else if isWeaponArtificeImbue({_imbue}) is true:
+				if at least one of:
+					player's held item is a sword
+					player's held item is an axe
+					player's held item is a bow
+					player's held item is a crossbow
+					player's held item is a trident
+				then:
+					if takeItems(player, getItemCostForArtificerImbue({_imbue})) is true:
+						set player's held item to addImbue({_item}, "&b%{_imbue}%")
+					else:
+						send "&cYou do not have the required items to add that imbuement!" to player
+				else:
+					send "&cWrong item for that Artifice! %{_imbue}% must goes on Weapons!" to the player
+			else if isToolArtificeImbue({_imbue}) is true:
+				if at least one of:
+					player's held item is a pickaxe
+					player's held item is an axe
+					player's held item is a shovel
+					player's held item is a hoe
+					player's held item are shears
+				then:
+					if takeItems(player, getItemCostForArtificerImbue({_imbue})) is true:
+						set player's held item to addImbue({_item}, "&b%{_imbue}%")
+					else:
+						send "&cYou do not have the required items to add that imbuement!" to player
+				else:
+					send "&cWrong item for that Artifice! %{_imbue}% must goes on Tools!" to the player
+			else:
+				send "&cNot a Valid Artifice!" to the player
+				stop
+			send "&bYou successfully artifice your held item!" to the player
+		else:
+			send "&cYou are not an Artificer" to the player
 
 function isArmorArtificeImbue(imbue: text) :: boolean:
 	if at least one of:
@@ -3503,4 +3498,26 @@ on mine of (sand or gravel or dirt or grass block):
 				loop-block is grass block
 			then:
 				break loop-block naturally using diamond shovel
+
+function getItemCostForArtificerImbue(imbue: text):: items:
+	if {_imbue} is "vampiric":
+		return (8 copper ingot and 16 redstone)
+	else if {_imbue} is "hallowed":
+		return (32 quartz and 3 diamond)
+	else if {_imbue} is "shocking":
+		return (32 lapis lazuli and 16 copper ingot)
+	else if {_imbue} is "bleeding":
+		return (8 iron ingot and 12 copper ingot)
+	else if {_imbue} is "mana leak":
+		return (24 lapis lazuli and 24 quartz and 4 diamond)
+	else if {_imbue} is "golem":
+		return (64 cobblestone and 12 iron ingot)
+	else if {_imbue} is "flame shield":
+		return (8 flint and 16 gold ingot)
+	else if {_imbue} is "mana shield":
+		return (24 lapis lazuli and 24 redstone and 4 diamond)
+	else if {_imbue} is "excavation":
+		return (8 gold ingot and 12 copper ingot)
+	else if {_imbue} is "disease":
+		return (4 emerald and 8 gold ingot)
 
