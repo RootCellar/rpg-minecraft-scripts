@@ -582,12 +582,14 @@ every 4 ticks:
 	loop all players:
 		drawEffects(loop-player)
 		loop all mobs in radius {@drawRadius} of loop-player:
+			loop-mob is alive
 			{_drawn::%uuid of loop-entity-2%} is not set:
 				drawEffects(loop-entity-2)
 				set {_drawn::%uuid of loop-entity-2%} to 0
 
 every 1 seconds:
-	loop all entities:
+	loop all mobs:
+		loop-entity is alive
 		hasEffect(loop-entity, "hallowed") is true:
 			if isMonster(loop-entity) is true:
 				damage loop-entity by 1
