@@ -1315,6 +1315,7 @@ function populateWarriorResearchMenu(player: player, menu: inventory):
 	set slot 32 of {_menu} to {_item}
 
 on inventory click:
+	event-inventory is not event-player's inventory
 	name of event-inventory is "&cWarrior Research"
 	cancel event
 
@@ -1459,6 +1460,7 @@ function populateRogueResearchMenu(player: player, menu: inventory):
 	set slot 31 of {_menu} to {_item}
 
 on inventory click:
+	event-inventory is not event-player's inventory
 	name of event-inventory is "&aRogue Research"
 	cancel event
 	
@@ -2373,6 +2375,7 @@ function populateWizardResearchMenu(player: player, menu: inventory):
 	set slot 31 of {_menu} to {_item}
 
 on inventory click:
+	event-inventory is not event-player's inventory
 	name of event-inventory is "&dWizard Research"
 	cancel event
 	
@@ -2835,6 +2838,7 @@ function populateBarbarianResearchMenu(player: player, menu: inventory):
 	set slot 33 of {_menu} to {_item}
 
 on inventory click:
+	event-inventory is not event-player's inventory
 	name of event-inventory is "&cBarbarian Research"
 	cancel event
 
@@ -3145,6 +3149,7 @@ function populateDruidResearchMenu(player: player, menu: inventory):
 
 
 on inventory click:
+	event-inventory is not event-player's inventory
 	name of event-inventory is "&cDruid Research"
 	cancel event
 
