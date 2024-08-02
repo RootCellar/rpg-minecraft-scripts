@@ -1716,7 +1716,7 @@ function regenMana(player: player):
 	else if hasClass({_player}, "endwarden") is true:
 		set {_add} to {rpgSkript::maxMana::%{_player}%} / 20
 	else if hasClass({_player}, "artificer") is true:
-		set {_add} to {rpgSkript::maxMana::%{_player}%} / 40
+		set {_add} to {rpgSkript::maxMana::%{_player}%} / 10
 	else if hasClass({_player}, "cleric") is true:
 		set {_add} to {rpgSkript::maxMana::%{_player}%} / 200
 	else if hasClass({_player}, "paladin") is true:
