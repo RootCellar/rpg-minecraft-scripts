@@ -3416,6 +3416,7 @@ function displayWildshape(player: player):
 # Artificer
 
 
+
 on preparing craft:
 	hasClass(event-player, "artificer") is true:
 		if at least one of:
@@ -3425,7 +3426,6 @@ on preparing craft:
 			event-item is any stair
 		then:
 			# add 2 to item amount of event-item
-
 
 command /fix:
 	executable by: players
