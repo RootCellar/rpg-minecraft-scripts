@@ -3456,6 +3456,9 @@ command /artifice <text>:
 				send "&cYou do not have that amount of mana available" to the player
 				stop
 
+			set {_imbue} to arg 1
+			set {_item} to player's held item
+
 			if isArmorArtificeImbue({_imbue}) is true:
 				if at least one of:
 					player's held item is any armor
