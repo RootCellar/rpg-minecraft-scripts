@@ -3443,12 +3443,6 @@ command /artifice <text>:
 	executable by: players
 	trigger:
 		if hasClass(player, "artificer") is true:
-			{rpgSkript::%player%::lastArtifice} is not set:
-				set {rpgSkript::%player%::lastArtifice} to 30 minutes ago
-			difference between {rpgSkript::%player%::lastArtifice} and now is less than 2 minutes:
-				send "&cYou must wait before you can attempt to artifice an item again!" to player
-				stop
-			set {rpgSkript::%player%::lastArtifice} to now
 			canArtifice(player's held item) is false:
 				send "&cThis item has been artificed the max amount of times!" to the player
 				stop
