@@ -268,6 +268,12 @@ function getItemCostForImbue(imbue: text):: items:
 		return (24 lapis lazuli and 24 redstone and 4 diamond)
 	else if {_imbue} is "excavation":
 		return (8 gold ingot and 12 copper ingot)
+	else if {_imbue} is "repulsor":
+		return (32 quartz and 32 copper ingot)
+	else if {_imbue} is "firststrike":
+		return (4 diamonds and 32 quartz)
+	else if {_imbue} is "detonate":
+		return (48 redstone and 16 copper ingot)
 
 command /ingredients <text>:
 	executable by: players
@@ -903,6 +909,9 @@ on damage:
 			applyEffect(victim, "mana_leak", 10 seconds)
 		if hasLore(attacker's held item, "disease") is true:
 			applyEffect(victim, "disease", 30 seconds)
+		if hasLore(attacker's held item, "firststrike") is true:
+			health of victim is equal to the maximum health of victim:
+				set the damage to the damage * 1.5
 
 	victim is a player:
 		setMaxHealth(the victim)
@@ -3518,6 +3527,9 @@ function isWeaponArtificeImbue(imbue: text) :: boolean:
 		{_imbue} is "bleeding"
 		{_imbue} is "shocking"
 		{_imbue} is "mana leak"
+		{_imbue} is "repulsor"
+		{_imbue} is "firststrike"
+		{_imbue} is "detonate"
 	then:
 		return true
 	return false
@@ -3594,3 +3606,26 @@ on mine of (sand or gravel or dirt or grass block):
 				loop-block is grass block
 			then:
 				break loop-block naturally using diamond shovel
+
+on projectile hit:
+	hasLore(shooter's held item, "Repulsor") is true:
+		loop all entities in radius 10 around event-projectile:
+			push loop-entity in the direction of event-projectile at speed 2.5
+	hasLore(shooter's held item, "Detonate") is true:
+		detonate(block at event-projectile, 2.5)
+		loop all entities in radius 5 around event-projectile:
+			loop-entity is not a dropped item
+			damage loop-entity by 4.5
+		create a fake explosion at event-projectile
+
+function detonate(block: block, range: number):
+	loop all blocks in radius {_range} around {_block}:
+		if at least one of:
+			loop-block is gravel
+			loop-block is dirt
+			loop-block is grass block
+			loop-block is sand
+			loop-block is any leaves
+		then:
+			break loop-block naturally using diamond pickaxe
+
