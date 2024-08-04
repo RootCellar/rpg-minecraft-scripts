@@ -250,6 +250,9 @@ function canFly(player: player):: boolean:
 	return false
 
 function getItemCostForImbue(imbue: text):: items:
+
+	# Artificer
+
 	if {_imbue} is "vampiric":
 		return (8 copper ingot and 16 redstone)
 	else if {_imbue} is "hallowed":
@@ -274,6 +277,13 @@ function getItemCostForImbue(imbue: text):: items:
 		return (4 diamonds and 32 quartz)
 	else if {_imbue} is "detonate":
 		return (48 redstone and 16 copper ingot)
+
+	# Wizard
+
+	else if {_imbue} is "health":
+		return (96 nether wart and 64 glowstone dust)
+	else if {_imbue} is "mana":
+		return (2 diamond and 6 gold ingot)
 
 command /ingredients <text>:
 	executable by: players
@@ -1815,28 +1825,18 @@ command /imbue <text>:
 			send "&cYou do not have enough mana to imbue an item with magic!"
 			stop
 		if arg 1 is "health":
-			set {_items::*} to (64 glowstone dust and 96 nether wart)
-			if takeItems( player, {_items::*} ) is true:
+			if takeItems( player, getItemCostForImbue("health") ) is true:
 				set line lastLoreLine(player's held item) of (player's held item)'s lore to "&cHealth Boost"
 				send "&dYou imbue the item in your hand with Health Boost!"
 			else:
-				send "&cYou do not have the required items for that property! Required: %{_items::*}%"
+				send "&cYou do not have the required items for that property!"
 				stop
 		else if arg 1 is "mana":
-			set {_items::*} to (4 diamond and 12 gold ingot)
-			if takeItems( player, {_items::*}) is true:
+			if takeItems( player, getItemCostForImbue("mana")) is true:
 				set line lastLoreLine(player's held item) of (player's held item)'s lore to "&3Mana Boost"
 				send "&dYou imbue the item in your hand with Mana Boost!"
 			else:
-				send "&cYou do not have the required items for that property! Required: %{_items::*}%"
-				stop
-		else if arg 1 is "rage":
-			set {_items::*} to (1 netherite ingot and 12 gold ingot)
-			if takeItems( player, {_items::*} ) is true:
-				set line lastLoreLine(player's held item) of (player's held item)'s lore to "&3Rage Boost"
-				send "&dYou imbue the item in your hand with Rage Boost!"
-			else:
-				send "&cYou do not have the required items for that property! Required: %{_items::*}%"
+				send "&cYou do not have the required items for that property!"
 				stop
 		else:
 			send "&cThat is not a valid property!"
