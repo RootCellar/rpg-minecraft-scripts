@@ -504,6 +504,42 @@ on join:
 	setMaxHealth(the player)
 	set the player's health to the player's health
 
+function createWorldEffect(loc: location, name: text, duration: time span, creator: entity={_none}):
+	set {_id} to a random UUID
+	set {rpgSkript::worldeffects::%{_id}%} to 0
+	set {rpgSkript::worldeffects::%{_id}%::location} to {_loc}
+	set {rpgSkript::worldeffects::%{_id}%::name} to {_name}
+	set {rpgSkript::worldeffects::%{_id}%::duration} to {_duration}
+	set {rpgSkript::worldeffects::%{_id}%::creator} to {_creator}
+	set {rpgSkript::worldeffects::%{_id}%::started} to now
+	scriptDebugBroadcastType("world_effect", "Created world effect %{_name}% at %{_loc}% for %{_duration}%, created by %{_creator}%")
+
+function drawWorldEffect(index: text):
+	set {_loc} to {rpgSkript::worldeffects::%{_index}%::location}
+	set {_name} to {rpgSkript::worldeffects::%{_index}%::name}
+
+function handleWorldEffect(index: text):
+	set {_loc} to {rpgSkript::worldeffects::%{_index}%::location}
+	set {_name} to {rpgSkript::worldeffects::%{_index}%::name}
+	set {_started} to {rpgSkript::worldeffects::%{_index}%::started}
+	set {_duration} to {rpgSkript::worldeffects::%{_index}%::duration}
+	set {_creator} to {rpgSkript::worldeffects::%{_index}%::creator}
+
+	set {_diff} to difference between now and {_started}
+	{_diff} is greater than {_duration}:
+		delete {rpgSkript::worldeffects::%{_index}%::*}
+		delete {rpgSkript::worldeffects::%{_index}%}
+		scriptDebugBroadcastType("world_effect", "Deleted world effect %{_name}% at %{_loc}%")
+		stop
+
+every 4 ticks:
+	loop {rpgSkript::worldeffects::*}:
+		drawWorldEffect(loop-index)
+
+every 10 ticks:
+	loop {rpgSkript::worldeffects::*}:
+		handleWorldEffect(loop-index)
+
 function generateIndex(entity: entity) :: text:
 	{_entity} is a player:
 		set {_index} to name of {_entity}
