@@ -27,6 +27,7 @@ on script unload:
 
 	delete {rpgSkript::minions::*}
 	delete {rpgSkript::effects::*}
+	delete {rpgSkript::worldeffects::*}
 
 on join:
 	wait 3 seconds
