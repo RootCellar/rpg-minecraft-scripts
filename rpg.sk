@@ -1862,9 +1862,9 @@ command /send <player>:
 		if arg 1 has enough space for {_senditem}:
 			remove {_senditem} from player
 			give {_senditem} to arg 1
-			message "&dSent %{_senditem}% to %arg 1%"
+			message "&3Sent %{_senditem}% to %arg 1%"
 			send "&a[Send] %player% Sent %{_senditem}% to %arg 1%" to console
-			send "&dReceived %{_senditem}% from %player%" to arg 1
+			send "&3Received %{_senditem}% from %player%" to arg 1
 			delete {_senditem}
 		else:
 			message "&d%arg 1% does not have enough inventory space!"
