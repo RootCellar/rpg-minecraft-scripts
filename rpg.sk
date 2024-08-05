@@ -519,6 +519,10 @@ function drawWorldEffect(index: text):
 	set {_loc} to {rpgSkript::worldeffects::%{_index}%::location}
 	set {_name} to {rpgSkript::worldeffects::%{_index}%::name}
 
+	{_name} is "smoke":
+		loop blocks in radius 6 around {_loc}:
+			show cloud at loop-block
+
 function handleWorldEffect(index: text):
 	set {_loc} to {rpgSkript::worldeffects::%{_index}%::location}
 	set {_name} to {rpgSkript::worldeffects::%{_index}%::name}
@@ -3654,6 +3658,8 @@ on projectile hit:
 			loop-entity is not a dropped item
 			damage loop-entity by 4.5
 		create a fake explosion at event-projectile
+	hasLore(shooter's held item, "smoke") is true:
+		createWorldEffect(location of event-projectile, "smoke", 20 seconds, shooter)
 
 function detonate(block: block, range: number):
 	loop all blocks in radius {_range} around {_block}:
