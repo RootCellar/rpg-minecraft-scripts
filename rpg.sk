@@ -537,7 +537,7 @@ function handleWorldEffect(index: text):
 		scriptDebugBroadcastType("world_effect", "Deleted world effect %{_name}% at %{_loc}%")
 		stop
 
-every 4 ticks:
+every 5 ticks:
 	loop {rpgSkript::worldeffects::*}:
 		drawWorldEffect(loop-index)
 
