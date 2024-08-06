@@ -519,9 +519,10 @@ function drawWorldEffect(index: text):
 	set {_loc} to {rpgSkript::worldeffects::%{_index}%::location}
 	set {_name} to {rpgSkript::worldeffects::%{_index}%::name}
 
-	{_name} is "smoke":
-		loop blocks in radius 6 around {_loc}:
-			show cloud at loop-block
+	{_name} is "electric_smoke":
+		loop blocks in radius 12 around {_loc}:
+			chance of 5%:
+				show cloud at loop-block
 
 function handleWorldEffect(index: text):
 	set {_loc} to {rpgSkript::worldeffects::%{_index}%::location}
@@ -536,6 +537,11 @@ function handleWorldEffect(index: text):
 		delete {rpgSkript::worldeffects::%{_index}%}
 		scriptDebugBroadcastType("world_effect", "Deleted world effect %{_name}% at %{_loc}%")
 		stop
+
+	{_name} is "electric_smoke":
+		loop entities in radius 13 around {_loc}:
+			chance of 60%:
+				damage loop-entity by 1
 
 every 5 ticks:
 	loop {rpgSkript::worldeffects::*}:
@@ -3658,8 +3664,8 @@ on projectile hit:
 			loop-entity is not a dropped item
 			damage loop-entity by 4.5
 		create a fake explosion at event-projectile
-	hasLore(shooter's held item, "smoke") is true:
-		createWorldEffect(location of event-projectile, "smoke", 20 seconds, shooter)
+	hasLore(shooter's held item, "electric smoke") is true:
+		createWorldEffect(location of event-projectile, "electric_smoke", 20 seconds, shooter)
 
 function detonate(block: block, range: number):
 	loop all blocks in radius {_range} around {_block}:
