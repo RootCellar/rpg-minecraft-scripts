@@ -464,6 +464,7 @@ function heal(entity: entity, amount: number) :: boolean:
 		hasClass({_entity}, "cleric") is true:
 			set {_amount} to {_amount} * 2
 	heal {_entity} by {_amount}
+	scriptDebugBroadcastType("heal", "%{_entity}% heals for %{_amount}%")
 	return true
 
 on join:
@@ -2286,22 +2287,25 @@ on right click with diamond:
 	play sound "entity.player.breath" with pitch 0.7 at player
 
 on right click with feather:
-	hasClass(player, "wizard") is true
+	( hasClass(player, "wizard") or hasClass(player, "cleric") ) is true
+	set {_amount} to 2
+	hasClass(player, "cleric") is true:
+		set {_amount} to 4
 	set {_t} to targeted entity of player
 	{_t} is a player:
-		if subMana(event-player, 90) is false:
+		if subMana(event-player, 150) is false:
 			send "&cYou do not have enough Mana to cast the heal other spell!" to event-player
 			stop
-		heal({_t}, 3)
-		send "&dYou heal %{_t}%!" to event-player
-		send "&dYou are healed!" to {_t}
+		heal({_t}, {_amount})
+		send "&6You heal %{_t}%!" to event-player
+		send "&6You are healed!" to {_t}
 		play sound "entity.player.levelup" with pitch 1.5 at {_t}
 		stop
-	if subMana(event-player, 90) is false:
+	if subMana(event-player, 150) is false:
 		send "&cYou do not have enough Mana to cast the heal spell!" to event-player
 		stop
-	heal(event-player, 3)
-	send "&dYou are healed!" to event-player
+	heal(event-player, {_amount})
+	send "&6You heal yourself!" to event-player
 	play sound "entity.player.levelup" with pitch 1.5 at event-player
 
 on right click with amethyst shard:
@@ -2701,6 +2705,7 @@ on heal:
 	event-entity is a player:
 		hasClass(event-player, "cleric") is true:
 			set the heal amount to the heal amount * 2
+		scriptDebugBroadcastType("heal", "%player% heals for %heal amount%")
 
 command /pray <text>:
 	executable by: players
