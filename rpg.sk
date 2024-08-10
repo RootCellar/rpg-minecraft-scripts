@@ -2076,6 +2076,9 @@ function explodeFireball(index: string):
 	loop blocks in radius 2.5 around {_loc}:
 		loop-block is air:
 			show mob spawner flames at loop-block
+	loop blocks in radius 5 around {_loc}:
+		loop-block is air:
+			set block at location of loop-block to fire
 	delete {rpgSkript::fireballs::%{_index}%}
 	loop all entities in radius 8 around ({_loc}):
 		loop-entity is not a dropped item
