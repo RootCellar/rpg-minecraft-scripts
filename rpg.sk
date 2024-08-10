@@ -2144,6 +2144,9 @@ function explodeCryoball(index: string):
 			set loop-block to ice
 		loop-block is lava:
 			set loop-block to cobblestone
+	loop blocks in radius 10 around {_loc}:
+		loop-block is fire:
+			set loop-block to air
 	delete {rpgSkript::cryoballs::%{_index}%}
 	loop all entities in radius 14 around ({_loc}):
 		loop-entity is not a dropped item
