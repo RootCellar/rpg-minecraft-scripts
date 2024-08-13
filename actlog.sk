@@ -64,6 +64,9 @@ command /logactionreset:
 on server list ping:
 	scriptActionConsoleMessageType("ping", "A client has pinged the server")
 
+on connect:
+	scriptActionConsoleMessageType("connect", "%player% is connecting...")
+
 on craft:
 	event-item is not air:
 		scriptActionConsoleMessageType("craft", "%event-player% crafted %event-item%")
