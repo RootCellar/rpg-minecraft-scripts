@@ -3438,14 +3438,14 @@ function displayWildshape(player: player):
 
 
 
-on preparing craft:
-	hasClass(event-player, "artificer") is true:
-		if at least one of:
-			event-item is any planks
-			event-item is any stone
-			event-item is any slab
-			event-item is any stair
-		then:
+#on preparing craft:
+	#hasClass(event-player, "artificer") is true:
+		#if at least one of:
+			#event-item is any planks
+			#event-item is any stone
+			#event-item is any slab
+			#event-item is any stair
+		#then:
 			# add 2 to item amount of event-item
 
 command /fix:
