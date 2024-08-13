@@ -55,6 +55,9 @@ command /logactionreset:
 		delete {actionLog::action::*}
 		send "&cEnabled action types reset" to command executor
 
+on server list ping:
+	scriptActionConsoleMessageType("ping", "A client has pinged the server")
+
 on craft:
 	event-item is not air:
 		scriptActionConsoleMessageType("craft", "%event-player% crafted %event-item%")
