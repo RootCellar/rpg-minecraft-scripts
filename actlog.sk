@@ -4,6 +4,12 @@ Options:
 	logActions: true
 	logToFile: false
 
+on script load:
+	actionConsoleMessage("Loaded!")
+
+on script unload:
+	actionConsoleMessage("Unloading...")
+
 function logAction(message: text):
 	{@logToFile} is true:
 		log "%{_message}%" to "action/main.log"
