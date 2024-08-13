@@ -106,7 +106,7 @@ on pick up:
 	scriptActionConsoleMessageType("item", "%event-entity% picks up %event-item% (%event-item's enchantments%)")
 
 on level change:
-	scriptActionConsoleMessageType("exp", "%event-player%'s level is now %level of event-player%")
+	scriptActionConsoleMessageType("exp", "%event-player% is now level %level of event-player%")
 
 on player world change:
 	scriptActionConsoleMessageType("world", "%event-player% enters world %world of event-player%")
