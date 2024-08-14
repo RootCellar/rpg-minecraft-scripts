@@ -198,8 +198,14 @@ function setMaxHealth(player: player):
 	if hasImbue({_player}, "golem") is true:
 		set {_newMax} to {_newMax} * 1.2
 
+	hasImbue({_player}, "photosynthesis") is true:
+		sun light level at {_player} is greater than 13:
+			time in world of {_player} is not between 19:00 and 5:00:
+				set {_newMax} to {_newMax} * ( 1 + 0.1 * countImbue({_player}, "photosynthesis") )
+
 	hasEffect({_player}, "disease") is true:
-		set {_newMax} to {_newMax} * 0.8
+		hasImbue({_player}, "iron will") is false:
+			set {_newMax} to {_newMax} * 0.8
 
 	set {_newMax} to ceil({_newMax})
 	if {_player}'s maximum health is not {_newMax}:
@@ -240,9 +246,13 @@ function getItemCostForImbue(imbue: text):: items:
 	else if {_imbue} is "repulsor":
 		return (32 quartz and 32 copper ingot)
 	else if {_imbue} is "firststrike":
-		return (4 diamonds and 32 quartz)
+		return (4 diamond and 32 quartz)
 	else if {_imbue} is "detonate":
-		return (48 redstone and 16 copper ingot)
+		return (48 redstone and 16 copper ingot and 16 gunpowder)
+	else if {_imbue} is "Frost Shield":
+		return (4 diamond and 32 copper ingot)
+	else if {_imbue} is "Iron Will":
+		return (48 iron ingot and 24 copper ingot and 2 netherite ingot)
 
 	# Wizard
 
@@ -250,6 +260,15 @@ function getItemCostForImbue(imbue: text):: items:
 		return (96 nether wart and 64 glowstone dust)
 	else if {_imbue} is "mana":
 		return (2 diamond and 6 gold ingot)
+	else if {_imbue} is "siphon":
+		return (2 diamond and 48 quartz)
+	else if {_imbue} is "Enlighten":
+		return (64 lapis lazuli and 64 quartz and 4 diamond)
+
+	# Druid
+
+	else if {_imbue} is "Photosynthesis":
+		return (24 lapis lazuli and 24 quartz and 4 diamond)
 
 command /ingredients <text>:
 	executable by: players
@@ -653,16 +672,17 @@ every 4 ticks:
 every 1 seconds:
 	loop all entities:
 		loop-entity is alive
+		set {_effectDamage} to 0
 		hasEffect(loop-entity, "hallowed") is true:
 			if isMonster(loop-entity) is true:
-				damage loop-entity by 1
+				set {_effectDamage} to {_effectDamage} + 1
 			else if hasClass(loop-entity, "paladin") is true:
 				heal(loop-entity, 0.5)
 			else:
-				damage loop-entity by 0.5
+				set {_effectDamage} to {_effectDamage} + 0.5
 		hasEffect(loop-entity, "bleeding") is true:
 			if hasClass(loop-entity, "warrior") is false:
-				damage loop-entity by 0.05 * maximum health of loop-entity
+				set {_effectDamage} to {_effectDamage} + 0.05 * maximum health of loop-entity 
 		hasEffect(loop-entity, "mana_leak") is true:
 			loop-entity is a player
 			set {_loss} to ({rpgSkript::maxMana::%loop-entity%} / 40) / 2
@@ -672,7 +692,7 @@ every 1 seconds:
 			loop all entities in radius 5 around loop-entity:
 				loop-entity-2 is not loop-entity-1
 				hasEffect(loop-entity-2, "shocking") is false
-				damage loop-entity-2 by 1
+				set {_effectDamage} to {_effectDamage} + 1
 				applyEffect(loop-entity-2, "shocking", 0.1 seconds)
 				set {_vec} to vector between loop-entity-1 and loop-entity-2
 				set y component of {_vec} to 0
@@ -687,12 +707,16 @@ every 1 seconds:
 			loop-entity is not a zombie
 			loop-entity is not a skeleton
 			chance of 10%:
-				damage loop-entity by 1.5
+				set {_effectDamage} to {_effectDamage} + 1.5
 			loop all entities in radius 5 around loop-entity:
 				loop-entity-2 is not loop-entity-1
 				loop-entity-2 is alive
 				chance of 30%:
 					applyEffect(loop-entity-2, "disease", 30 seconds)
+
+		if {_effectDamage} is not 0:
+			set {_reduction} to 1 - (0.15 * countImbue(loop-entity, "iron will") )
+			damage loop-entity by {_effectDamage} * {_reduction}
 
 every 2 seconds:
 
@@ -796,6 +820,11 @@ every 2 seconds:
 		hasImbue(loop-player, "golem") is true:
 			apply strength 2 without particles to the loop-player for 5 seconds replacing the existing effect
 			apply slowness 1 without particles to the loop-player for 5 seconds replacing the existing effect
+		hasImbue(loop-player, "photosynthesis") is true:
+			sun light level at loop-player is greater than 13:
+				time in world of loop-player is not between 19:00 and 5:00:
+					set {_add} to 0.25 * countImbue(loop-player, "photosynthesis")
+					heal(loop-player, {_add})
 
 function getTag(item: item, name: text) :: text:
 	set {_value} to tag {_name} of nbt of {_item}
@@ -836,6 +865,15 @@ on death:
 			hasAnyImbue({_item}) is true:
 				scriptDebugBroadcastType("loot", "Added %{_item}% to mob loot")
 				# add {_item} to the drops
+
+on experience change:
+	hasImbue(event-player, "enlighten") is true:
+		while true is true:
+			wait 10 ticks
+			chance of 60%:
+				add 1 experience to event-player
+			else:
+				exit 1 loop
 
 on damage:
 	damage cause is fall:
@@ -914,7 +952,7 @@ on damage:
 					push victim upwards with force 0.8
 
 		if hasLore(attacker's held item, "vampiric") is true:
-			set {_heal} to 0.5 + 0.5 * countImbue(attacker, "vampiric")
+			set {_heal} to 0.5 * countImbue(attacker, "vampiric")
 			heal(attacker, {_heal})
 		if hasLore(attacker's held item, "hallowed") is true:
 			applyEffect(victim, "hallowed", 10 seconds)
@@ -929,6 +967,10 @@ on damage:
 		if hasLore(attacker's held item, "firststrike") is true:
 			health of victim is equal to the maximum health of victim:
 				set the damage to the damage * 1.5
+		if hasLore(attacker's held item, "siphon") is true:
+			if victim is a player:
+				subMana(victim, 25, false)
+			addMana(attacker, 15)
 
 	victim is a player:
 		setMaxHealth(the victim)
@@ -1008,8 +1050,32 @@ on damage:
 				delete event-projectile
 				cancel the event
 				stop
-			set the damage to the damage * 0.85
-			ignite the attacker for 5 seconds
+			if damage cause is burn:
+				set the damage to the damage * 0.75
+			else:
+				set the damage to the damage * 0.95
+			ignite the attacker for 2 seconds
+
+		hasImbue(victim, "frost shield") is true:
+			set {_loc} to the victim's location
+			set {_loc} to the location 1 meter above {_loc}
+			show splash at {_loc}
+			event-projectile is not set:
+				if damage cause is freeze:
+					set the damage to the damage * 0.75
+				else:
+					set the damage to the damage * 0.95
+
+		hasImbue(victim, "iron will") is true:
+			if at least one of:
+				damage cause is burn
+				damage cause is freeze
+				damage cause is poison
+				damage cause is wither potion effect
+			then:
+				set {_reduction} to 1 - (0.15 * countImbue(victim, "iron will") )
+				set the damage to the damage * {_reduction}
+
 
 on target:
 	isMinion(event-entity) is true:
@@ -1742,6 +1808,11 @@ function regenMana(player: player):
 		set {_add} to {rpgSkript::maxMana::%{_player}%} / 200
 	else if hasClass({_player}, "paladin") is true:
 		set {_add} to {rpgSkript::maxMana::%{_player}%} / 6
+
+	if hasImbue({_player}, "photosynthesis") is true:
+		sun light level at {_player} is greater than 5:
+			time in world of {_player} is not between 19:00 and 5:00:
+				set {_add} to {_add} * ( 1 + 0.1 * countImbue({_player}, "photosynthesis"))
 	
 	addMana( {_player}, {_add} )
 
@@ -3533,6 +3604,8 @@ function isArmorArtificeImbue(imbue: text) :: boolean:
 		{_imbue} is "golem"
 		{_imbue} is "mana shield"
 		{_imbue} is "flame shield"
+		{_imbue} is "frost shield"
+		{_imbue} is "iron will"
 	then:
 		return true
 	return false
@@ -3547,12 +3620,16 @@ function isWeaponArtificeImbue(imbue: text) :: boolean:
 		{_imbue} is "repulsor"
 		{_imbue} is "firststrike"
 		{_imbue} is "detonate"
+		{_imbue} is "enlighten"
 	then:
 		return true
 	return false
 
 function isToolArtificeImbue(imbue: text) :: boolean:
-	{_imbue} is "excavation":
+	if at least one of:
+		{_imbue} is "excavation"
+		{_imbue} is "enlighten"
+	then:
 		return true
 	return false
 
