@@ -156,6 +156,8 @@ function isMonster(entity: entity) :: boolean:
 		return true
 	{_entity} is a hoglin:
 		return true
+	{_entity} is a shulker:
+		return true
 	return false
 
 function setMaxHealth(player: player):
