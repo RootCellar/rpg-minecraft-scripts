@@ -208,8 +208,9 @@ function setMaxHealth(player: player):
 				set {_newMax} to {_newMax} * ( 1 + 0.1 * countImbue({_player}, "photosynthesis") )
 
 	hasEffect({_player}, "disease") is true:
-		hasImbue({_player}, "iron will") is false:
-			set {_newMax} to {_newMax} * 0.8
+		hasClass({_player}, "paladin") is false
+		hasImbue({_player}, "iron will") is false
+		set {_newMax} to {_newMax} * 0.8
 
 	set {_newMax} to ceil({_newMax})
 	if {_player}'s maximum health is not {_newMax}:
