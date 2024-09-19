@@ -154,6 +154,8 @@ function isMonster(entity: entity) :: boolean:
 		return true
 	{_entity} is a phantom:
 		return true
+	{_entity} is a hoglin:
+		return true
 	return false
 
 function setMaxHealth(player: player):
