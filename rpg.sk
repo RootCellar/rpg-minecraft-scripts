@@ -7,6 +7,9 @@ Options:
 	debugPrefix: &e[&bDEBUG&e]&r
 	debug: true
 
+	benchmark: false
+	benchmarkSpan: 10 seconds
+
 	drawRadius: 20
 
 on script load:
@@ -126,6 +129,39 @@ command /rpgdebugreset:
 		command executor has permission "rpg.control"
 		delete {rpgSkript::debug::*}
 		send "&cEnabled debug types reset" to command executor
+
+function benchmark(type: string):
+	{@benchmark} is true
+	add 1 to {rpgSkript::benchmark::%{_type}%::runs}
+	{rpgSkript::benchmark::%{_type}%} is not set:
+		set {rpgSkript::benchmark::%{_type}%} to false
+	{rpgSkript::benchmark::%{_type}%::last} is not set:
+		set {rpgSkript::benchmark::%{_type}%::last} to now
+	{rpgSkript::benchmark::%{_type}%::runs} is not set:
+		set {rpgSkript::benchmark::%{_type}%::runs} to 0
+	set {_difference} to difference between {rpgSkript::benchmark::%{_type}%::last} and now 
+	{_difference} is more than {@benchmarkSpan}:
+		scriptBroadcast("%{_type}% - %{rpgSkript::benchmark::%{_type}%::runs}% over %{_difference}%")
+		set {rpgSkript::benchmark::%{_type}%::last} to now
+		set {rpgSkript::benchmark::%{_type}%::runs} to 0
+
+command /rpgbench <string> <boolean>:
+	trigger:
+		command executor has permission "rpg.control"
+		set {rpgSkript::benchmark::%arg 1%} to arg 2
+		send "&3Running benchmark %arg 1%" to command executor
+
+command /rpgbenched:
+	trigger:
+		command executor has permission "rpg.control"
+		loop {rpgSkript::benchmark::*}:
+			send "&3%loop-index% -> %loop-value%" to command executor
+
+command /rpgbenchreset:
+	trigger:
+		command executor has permission "rpg.control"
+		delete {rpgSkript::benchmark::*}
+		send "&cEnabled benchmark types reset" to command executor
 
 function giveItem(player: player, item: item) :: boolean:
 	{_player} doesn't have space for {_item}:
