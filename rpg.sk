@@ -2460,14 +2460,12 @@ on right click with sugar:
 	if subMana(event-player, 30) is false:
 		send "&cYou do not have enough Mana to cast the move items spell!" to event-player
 		stop
-	send "&dSummoned nearby dropped items near where you are looking!" to event-player
 	set {_loc} to event-player's targeted block
 	loop all entities in radius 80 around (event-player's targeted block):
 		loop-entity is a dropped item
 		teleport loop-entity to location 1 meter above {_loc}
-		add 1 experience to the player
-	add 2 experience to the player
 	play sound "entity.player.breath" with pitch 0.7 at player
+	send "&dSummoned nearby dropped items near where you are looking!" to event-player
 
 on right click with wheat:
 	if at least one of:
