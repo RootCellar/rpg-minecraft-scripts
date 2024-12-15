@@ -244,8 +244,6 @@ function setMaxHealth(player: player):
 				set {_newMax} to {_newMax} * ( 1 + 0.1 * countImbue({_player}, "photosynthesis") )
 
 	hasEffect({_player}, "disease") is true:
-		hasClass({_player}, "paladin") is false
-		hasImbue({_player}, "iron will") is false
 		set {_newMax} to {_newMax} * 0.8
 
 	set {_newMax} to ceil({_newMax})
@@ -583,6 +581,8 @@ function isImmuneToEffect(entity: entity, name: string) :: boolean:
 		{_entity} is a player:
 			hasClass({_entity}, "paladin") is true:
 				return true
+			hasImbue({_entity}, "iron will") is true:
+				return true
 		{_entity} is a zombie or skeleton:
 			return true
 
@@ -761,9 +761,6 @@ every 1 seconds:
 					hasEffect(loop-entity-2, "shocking") is false:
 						applyEffect(loop-entity-2, "shocking", 2 seconds)
 		hasEffect(loop-entity, "disease") is true:
-			hasClass(loop-entity, "paladin") is false
-			loop-entity is not a zombie
-			loop-entity is not a skeleton
 			chance of 10%:
 				set {_effectDamage} to {_effectDamage} + 1.5
 			loop all entities in radius 5 around loop-entity:
