@@ -577,6 +577,17 @@ every 10 ticks:
 	loop {rpgSkript::worldeffects::*}:
 		handleWorldEffect(loop-index)
 
+function isImmuneToEffect(entity: entity, name: string) :: boolean:
+
+	{_name} is "disease":
+		{_entity} is a player:
+			hasClass({_entity}, "paladin") is true:
+				return true
+		{_entity} is a zombie or skeleton:
+			return true
+
+	return false
+
 function generateIndex(entity: entity) :: text:
 	{_entity} is a player:
 		set {_index} to name of {_entity}
@@ -604,15 +615,21 @@ function applyEffect(entity: entity, name: string, duration: timespan):
 	set {rpgSkript::effects::%{_index}%::%{_name}%::applied} to now
 
 function hasEffect(entity: entity, name: string) :: boolean:
+	isImmuneToEffect({_entity}, {_name}) is true:
+		return false
+
 	{_entity} is a player:
 		hasImbue({_entity}, "%{_name}% effect") is true:
 			return true
+
 	set {_index} to generateIndex({_entity})
 	{rpgSkript::effects::%{_index}%::%{_name}%} is not set:
 		return false
+
 	set {_diff} to difference between now and {rpgSkript::effects::%{_index}%::%{_name}%::applied}
 	{_diff} is greater than {rpgSkript::effects::%{_index}%::%{_name}%::duration}:
 		return false
+
 	return true
 
 function drawEffects(entity: entity):
