@@ -146,7 +146,8 @@ function benchmark(type: string):
 		set {rpgSkript::benchmark::%{_type}%::runs} to 0
 	set {_difference} to difference between {rpgSkript::benchmark::%{_type}%::last} and now 
 	{_difference} is more than {@benchmarkSpan}:
-		scriptBroadcast("%{_type}% - %{rpgSkript::benchmark::%{_type}%::runs}% over %{_difference}%")
+		{rpgSkript::benchmark::%{_type}%} is true:
+			scriptBroadcast("%{_type}% - %{rpgSkript::benchmark::%{_type}%::runs}% over %{_difference}%")
 		set {rpgSkript::benchmark::%{_type}%::last} to now
 		set {rpgSkript::benchmark::%{_type}%::runs} to 0
 
