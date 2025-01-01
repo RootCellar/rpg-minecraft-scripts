@@ -102,7 +102,7 @@ function scriptDebugBroadcast(message: text):
 function scriptDebugBroadcastType(type: string, message: text):
 	{@debug} is true:
 		shouldPrintDebugType({_type}) is true:
-			broadcast "{@debugPrefix} %{_type}% {@prefix} &7%{_message}%"
+			broadcast "{@debugPrefix} {@prefix} &f%{_type}% &7%{_message}%"
 
 function scriptDebugConsoleMessage(message: text):
 	scriptDebugConsoleMessageType("main", {_message})
@@ -110,7 +110,7 @@ function scriptDebugConsoleMessage(message: text):
 function scriptDebugConsoleMessageType(type: string, message: text):
 	{@debug} is true:
 		shouldPrintDebugType({_type}) is true:
-			send "{@consolePrefix} %{_type}% {@debugPrefix} {@prefix} &7%{_message}%" to console
+			send "{@consolePrefix} {@debugPrefix} {@prefix} &f%{_type}% &7%{_message}%" to console
 
 command /rpgdebug <string> <boolean>:
 	trigger:
