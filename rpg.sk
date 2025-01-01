@@ -112,6 +112,11 @@ function scriptDebugConsoleMessageType(type: string, message: text):
 		shouldPrintDebugType({_type}) is true:
 			send "{@consolePrefix} {@debugPrefix} {@prefix} &f%{_type}% &7%{_message}%" to console
 
+command /rpgannounce <string>:
+	trigger:
+		command executor has permission "rpg.control"
+		scriptBroadcast("&cAnnouncement: &e%arg 1%")
+
 command /rpgdebug <string> <boolean>:
 	trigger:
 		command executor has permission "rpg.control"
