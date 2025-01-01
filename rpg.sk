@@ -739,8 +739,6 @@ every 1 seconds:
 		hasEffect(loop-entity, "hallowed") is true:
 			if isMonster(loop-entity) is true:
 				set {_effectDamage} to {_effectDamage} + 1
-			else if hasClass(loop-entity, "paladin") is true:
-				heal(loop-entity, 0.5)
 			else:
 				set {_effectDamage} to {_effectDamage} + 0.5
 		hasEffect(loop-entity, "bleeding") is true:
