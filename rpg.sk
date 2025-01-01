@@ -586,6 +586,11 @@ function isImmuneToEffect(entity: entity, name: string) :: boolean:
 		{_entity} is a zombie or skeleton:
 			return true
 
+	{_name} is "hallowed":
+		{_entity} is a player:
+			hasClass({_entity}, "paladin") is true:
+				return true
+
 	return false
 
 function generateIndex(entity: entity) :: text:
