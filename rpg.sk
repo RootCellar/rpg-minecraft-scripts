@@ -2610,6 +2610,8 @@ on right click with lapis lazuli:
 
 
 function isMinion(entity: entity) :: boolean:
+	{_entity} is a player:
+		return false
 	{rpgSkript::minions::%uuid of {_entity}%} is set:
 		return true
 	return false
