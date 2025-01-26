@@ -683,7 +683,7 @@ function drawEffects(entity: entity):
 		show rollDice(3, 3) (red dust with offset of 0.3, 0.5, 0.3) at (location of {_entity} ~ vector 0, 1, 0)
 	hasEffect({_entity}, "disease") is true:
 		show rollDice(3, 3) (falling spore blossom with offset of 0.3, 0.5, 0.3) at (location of {_entity} ~ vector 0, 1, 0)
-	hasEffect({_entity}, "mana leak") is true:
+	hasEffect({_entity}, "mana_leak") is true:
 		loop 5 times:
 			set {_x} to a random number between -0.5 and 0.5
 			set {_y} to 1.0
