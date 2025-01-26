@@ -192,6 +192,7 @@ command /rpgflagreset:
 		send "&dFeature flags reset" to command executor
 
 function featureEnabled(name: string) :: boolean:
+	replace all " " with "_" in {_name}
 	if {rpgSkript::feature_flags::%{_name}%} is not set:
 		set {rpgSkript::feature_flags::%{_name}%} to true
 	return {rpgSkript::feature_flags::%{_name}%}
