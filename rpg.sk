@@ -370,6 +370,9 @@ function addImbue(item: item, imbue: text) :: item:
 	return {_item}
 
 function countImbue(player: player, text: text) :: number:
+	if featureEnabled("g_%{_text}%_imbue") is false:
+		return 0
+
 	set {_c} to 0
 	if hasLore({_player}'s helmet, {_text}) is true:
 		set {_c} to {_c} + 1
@@ -386,6 +389,9 @@ function countImbue(player: player, text: text) :: number:
 	return {_c}
 
 function hasImbue(player: player, text: text) :: boolean:
+	if featureEnabled("g_%{_text}%_imbue") is false:
+		return false
+
 	if hasLore({_player}'s helmet, {_text}) is true:
 		return true
 	if hasLore({_player}'s chestplate, {_text}) is true:
