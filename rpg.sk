@@ -2662,7 +2662,7 @@ every 2 seconds:
 
 	set {_end} to now
 	set {_seconds} to difference between {_end} and {_start}
-	#broadcast "%{_seconds}%"
+	scriptDebugConsoleMessageType("minion_loop_time", "Took %{_seconds}%")
 
 on death:
 	the victim is not a player
