@@ -499,14 +499,12 @@ command /armorclass:
 function arcaneTide():
 	{rpgSkript::arcaneTide} is not set:
 		set {_x} to a random number between 1 and 1000
-		#broadcast {_x}
 		{_x} < 7:
 			set {rpgSkript::arcaneTide} to now
 			arcaneSense("You feel the surrounding energy of Magic become more intense!")
 	else:
 		if difference between now and {rpgSkript::arcaneTide} is greater than 2 minutes:
 			set {_x} to a random number between 1 and 1000
-			#broadcast {_x}
 			{_x} < 20:
 				delete {rpgSkript::arcaneTide}
 				arcaneSense("The energy in the air settles...")
@@ -2185,13 +2183,10 @@ function moveFireball(index: string, v: vector):
 	if {rpgSkript::fireballs::%{_index}%} is not set:
 		exit
 	show large smoke at ({rpgSkript::fireballs::%{_index}%::loc})
-	#broadcast "%{rpgSkript::fireballs::%{_index}%::loc}%"
 	set {rpgSkript::fireballs::%{_index}%::loc} to ({rpgSkript::fireballs::%{_index}%::loc} ~ {_v})
 	set {_loc} to {rpgSkript::fireballs::%{_index}%::loc}
-	#broadcast "%{rpgSkript::fireballs::%{_index}%::loc}%"
 	show mob spawner flames at {_loc}
 	loop blocks in radius 1 around {_loc}:
-		#show mob spawner flames at loop-block
 		loop-block is water:
 			delete {rpgSkript::fireballs::%{_index}%}
 		loop-block is solid:
@@ -2352,7 +2347,6 @@ on right click with iron nugget:
 			loop-block is not air
 			create an explosion with force 3 at the loop-block
 			wait 1 ticks
-	#create an explosion with force 5 at the event-player's targeted block
 	add 10 experience to the player
 	show mob spawner flames at (the location 1 block above the player's location)
 
@@ -2681,7 +2675,6 @@ on explosion prime:
 			cancel the event
 
 function deleteMinion(uuid: text):
-	#broadcast "&7Deleting minion"
 	delete {rpgSkript::minions::%{_uuid}%}
 	delete {rpgSkript::minions::%{_uuid}%::*}
 
@@ -2690,7 +2683,6 @@ function deleteMinion(uuid: text):
 		reset target of {_entity}
 
 function killMinion(uuid: text):
-	#broadcast "&7Killing minion"
 	kill getByUUID({_uuid})
 	deleteMinion({_uuid})
 
