@@ -2340,6 +2340,7 @@ on right click with nether quartz:
 	show mob spawner flames at (the location 1 block above the player's location)
 
 on right click with iron nugget:
+	true is false # This spell is disabled
 	( hasClass(player, "wizard") or hasClass(player, "sorceror") ) is true
 	if subMana(event-player, 180) is false:
 		send "&cYou do not have enough Mana to cast the shatter spell!" to event-player
