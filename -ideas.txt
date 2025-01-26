@@ -1,5 +1,7 @@
 # Ideas
 
+- Feature Flags?
+
 - log on connect and on server list ping
 - make monsters more powerful
 
