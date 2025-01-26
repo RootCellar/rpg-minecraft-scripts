@@ -172,6 +172,30 @@ command /rpgbenchreset:
 		delete {rpgSkript::benchmark::*}
 		send "&cEnabled benchmark types reset" to command executor
 
+command /rpgflag <string> <boolean>:
+	trigger:
+		command executor has permission "rpg.control"
+		set {_flag} to arg 1 in lowercase
+		set {rpgSkript::feature_flags::%{_flag}%} to arg 2
+		send "&3Flag set: %{_flag}% -> %arg 2%" to command executor
+
+command /rpgflags:
+	trigger:
+		command executor has permission "rpg.control"
+		loop {rpgSkript::feature_flags::*}:
+			send "&3%loop-index% -> %loop-value%" to command executor
+
+command /rpgflagreset:
+	trigger:
+		command executor has permission "rpg.control"
+		delete {rpgSkript::feature_flags::*}
+		send "&dFeature flags reset" to command executor
+
+function featureEnabled(name: string) :: boolean:
+	if {rpgSkript::feature_flags::%{_name}%} is not set:
+		set {rpgSkript::feature_flags::%{_name}%} to true
+	return {rpgSkript::feature_flags::%{_name}%}
+
 function giveItem(player: player, item: item) :: boolean:
 	{_player} doesn't have space for {_item}:
 		send "&cYou don't have space for %{_item}%" to {_player}
