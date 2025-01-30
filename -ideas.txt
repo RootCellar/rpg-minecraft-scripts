@@ -9,7 +9,6 @@
   - provide function to determine if a block is natural or not
 
 
-
 # Herobrine
 
 - allow Herobrine to enter and leave spectator mode at will
