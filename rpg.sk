@@ -767,6 +767,8 @@ every 1 seconds:
 			set line 1 of loop-player's scoreboard to "Items on Ground: %countEntities(dropped items within 30 meters of loop-player)%"
 
 every 4 ticks:
+	set {_start} to now
+
 	loop all players:
 		drawEffects(loop-player)
 		loop all mobs in radius {@drawRadius} of loop-player:
@@ -774,6 +776,10 @@ every 4 ticks:
 			{_drawn::%uuid of loop-entity-2%} is not set:
 				drawEffects(loop-entity-2)
 				set {_drawn::%uuid of loop-entity-2%} to 0
+
+	set {_end} to now
+	set {_seconds} to difference between {_end} and {_start}
+	scriptDebugConsoleMessageType("effects_loop_time", "Took %{_seconds}%")
 
 every 1 seconds:
 	loop all entities:
