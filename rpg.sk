@@ -2935,6 +2935,20 @@ command /channel <text>:
 				send "&6A Cleric blesses you with absorption!" to loop-player
 			play sound "item.trident.thunder" with pitch 2.0 at player
 			send "&6You bless your allies with absorption!" to player
+		else if arg 1 is "day":
+			subMana(player, 400) is false:
+				send "&cYou do not have enough mana!" to player
+				stop
+			set time in (world of player) to 6:00
+			play sound "item.trident.thunder" with pitch 2.0 at player
+			send "&6Time changes to day!" to player
+		else if arg 1 is "night":
+			subMana(player, 400) is false:
+				send "&cYou do not have enough mana!" to player
+				stop
+			set time in (world of player) to 20:00
+			play sound "item.trident.thunder" with pitch 2.0 at player
+			send "&6Time changes to night!" to player
 		else:
 			send "&cUnrecognized ability" to player
 
