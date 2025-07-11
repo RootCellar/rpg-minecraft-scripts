@@ -86,7 +86,7 @@ on damage:
 	event is cancelled:
 		stop
 	attacker is a player:
-		scriptActionConsoleMessageType("combat", "%attacker% swings at %victim% for %the damage% damage")
+		scriptActionConsoleMessageType("combat", "%attacker% hits %victim% for %the damage% damage")
 	victim is a player:
 		set {_cause} to damage cause
 		attacker is set:
