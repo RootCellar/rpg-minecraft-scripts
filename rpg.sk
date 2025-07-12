@@ -249,6 +249,8 @@ function isMonster(entity: entity) :: boolean:
 		return true
 	{_entity} is a shulker:
 		return true
+	{_entity} is a magma slime:
+		return true
 	return false
 
 function setMaxHealth(player: player):
