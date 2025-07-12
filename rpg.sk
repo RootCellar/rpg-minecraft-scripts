@@ -485,6 +485,39 @@ function isWearingMediumOrLess(player: player) :: boolean:
 function isWearingHeavyOrLess(player: player) :: boolean:
 	return true
 
+function shouldTriggerAbility(player: player) :: boolean:
+	if at least one of:
+		{_player}'s targeted block's inventory is set
+		{_player}'s targeted block is a crafting table
+		{_player}'s targeted block is an enchanting table
+		{_player}'s targeted block is an ender chest
+		{_player}'s targeted block is a brewing stand
+		{_player}'s targeted block is a fletching table
+		{_player}'s targeted block is a cartography table
+		{_player}'s targeted block is a smithing table
+		{_player}'s targeted block is a grindstone
+		{_player}'s targeted block is a stonecutter
+		{_player}'s targeted block is a loom
+		{_player}'s targeted block is a jukebox
+		{_player}'s targeted block is a note block
+		{_player}'s targeted block is a lectern
+		{_player}'s targeted block is a bell
+		{_player}'s targeted block is any bed
+		{_player}'s targeted block is any door
+		{_player}'s targeted block is any trapdoor
+		{_player}'s targeted block is any fence gate
+		{_player}'s targeted block is any sign
+		{_player}'s targeted entity is an item frame
+		{_player}'s targeted entity is an armor stand
+		{_player}'s targeted block is a lever
+		{_player}'s targeted block is any button
+		{_player}'s targeted block is a redstone repeater
+		{_player}'s targeted block is a comparator
+	then:
+		return false
+
+	return true
+
 function rollDie(sides: number) :: number:
 	set {_value} to a random integer between 1 and {_sides}
 	scriptDebugBroadcastType("dice", "rollDie(%{_sides}%) = %{_value}%")
@@ -1620,6 +1653,9 @@ on preparing craft:
 
 on right click:
 	hasClass(player, "warrior") is true
+
+	if shouldTriggerAbility(player) is false:
+		stop
 
 	set {_didHit} to false
 	set {_can_power_attack} to false
