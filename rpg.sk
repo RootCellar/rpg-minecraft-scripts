@@ -1002,6 +1002,8 @@ on right click with glass bottle:
 			scriptDebugBroadcastType("holding", "New ID: %{_id}%")
 			set {rpgSkript::holding::%{_id}%} to 1
 			set tag "holdingId" of nbt of event-player's held item to {_id}
+		else:
+			stop
 	set {_inv} to chest inventory with 6 rows named "&eBottle of Holding"
 	loop 6*9 times:
 		set slot (loop-value)-1 of {_inv} to {rpgSkript::holding::%{_id}%::%loop-value%}
