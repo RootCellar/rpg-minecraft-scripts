@@ -1012,6 +1012,7 @@ on inventory close:
 		set {_id} to getTag(player's held item, "holdingId")
 		{_id} is not set:
 			scriptDebugBroadcastType("holding", "ID not set, cannot save inventory")
+			stop
 		loop 6*9 times:
 			set {rpgSkript::holding::%{_id}%::%loop-value%} to slot (loop-value)-1 of event-inventory
 
