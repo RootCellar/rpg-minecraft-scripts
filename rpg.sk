@@ -82,6 +82,25 @@ on chat:
 	hasClass(player, "artificer") is true:
 		set the message to "&7[&bArtificer&7]&r %message%"
 
+command /view <player> <string>:
+	trigger:
+		command executor is a player:
+			player doesn't have permission "rpg.control":
+				send "&cYou do not have permission to run that command!" to command executor
+				stop
+
+		arg 2 is "equip" or "equipment":
+			send "&b---- &e%arg 1%'s Equipment &b----" to command executor
+			send "&eHelmet&b: &a%arg 1's helmet%&b, &eEnchantments&b: &a%enchantments of arg 1's helmet%" to command executor
+			send "&eChestplate&b: &a%arg 1's chestplate%&b, &eEnchantments&b: &a%enchantments of arg 1's chestplate%" to command executor
+			send "&eLeggings&b: &a%arg 1's leggings%&b, &eEnchantments&b: &a%enchantments of arg 1's leggings%" to command executor
+			send "&eBoots&b: &a%arg 1's boots%&b, &eEnchantments&b: &a%enchantments of arg 1's boots%" to command executor
+			send "&eHeld Item&b: &a%arg 1's held item%&b, &eEnchantments&b: &a%enchantments of arg 1's held item%" to command executor
+			send "&eOffhand Item&b: &a%arg 1's offhand item%&b, &eEnchantments&b: &a%enchantments of arg 1's offhand item%" to command executor
+		else:
+			send "&cInvalid data!" to command executor
+			send "&cYou may view 'equipment'" to command executor
+
 function rpgLog(message: text):
 	log "%{_message}%" to "rpg/main.log"
 
