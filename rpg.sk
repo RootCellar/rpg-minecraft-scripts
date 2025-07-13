@@ -2029,6 +2029,7 @@ function takeItems(player: player, items: items) :: boolean:
 		return true
 	if hasItems({_player}, {_items::*}) is true:
 		remove {_items::*} from {_player}
+		scriptConsoleMessage("Took items from %{_player}%: %{_items::*}%")
 		return true
 	return false
 
