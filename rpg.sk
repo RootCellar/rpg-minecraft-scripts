@@ -2109,8 +2109,9 @@ command /send <player>:
 		if subMana(command executor, 10) is false:
 			message "&cYou do not have enough Mana!"
 			stop
-		remove {_senditem} from player
-		give {_senditem} to arg 1
+		set {_sendItemList::*} to ( {_senditem} )
+		takeItems(player, {_sendItemList::*})
+		giveItem(player, {_sendItem})
 		message "&3Sent %{_senditem}% to %arg 1%"
 		send "&a[Send] %player% Sent %{_senditem}% to %arg 1%" to console
 		send "&3Received %{_senditem}% from %player%" to arg 1
