@@ -435,18 +435,14 @@ function hasLore(item: item, text: text) :: boolean:
 	return false
 
 function isWearingNothing(player: player) :: boolean:
-	hasLore(helmet of {_player}, "shapeshifter") is false:
-		helmet of {_player} is not (air):
-			return false
-	hasLore(chestplate of {_player}, "shapeshifter") is false:
-		chestplate of {_player} is not (air):
-			return false
-	hasLore(leggings of {_player}, "shapeshifter") is false:
-		leggings of {_player} is not (air):
-			return false
-	hasLore(boots of {_player}, "shapeshifter") is false:
-		boots of {_player} is not (air):
-			return false
+	helmet of {_player} is not (air):
+		return false
+	chestplate of {_player} is not (air):
+		return false
+	leggings of {_player} is not (air):
+		return false
+	boots of {_player} is not (air):
+		return false
 	return true
 
 function isWearingLightOrLess(player: player) :: boolean:
@@ -3415,8 +3411,18 @@ function canUseDruidAbilities(player: player) :: boolean:
 	return false
 
 function canUseShapeshiftAbilities(player: player) :: boolean:
-	if isWearingNothing({_player}) is true:
-		return true
+	helmet of {_player} is not (air):
+		hasLore(helmet of {_player}, "shapeshifter") is false:
+			return false
+	chestplate of {_player} is not (air):
+		hasLore(chestplate of {_player}, "shapeshifter") is false:
+			return false
+	leggings of {_player} is not (air):
+		hasLore(leggings of {_player}, "shapeshifter") is false:
+			return false
+	boots of {_player} is not (air):
+		hasLore(boots of {_player}, "shapeshifter") is false:
+			return false
 	return false
 
 command /druidresearch:
