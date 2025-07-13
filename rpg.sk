@@ -2046,7 +2046,7 @@ function takeResources(player: player, mana: number, items: items) :: boolean:
 	{_player} has permission "rpg.control":
 		return true
 	if hasResources({_player}, {_mana}, {_items::*}) is true:
-		remove {_items::*} from {_player}
+		takeItems({_player}, {_items::*})
 		subMana({_player}, {_amount})
 		return true
 	return false
