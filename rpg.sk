@@ -443,6 +443,8 @@ function isWearingNothing(player: player) :: boolean:
 		return false
 	boots of {_player} is not (air):
 		return false
+	off hand item of {_player} is shield:
+		return false
 	return true
 
 function isWearingLightOrLess(player: player) :: boolean:
