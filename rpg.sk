@@ -3425,6 +3425,9 @@ function canUseShapeshiftAbilities(player: player) :: boolean:
 	boots of {_player} is not (air):
 		hasLore(boots of {_player}, "shapeshifter") is false:
 			return false
+	off hand item of {_player} is shield:
+		hasLore(off hand item of {_player}, "shapeshifter") is false:
+			return false
 	return false
 
 command /druidresearch:
