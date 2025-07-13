@@ -434,6 +434,21 @@ function hasLore(item: item, text: text) :: boolean:
 			return true
 	return false
 
+function isWearingNothing(player: player) :: boolean:
+	hasLore(helmet of {_player}, "shapeshifter") is false:
+		helmet of {_player} is not (air):
+			return false
+	hasLore(chestplate of {_player}, "shapeshifter") is false:
+		chestplate of {_player} is not (air):
+			return false
+	hasLore(leggings of {_player}, "shapeshifter") is false:
+		leggings of {_player} is not (air):
+			return false
+	hasLore(boots of {_player}, "shapeshifter") is false:
+		boots of {_player} is not (air):
+			return false
+	return true
+
 function isWearingLightOrLess(player: player) :: boolean:
 	hasLore(helmet of {_player}, "light") is false:
 		helmet of {_player} is not (leather helmet or air):
@@ -449,21 +464,6 @@ function isWearingLightOrLess(player: player) :: boolean:
 			return false
 	hasLore(off hand item of {_player}, "light") is false:
 		off hand item of {_player} is shield:
-			return false
-	return true
-
-function isWearingNothing(player: player) :: boolean:
-	hasLore(helmet of {_player}, "shapeshifter") is false:
-		helmet of {_player} is not (air):
-			return false
-	hasLore(chestplate of {_player}, "shapeshifter") is false:
-		chestplate of {_player} is not (air):
-			return false
-	hasLore(leggings of {_player}, "shapeshifter") is false:
-		leggings of {_player} is not (air):
-			return false
-	hasLore(boots of {_player}, "shapeshifter") is false:
-		boots of {_player} is not (air):
 			return false
 	return true
 
