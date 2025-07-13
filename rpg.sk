@@ -577,6 +577,7 @@ command /haslore <text>:
 command /armorclass:
 	executable by: players
 	trigger:
+		send "Nothing: %isWearingNothing(command executor)%"
 		send "Light or less: %isWearingLightOrLess(command executor)%"
 		send "Medium or less: %isWearingMediumOrLess(command executor)%"
 		send "Heavy or less: %isWearingHeavyOrLess(command executor)%"
