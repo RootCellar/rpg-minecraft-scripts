@@ -1636,7 +1636,7 @@ function fellTree(block: block, depth: number=1):
 	break {_block} naturally using a diamond axe
 		
 	if {_recurse} is true:
-		loop blocks in radius 2 of {_block}:
+		loop blocks in radius 1.99 of {_block}:
 			fellTree(loop-block, {_depth} + 1)
 
 on preparing craft:
