@@ -97,7 +97,7 @@ command /view <player> <string>:
 			send "&eBoots&b: &a%arg 1's boots%&b, &eEnchantments&b: &a%enchantments of arg 1's boots%" to command executor
 			send "&eHeld Item&b: &a%arg 1's held item%&b, &eEnchantments&b: &a%enchantments of arg 1's held item%" to command executor
 			send "&eOffhand Item&b: &a%arg 1's offhand item%&b, &eEnchantments&b: &a%enchantments of arg 1's offhand item%" to command executor
-		arg 2 is "stat" or "stats":
+		else if arg 2 is "stat" or "stats":
 			send "&b---- &e%arg 1%'s Stats &b----" to command executor
 			send "&eHealth&b: &a%arg 1's health% / %arg 1's max health%" to command executor
 			send "&eMana&b: &a%{rpgSkript::mana::%arg 1%}% / %{rpgSkript::maxMana::%arg 1%}%" to command executor
