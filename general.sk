@@ -7,7 +7,7 @@ command /cbcast <string>:
 on command:
 	command executor is console
 	{console.broadcast} is "true"
-	broadcast "&7Server Console executing command: /%command% %arguments%"
+	broadcast "&7Server Console executing command: /%command% %concatStringList(arguments)%"
 	send "&4Warning: &cConsole Broadcasting is on!" to console
 
 command /feedback [<text="">]:
@@ -22,3 +22,17 @@ command /feedback [<text="">]:
 on join:
 	wait 5 seconds
 	send "&bUse '/feedback' to send feedback or ideas to be filed and viewed by the server administrator" to the player
+
+function concatStringList(list: texts, delim: string=" ") :: text:
+	set {_toRet} to ""
+	set {_first} to true
+
+	loop {_list::*}:
+		if {_first} is true:
+			set {_toRet} to "%loop-value%"
+			set {_first} to false
+		else:
+			set {_toRet} to "%{_toRet}%%{_delim}%%loop-value%"
+
+	return {_toRet}
+
