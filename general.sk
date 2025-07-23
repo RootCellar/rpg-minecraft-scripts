@@ -23,7 +23,7 @@ on join:
 	wait 5 seconds
 	send "&bUse '/feedback' to send feedback or ideas to be filed and viewed by the server administrator" to the player
 
-function concatStringList(list: texts, delim: string=" ") :: text:
+local function concatStringList(list: texts, delim: string=" ") :: text:
 	set {_toRet} to ""
 	set {_first} to true
 
