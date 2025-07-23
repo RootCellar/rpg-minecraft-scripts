@@ -29,7 +29,7 @@ on script unload:
 		killMinion(loop-index)
 
 	delete {rpgSkript::minions::*}
-	delete {rpgSkript::effects::*}
+	delete {-rpgSkript::effects::*}
 	delete {rpgSkript::worldeffects::*}
 
 on join:
@@ -721,21 +721,21 @@ function generateIndex(entity: entity) :: text:
 
 function removeAllEffects(entity: entity):
 	set {_index} to generateIndex({_entity})
-	loop {rpgSkript::effects::%{_index}%::*}:
+	loop {-rpgSkript::effects::%{_index}%::*}:
 		removeEffect({_entity}, loop-index)
 
 function removeEffect(entity: entity, name: string):
 	scriptDebugBroadcastType("effect", "Removing Effect %{_name}% from %{_entity}%")
 	set {_index} to generateIndex({_entity})
-	delete {rpgSkript::effects::%{_index}%::%{_name}%}
-	delete {rpgSkript::effects::%{_index}%::%{_name}%::*}
+	delete {-rpgSkript::effects::%{_index}%::%{_name}%}
+	delete {-rpgSkript::effects::%{_index}%::%{_name}%::*}
 
 function applyEffect(entity: entity, name: string, duration: timespan):
 	scriptDebugBroadcastType("effect", "Applying Effect %{_name}% to %{_entity}% for %{_duration}%")
 	set {_index} to generateIndex({_entity})
-	set {rpgSkript::effects::%{_index}%::%{_name}%} to 0
-	set {rpgSkript::effects::%{_index}%::%{_name}%::duration} to {_duration}
-	set {rpgSkript::effects::%{_index}%::%{_name}%::applied} to now
+	set {-rpgSkript::effects::%{_index}%::%{_name}%} to 0
+	set {-rpgSkript::effects::%{_index}%::%{_name}%::duration} to {_duration}
+	set {-rpgSkript::effects::%{_index}%::%{_name}%::applied} to now
 
 function hasEffect(entity: entity, name: string) :: boolean:
 	if featureEnabled("g_%{_name}%_effect") is false:
@@ -749,11 +749,11 @@ function hasEffect(entity: entity, name: string) :: boolean:
 			return true
 
 	set {_index} to generateIndex({_entity})
-	{rpgSkript::effects::%{_index}%::%{_name}%} is not set:
+	{-rpgSkript::effects::%{_index}%::%{_name}%} is not set:
 		return false
 
-	set {_diff} to difference between now and {rpgSkript::effects::%{_index}%::%{_name}%::applied}
-	{_diff} is greater than {rpgSkript::effects::%{_index}%::%{_name}%::duration}:
+	set {_diff} to difference between now and {-rpgSkript::effects::%{_index}%::%{_name}%::applied}
+	{_diff} is greater than {-rpgSkript::effects::%{_index}%::%{_name}%::duration}:
 		return false
 
 	return true
