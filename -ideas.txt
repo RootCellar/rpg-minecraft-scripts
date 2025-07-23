@@ -1,12 +1,23 @@
 # Ideas
 
-- Feature Flags?
+- Refactor on damage event to pass attacker, victim, and cause to a function
+  - spells can then call this same damage function and manually set the attacker,
+  so that the attacker can be known in cases where external code can't determine the attacker
+- Add function to list classes, another to get "name plate"
+  - refactor scoreboard to use those to display players' classes
+- Add command to allow players to pick their class if they don't have one
+  - modify hasClass() to also search variables to check if a player has a class
+  - add functions to list which classes player has
+  - isValidClass() to check of a class is valid, canPlayerPickClass() to limit which classes a player can pick
+- re-order name of mana and maxMana variables
+- look at permission naming and other naming to clean things up
+
+- function "pointers" for projectile system?
 
 - make monsters more powerful
 
-- create script to keep track of block changes
+- create script to keep track of block changes?
   - provide function to determine if a block is natural or not
-
 
 # Herobrine
 
