@@ -1,4 +1,4 @@
-command /cbcast <string>:
+command /cbcast <boolean>:
 	trigger:
 		command executor is console
 		set {console.broadcast} to argument
@@ -6,7 +6,7 @@ command /cbcast <string>:
 		
 on command:
 	command executor is console
-	{console.broadcast} is "true"
+	{console.broadcast} is true
 	broadcast "&7Server Console executing command: /%command% %concatStringList(arguments)%"
 	send "&4Warning: &cConsole Broadcasting is on!" to console
 
