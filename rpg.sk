@@ -30,7 +30,7 @@ on script unload:
 
 	delete {rpgSkript::minions::*}
 	delete {-rpgSkript::effects::*}
-	delete {rpgSkript::worldeffects::*}
+	delete {-rpgSkript::worldeffects::*}
 
 on join:
 	wait 3 seconds
@@ -649,17 +649,17 @@ on join:
 
 function createWorldEffect(loc: location, name: text, duration: time span, creator: entity={_none}):
 	set {_id} to a random UUID
-	set {rpgSkript::worldeffects::%{_id}%} to 0
-	set {rpgSkript::worldeffects::%{_id}%::location} to {_loc}
-	set {rpgSkript::worldeffects::%{_id}%::name} to {_name}
-	set {rpgSkript::worldeffects::%{_id}%::duration} to {_duration}
-	set {rpgSkript::worldeffects::%{_id}%::creator} to {_creator}
-	set {rpgSkript::worldeffects::%{_id}%::started} to now
+	set {-rpgSkript::worldeffects::%{_id}%} to 0
+	set {-rpgSkript::worldeffects::%{_id}%::location} to {_loc}
+	set {-rpgSkript::worldeffects::%{_id}%::name} to {_name}
+	set {-rpgSkript::worldeffects::%{_id}%::duration} to {_duration}
+	set {-rpgSkript::worldeffects::%{_id}%::creator} to {_creator}
+	set {-rpgSkript::worldeffects::%{_id}%::started} to now
 	scriptDebugBroadcastType("world_effect", "Created world effect %{_name}% at %{_loc}% for %{_duration}%, created by %{_creator}%")
 
 function drawWorldEffect(index: text):
-	set {_loc} to {rpgSkript::worldeffects::%{_index}%::location}
-	set {_name} to {rpgSkript::worldeffects::%{_index}%::name}
+	set {_loc} to {-rpgSkript::worldeffects::%{_index}%::location}
+	set {_name} to {-rpgSkript::worldeffects::%{_index}%::name}
 
 	{_name} is "electric_smoke":
 		loop blocks in radius 12 around {_loc}:
@@ -667,16 +667,16 @@ function drawWorldEffect(index: text):
 				show cloud at loop-block
 
 function handleWorldEffect(index: text):
-	set {_loc} to {rpgSkript::worldeffects::%{_index}%::location}
-	set {_name} to {rpgSkript::worldeffects::%{_index}%::name}
-	set {_started} to {rpgSkript::worldeffects::%{_index}%::started}
-	set {_duration} to {rpgSkript::worldeffects::%{_index}%::duration}
-	set {_creator} to {rpgSkript::worldeffects::%{_index}%::creator}
+	set {_loc} to {-rpgSkript::worldeffects::%{_index}%::location}
+	set {_name} to {-rpgSkript::worldeffects::%{_index}%::name}
+	set {_started} to {-rpgSkript::worldeffects::%{_index}%::started}
+	set {_duration} to {-rpgSkript::worldeffects::%{_index}%::duration}
+	set {_creator} to {-rpgSkript::worldeffects::%{_index}%::creator}
 
 	set {_diff} to difference between now and {_started}
 	{_diff} is greater than {_duration}:
-		delete {rpgSkript::worldeffects::%{_index}%::*}
-		delete {rpgSkript::worldeffects::%{_index}%}
+		delete {-rpgSkript::worldeffects::%{_index}%::*}
+		delete {-rpgSkript::worldeffects::%{_index}%}
 		scriptDebugBroadcastType("world_effect", "Deleted world effect %{_name}% at %{_loc}%")
 		stop
 
@@ -686,11 +686,11 @@ function handleWorldEffect(index: text):
 				damage loop-entity by 1
 
 every 5 ticks:
-	loop {rpgSkript::worldeffects::*}:
+	loop {-rpgSkript::worldeffects::*}:
 		drawWorldEffect(loop-index)
 
 every 10 ticks:
-	loop {rpgSkript::worldeffects::*}:
+	loop {-rpgSkript::worldeffects::*}:
 		handleWorldEffect(loop-index)
 
 function isImmuneToEffect(entity: entity, name: string) :: boolean:
