@@ -43,6 +43,12 @@ function scriptActionConsoleMessageType(type: string, message: text):
 	#scriptActionBroadcastType({_type}, {_message})
 	logAction("%{_type}% -> %{_message}%")
 
+function convertItemToString(item: item) :: text:
+	set {_toRet} to "%{_item}%"
+	{_item} is enchanted:
+		set {_toRet} to "%{_toRet}% enchanted with %{_item}'s enchantments%"
+	return {_toRet}
+
 command /logaction <string> <boolean>:
 	trigger:
 		command executor has permission "actionLog.control"
@@ -94,19 +100,19 @@ on damage:
 		scriptActionConsoleMessageType("combat", "%victim% hit for %the damage% damage from %{_cause}%")
 
 on tool break:
-	scriptActionConsoleMessageType("item", "%event-player% breaks %event-item% (%event-item's enchantments%)")
+	scriptActionConsoleMessageType("item", "%event-player% breaks %convertItemToString(event-item)%")
 
 on drop:
-	scriptActionConsoleMessageType("item", "%event-entity% drops %event-item% (%event-item's enchantments%)")
+	scriptActionConsoleMessageType("item", "%event-entity% drops %convertItemToString(event-item)%")
 
 on consume:
 	scriptActionConsoleMessageType("item", "%event-entity% consumes %plain event-item%")
 
 on item despawn:
-	scriptActionConsoleMessageType("item", "%event-item% (%event-item's enchantments%) despawning")
+	scriptActionConsoleMessageType("item", "%convertItemToString(event-item)% despawning")
 
 on pick up:
-	scriptActionConsoleMessageType("item", "%event-entity% picks up %event-item% (%event-item's enchantments%)")
+	scriptActionConsoleMessageType("item", "%event-entity% picks up %convertItemToString(event-item)%")
 
 on level change:
 	scriptActionConsoleMessageType("exp", "%event-player% is now level %level of event-player%")
