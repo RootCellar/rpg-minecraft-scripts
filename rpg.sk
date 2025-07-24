@@ -25,10 +25,10 @@ on script unload:
 	delete {-rpgSkript::fireballs::*}
 	delete {-rpgSkript::cryoballs::*}
 
-	loop {rpgSkript::minions::*}:
+	loop {-rpgSkript::minions::*}:
 		killMinion(loop-index)
 
-	delete {rpgSkript::minions::*}
+	delete {-rpgSkript::minions::*}
 	delete {-rpgSkript::effects::*}
 	delete {-rpgSkript::worldeffects::*}
 
@@ -2738,7 +2738,7 @@ on right click with lapis lazuli:
 function isMinion(entity: entity) :: boolean:
 	{_entity} is a player:
 		return false
-	{rpgSkript::minions::%uuid of {_entity}%} is set:
+	{-rpgSkript::minions::%uuid of {_entity}%} is set:
 		return true
 	return false
 
@@ -2751,7 +2751,7 @@ every 2 seconds:
 
 	set {_start} to now
 
-	loop {rpgSkript::minions::*}:
+	loop {-rpgSkript::minions::*}:
 	
 		set {_uuid} to loop-index
 		set {_entity} to getByUUID({_uuid})
@@ -2759,7 +2759,7 @@ every 2 seconds:
 			deleteMinion({_uuid})
 			continue loop
 			
-		set {_summoner} to {rpgSkript::minions::%{_uuid}%::summoner}
+		set {_summoner} to {-rpgSkript::minions::%{_uuid}%::summoner}
 		{_summoner} is not online:
 			killMinion({_uuid})
 			continue loop
@@ -2803,8 +2803,8 @@ on explosion prime:
 			cancel the event
 
 function deleteMinion(uuid: text):
-	delete {rpgSkript::minions::%{_uuid}%}
-	delete {rpgSkript::minions::%{_uuid}%::*}
+	delete {-rpgSkript::minions::%{_uuid}%}
+	delete {-rpgSkript::minions::%{_uuid}%::*}
 
 	set {_entity} to getByUUID({_uuid})
 	{_entity} is set:
@@ -2871,31 +2871,31 @@ on left click with bone:
 				set target of loop-value to event-player's targeted entity
 
 function setupMinion(entity: entity, summoner: player):
-	set {rpgSkript::minions::%uuid of {_entity}%} to 1
-	set {rpgSkript::minions::%uuid of {_entity}%::summoner} to {_summoner}
+	set {-rpgSkript::minions::%uuid of {_entity}%} to 1
+	set {-rpgSkript::minions::%uuid of {_entity}%::summoner} to {_summoner}
 	set {_entity}'s helmet to leather helmet
 	dye {_entity}'s helmet blue
 	enchant {_entity}'s helmet with protection 1
 	reset target of {_entity}
 
 function hasSameSummoner(entity: entity, entity2: entity) :: boolean:
-	{rpgSkript::minions::%uuid of {_entity}%::summoner} is {rpgSkript::minions::%uuid of {_entity2}%::summoner}:
+	{-rpgSkript::minions::%uuid of {_entity}%::summoner} is {-rpgSkript::minions::%uuid of {_entity2}%::summoner}:
 		return true
 	return false
 
 function getSummoner(uuid: text) :: player:
-	{rpgSkript::minions::%{_uuid}%::summoner} is set:
-		return {rpgSkript::minions::%{_uuid}%::summoner}
+	{-rpgSkript::minions::%{_uuid}%::summoner} is set:
+		return {-rpgSkript::minions::%{_uuid}%::summoner}
 
 function getMinionCount(summoner: player) :: number:
 	set {_count} to 0
-	loop {rpgSkript::minions::*}:
+	loop {-rpgSkript::minions::*}:
 		getSummoner(loop-index) is {_summoner}:
 			set {_count} to {_count} + 1
 	return {_count}
 
 function getMinionUUIDs(summoner: player) :: texts:
-	loop {rpgSkript::minions::*}:
+	loop {-rpgSkript::minions::*}:
 		getSummoner(loop-index) is {_summoner}:
 			add loop-index to {_list::*}
 	return {_list::*}
@@ -2930,7 +2930,7 @@ function calculateMaxMinions(summoner: player) :: number:
 
 function cullMinions(summoner: player):
 	set {_toRemove} to getMinionCount({_summoner}) - calculateMaxMinions({_summoner})
-	loop {rpgSkript::minions::*}:
+	loop {-rpgSkript::minions::*}:
 		{_toRemove} > 0:
 			getSummoner(loop-index) is {_summoner}:
 				killMinion(loop-index)
