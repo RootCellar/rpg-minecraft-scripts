@@ -22,8 +22,8 @@ on script load:
 on script unload:
 	broadcast "{@prefix} &3Unloading script..."
 	
-	delete {rpgSkript::fireballs::*}
-	delete {rpgSkript::cryoballs::*}
+	delete {-rpgSkript::fireballs::*}
+	delete {-rpgSkript::cryoballs::*}
 
 	loop {rpgSkript::minions::*}:
 		killMinion(loop-index)
@@ -2248,9 +2248,9 @@ command /cast <text>:
 				
 			set {_c} to 1
 			while {_x} is not set:
-				if {rpgSkript::fireballs::%{_c}%} is not set:
+				if {-rpgSkript::fireballs::%{_c}%} is not set:
 					set {_x} to {_c}
-					set {rpgSkript::fireballs::%{_x}%} to "fireball"
+					set {-rpgSkript::fireballs::%{_x}%} to "fireball"
 				else:
 					set {_c} to {_c} + 1
 					
@@ -2266,11 +2266,11 @@ command /cast <text>:
 			
 			set {_loc} to ( {_loc} ~ {_first} )
 			
-			set {rpgSkript::fireballs::%{_x}%::loc} to {_loc}
-			set {rpgSkript::fireballs::%{_x}%::v} to {_v}
-			set {rpgSkript::fireballs::%{_x}%::time} to now
-			set {rpgSkript::fireballs::%{_x}%::caster} to player
-			set {rpgSkript::fireballs::%{_x}%} to 1
+			set {-rpgSkript::fireballs::%{_x}%::loc} to {_loc}
+			set {-rpgSkript::fireballs::%{_x}%::v} to {_v}
+			set {-rpgSkript::fireballs::%{_x}%::time} to now
+			set {-rpgSkript::fireballs::%{_x}%::caster} to player
+			set {-rpgSkript::fireballs::%{_x}%} to 1
 			play sound "item.firecharge.use" with pitch 0.7 at command executor
 			send "&dYou unleash a sphere of fiery destruction!" to command executor
 
@@ -2278,16 +2278,16 @@ command /fireballs:
 	trigger:
 		command executor has permission "rpg.control":
 			set {_x} to 0
-			loop {rpgSkript::fireballs::*}:
+			loop {-rpgSkript::fireballs::*}:
 				set {_x} to {_x} + 1
 			send "&cFireballs: %{_x}%" to command executor
 
 every tick:
-	loop {rpgSkript::fireballs::*}:
-		set {_loc} to {rpgSkript::fireballs::%loop-index%::loc}
+	loop {-rpgSkript::fireballs::*}:
+		set {_loc} to {-rpgSkript::fireballs::%loop-index%::loc}
 
-		if difference between {rpgSkript::fireballs::%loop-index%::time} and now is greater than 10 seconds:
-			delete {rpgSkript::fireballs::%loop-index%}
+		if difference between {-rpgSkript::fireballs::%loop-index%::time} and now is greater than 10 seconds:
+			delete {-rpgSkript::fireballs::%loop-index%}
 
 		y of (vector of {_loc}) is greater than 300:
 			explodeFireball(loop-index)
@@ -2298,9 +2298,9 @@ every tick:
 			rpgLog("Cleared stray fireball")
 			continue
 
-		set {_delta} to {rpgSkript::fireballs::%loop-index%::v}
+		set {_delta} to {-rpgSkript::fireballs::%loop-index%::v}
 		set vector length of {_delta} to 0.25
-		set {_distance} to vector length of {rpgSkript::fireballs::%loop-index%::v}
+		set {_distance} to vector length of {-rpgSkript::fireballs::%loop-index%::v}
 		while {_distance} > 0.25:
 			moveFireball(loop-index, {_delta})
 			set {_distance} to {_distance} - 0.25
@@ -2308,15 +2308,15 @@ every tick:
 		moveFireball(loop-index, {_delta})
 
 function moveFireball(index: string, v: vector):
-	if {rpgSkript::fireballs::%{_index}%} is not set:
+	if {-rpgSkript::fireballs::%{_index}%} is not set:
 		exit
-	show large smoke at ({rpgSkript::fireballs::%{_index}%::loc})
-	set {rpgSkript::fireballs::%{_index}%::loc} to ({rpgSkript::fireballs::%{_index}%::loc} ~ {_v})
-	set {_loc} to {rpgSkript::fireballs::%{_index}%::loc}
+	show large smoke at ({-rpgSkript::fireballs::%{_index}%::loc})
+	set {-rpgSkript::fireballs::%{_index}%::loc} to ({-rpgSkript::fireballs::%{_index}%::loc} ~ {_v})
+	set {_loc} to {-rpgSkript::fireballs::%{_index}%::loc}
 	show mob spawner flames at {_loc}
 	loop blocks in radius 1 around {_loc}:
 		loop-block is water:
-			delete {rpgSkript::fireballs::%{_index}%}
+			delete {-rpgSkript::fireballs::%{_index}%}
 		loop-block is solid:
 			explodeFireball({_index})
 	loop all entities in radius 2 around {_loc}:
@@ -2324,9 +2324,9 @@ function moveFireball(index: string, v: vector):
 			explodeFireball({_index})
 
 function explodeFireball(index: string):
-	if {rpgSkript::fireballs::%{_index}%} is not set:
+	if {-rpgSkript::fireballs::%{_index}%} is not set:
 		exit
-	set {_loc} to {rpgSkript::fireballs::%{_index}%::loc}
+	set {_loc} to {-rpgSkript::fireballs::%{_index}%::loc}
 	playSoundToPlayers({_loc}, "entity.firework_rocket.blast", 90, 0.3)
 	explodeRadius(block at {_loc}, 1.5)
 	loop blocks in radius 2.5 around {_loc}:
@@ -2335,20 +2335,20 @@ function explodeFireball(index: string):
 	loop blocks in radius 5 around {_loc}:
 		loop-block is air:
 			set block at location of loop-block to fire
-	delete {rpgSkript::fireballs::%{_index}%}
+	delete {-rpgSkript::fireballs::%{_index}%}
 	loop all entities in radius 8 around ({_loc}):
 		loop-entity is not a dropped item
 		damage loop-entity by 60
 	create an explosion with force 3 at {_loc}
-	if {rpgSkript::fireballs::%{_index}%::caster} is set:
-		add 5 experience to {rpgSkript::fireballs::%{_index}%::caster}
+	if {-rpgSkript::fireballs::%{_index}%::caster} is set:
+		add 5 experience to {-rpgSkript::fireballs::%{_index}%::caster}
 
 every tick:
-	loop {rpgSkript::cryoballs::*}:
-		set {_loc} to {rpgSkript::cryoballs::%loop-index%::loc}
+	loop {-rpgSkript::cryoballs::*}:
+		set {_loc} to {-rpgSkript::cryoballs::%loop-index%::loc}
 
-		if difference between {rpgSkript::cryoballs::%loop-index%::time} and now is greater than 10 seconds:
-			delete {rpgSkript::cryoballs::%loop-index%}
+		if difference between {-rpgSkript::cryoballs::%loop-index%::time} and now is greater than 10 seconds:
+			delete {-rpgSkript::cryoballs::%loop-index%}
 
 		y of (vector of {_loc}) is greater than 300:
 			explodeCryoball(loop-index)
@@ -2359,21 +2359,21 @@ every tick:
 			rpgLog("Cleared stray cryoball")
 			continue
 
-		set {_delta} to {rpgSkript::cryoballs::%loop-index%::v}
+		set {_delta} to {-rpgSkript::cryoballs::%loop-index%::v}
 		set vector length of {_delta} to 0.25
-		set {_distance} to vector length of {rpgSkript::cryoballs::%loop-index%::v}
+		set {_distance} to vector length of {-rpgSkript::cryoballs::%loop-index%::v}
 		while {_distance} > 0.25:
 			moveCryoball(loop-index, {_delta})
 			set {_distance} to {_distance} - 0.25
 		set vector length of {_delta} to {_distance}
 		moveCryoball(loop-index, {_delta})
-		set {rpgSkript::cryoballs::%loop-index%::v} to {rpgSkript::cryoballs::%loop-index%::v} -- (vector 0,0.1,0)
+		set {-rpgSkript::cryoballs::%loop-index%::v} to {-rpgSkript::cryoballs::%loop-index%::v} -- (vector 0,0.1,0)
 
 function moveCryoball(index: string, v: vector):
-	if {rpgSkript::cryoballs::%{_index}%} is not set:
+	if {-rpgSkript::cryoballs::%{_index}%} is not set:
 		exit
-	set {rpgSkript::cryoballs::%{_index}%::loc} to ({rpgSkript::cryoballs::%{_index}%::loc} ~ {_v})
-	set {_loc} to {rpgSkript::cryoballs::%{_index}%::loc}
+	set {-rpgSkript::cryoballs::%{_index}%::loc} to ({-rpgSkript::cryoballs::%{_index}%::loc} ~ {_v})
+	set {_loc} to {-rpgSkript::cryoballs::%{_index}%::loc}
 	show water splash at {_loc}
 	loop blocks in radius 1 around {_loc}:
 		show cloud at loop-block
@@ -2389,9 +2389,9 @@ function moveCryoball(index: string, v: vector):
 			explodeCryoball({_index})
 
 function explodeCryoball(index: string):
-	if {rpgSkript::cryoballs::%{_index}%} is not set:
+	if {-rpgSkript::cryoballs::%{_index}%} is not set:
 		exit
-	set {_loc} to {rpgSkript::cryoballs::%{_index}%::loc}
+	set {_loc} to {-rpgSkript::cryoballs::%{_index}%::loc}
 	playSoundToPlayers({_loc}, "entity.firework_rocket.blast", 50, 0.7)
 	loop blocks in radius 4 around {_loc}:
 		loop-block is air:
@@ -2403,13 +2403,13 @@ function explodeCryoball(index: string):
 	loop blocks in radius 10 around {_loc}:
 		loop-block is fire:
 			set loop-block to air
-	delete {rpgSkript::cryoballs::%{_index}%}
+	delete {-rpgSkript::cryoballs::%{_index}%}
 	loop all entities in radius 14 around ({_loc}):
 		loop-entity is not a dropped item
 		damage loop-entity by 3
 		apply slowness 3 to loop-entity for 8 seconds replacing the existing effect
-	if {rpgSkript::cryoballs::%{_index}%::caster} is set:
-		add 3 experience to {rpgSkript::cryoballs::%{_index}%::caster}
+	if {-rpgSkript::cryoballs::%{_index}%::caster} is set:
+		add 3 experience to {-rpgSkript::cryoballs::%{_index}%::caster}
 
 on inventory close:
 	if event-inventory's name is "&dSafe":
@@ -2703,9 +2703,9 @@ on right click with lapis lazuli:
 		
 	set {_c} to 1
 	while {_x} is not set:
-		if {rpgSkript::cryoballs::%{_c}%} is not set:
+		if {-rpgSkript::cryoballs::%{_c}%} is not set:
 			set {_x} to {_c}
-			set {rpgSkript::cryoballs::%{_x}%} to "cryoball"
+			set {-rpgSkript::cryoballs::%{_x}%} to "cryoball"
 		else:
 			set {_c} to {_c} + 1
 			
@@ -2721,11 +2721,11 @@ on right click with lapis lazuli:
 	
 	set {_loc} to ( {_loc} ~ {_first} )
 	
-	set {rpgSkript::cryoballs::%{_x}%::loc} to {_loc}
-	set {rpgSkript::cryoballs::%{_x}%::v} to {_v}
-	set {rpgSkript::cryoballs::%{_x}%::time} to now
-	set {rpgSkript::cryoballs::%{_x}%::caster} to player
-	set {rpgSkript::cryoballs::%{_x}%} to 1
+	set {-rpgSkript::cryoballs::%{_x}%::loc} to {_loc}
+	set {-rpgSkript::cryoballs::%{_x}%::v} to {_v}
+	set {-rpgSkript::cryoballs::%{_x}%::time} to now
+	set {-rpgSkript::cryoballs::%{_x}%::caster} to player
+	set {-rpgSkript::cryoballs::%{_x}%} to 1
 	play sound "item.bucket.empty" with pitch 0.7 at command executor
 	send "&dYou release a freezing orb of water!" to command executor
 
