@@ -2136,7 +2136,7 @@ command /send <player>:
 			stop
 		set {_sendItemList::*} to ( {_senditem} )
 		takeItems(player, {_sendItemList::*})
-		giveItem(player, {_sendItem})
+		giveItem(arg 1, {_sendItem})
 		message "&3Sent %{_senditem}% to %arg 1%"
 		send "&a[Send] %player% Sent %{_senditem}% to %arg 1%" to console
 		send "&3Received %{_senditem}% from %player%" to arg 1
