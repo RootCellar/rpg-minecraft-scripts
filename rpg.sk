@@ -57,30 +57,55 @@ on join:
 
 on chat:
 	set the message to "&6[&8LVL %player's level%&6]&r %message%"
-	hasClass(player, "rogue") is true:
-		set the message to "&7[&2Rogue&7]&r %message%"
-	hasClass(player, "warrior") is true:
-		set the message to "&e[&cWarrior&e]&r %message%"
-	hasClass(player, "wizard") is true:
-		set the message to "&8[&3Wizard&8]&r %message%"
-	hasClass(player, "paladin") is true:
-		set the message to "&6[&9Paladin&6]&r %message%"
-	hasClass(player, "cleric") is true:
-		set the message to "&3[&eCleric&3]&r %message%"
-	hasClass(player, "sorceror") is true:
-		set the message to "&e[&cSorceror&e]&r %message%"
-	hasClass(player, "necromancer") is true:
-		set the message to "&c[&7Necromancer&c]&r %message%"
-	hasClass(player, "herobrine") is true:
-		set the message to "&0[&4Herobrine&0]&r %message%"
-	hasClass(player, "barbarian") is true:
-		set the message to "&c[&4Barbarian&c]&r %message%"
-	hasClass(player, "endwarden") is true:
-		set the message to "&0[&9Endwarden&0]&r %message%"
-	hasClass(player, "druid") is true:
-		set the message to "&6[&aDruid&6]&r %message%"
-	hasClass(player, "artificer") is true:
-		set the message to "&7[&bArtificer&7]&r %message%"
+
+	loop getClassList():
+		hasClass(player, loop-value) is true:
+			set the message to "%getClassNamePlate(loop-value)% %message%"
+
+function getClassList() :: texts:
+	add "wizard" to {_classes::*}
+	add "rogue" to {_classes::*}
+	add "warrior" to {_classes::*}
+	add "paladin" to {_classes::*}
+	add "cleric" to {_classes::*}
+	add "artificer" to {_classes::*}
+	add "druid" to {_classes::*}
+	add "sorceror" to {_classes::*}
+	add "necromancer" to {_classes::*}
+	add "barbarian" to {_classes::*}
+	add "endwarden" to {_classes::*}
+
+	add "herobrine" to {_classes::*}
+
+	return {_classes::*}
+
+function getClassNamePlate(name: text) :: text:
+	{_name} is "rogue":
+		return "&7[&2Rogue&7]&r"
+	{_name} is "warrior":
+		return "&e[&cWarrior&e]&r"
+	{_name} is "wizard":
+		return "&8[&3Wizard&8]&r"
+	{_name} is "paladin":
+		return "&6[&9Paladin&6]&r"
+	{_name} is "cleric":
+		return "&3[&eCleric&3]&r"
+	{_name} is "sorceror":
+		return "&e[&cSorceror&e]&r"
+	{_name} is "necromancer":
+		return "&c[&7Necromancer&c]&r"
+	{_name} is "herobrine":
+		return "&0[&4Herobrine&0]&r"
+	{_name} is "barbarian":
+		return "&c[&4Barbarian&c]&r"
+	{_name} is "endwarden":
+		return "&0[&9Endwarden&0]&r"
+	{_name} is "druid":
+		return "&6[&aDruid&6]&r"
+	{_name} is "artificer":
+		return "&7[&bArtificer&7]&r"
+
+	return {_none}
 
 command /view <player> <string>:
 	trigger:
