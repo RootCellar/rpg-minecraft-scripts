@@ -105,7 +105,7 @@ function getClassNamePlate(name: text) :: text:
 	{_name} is "artificer":
 		return "&7[&bArtificer&7]&r"
 
-	return {_none}
+	return "&r[%{_name} in lower case%]&r"
 
 command /view <player> <string>:
 	trigger:
