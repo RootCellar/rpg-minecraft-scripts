@@ -115,7 +115,12 @@ function getClassDescription(name: text) :: text:
 command /listclasses <integer=1>:
 	trigger:
 		loop getClassList():
-			add "%getClassNamePlate(loop-value)% &b- &e%getClassDescription(loop-value)%" to {_nameplates::*}
+			if featureEnabled("g_%loop-value%_class") is false:
+				set {_prefix} to "&cD &4- &r"
+			else:
+				set {_prefix} to "&aE &2- &r"
+
+			add "%{_prefix}%%getClassNamePlate(loop-value)% &b- &e%getClassDescription(loop-value)%" to {_nameplates::*}
 
 		set {_lines::*} to paginate({_nameplates::*}, arg 1)
 
