@@ -117,7 +117,7 @@ command /listclasses <integer=1>:
 		loop getClassList():
 			add "%getClassNamePlate(loop-value)% &b- &e%getClassDescription(loop-value)%" to {_nameplates::*}
 
-		set {_lines::*} to paginate({_nameplates::*}, arg 1, 8)
+		set {_lines::*} to paginate({_nameplates::*}, arg 1)
 
 		loop {_lines::*}:
 			send "%loop-value%" to command executor
