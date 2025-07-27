@@ -12,6 +12,8 @@ Options:
 
 	drawRadius: 20
 
+	itemsOnPage: 5
+
 on script load:
 	scriptBroadcast("Loading script...")
 	scriptDebugBroadcast("Debug Output Enabled")
@@ -106,6 +108,43 @@ function getClassNamePlate(name: text) :: text:
 		return "&7[&bArtificer&7]&r"
 
 	return "&r[%{_name} in lower case%]&r"
+
+function getClassDescription(name: text) :: text:
+	return "No description has been written."
+
+command /listclasses <integer>:
+	trigger:
+		loop getClassList():
+			add "%getClassNamePlate(loop-value)% &b- &e%getClassDescription(loop-value)%" to {_nameplates::*}
+
+		set {_lines::*} to paginate({_nameplates::*}, arg 1)
+
+		loop {_lines::*}:
+			send "%loop-value%" to command executor
+
+function paginate(lines: texts, page: integer) :: texts:
+	set {_count} to countLines({_lines::*})
+	set {_pages} to ceil( {_count} / {@itemsOnPage} )
+
+	set {_starting} to ({_page} - 1) * {@itemsOnPage}
+	set {_ending} to {_starting} + {@itemsOnPage} - 1
+	set {_index} to 0
+
+	add "&b --- Page %{_page}% / %{_pages}% ---" to {_toRet::*}
+
+	loop {_lines::*}:
+		if {_index} >= {_starting}:
+			if {_index} <= {_ending}:
+				add loop-value to {_toRet::*}
+		add 1 to {_index}
+
+	return {_toRet::*}
+
+function countLines(lines: texts) :: number:
+	set {_toRet} to 0
+	loop {_lines::*}:
+		add 1 to {_toRet}
+	return {_toRet}
 
 command /view <player> <string>:
 	trigger:
