@@ -1019,6 +1019,7 @@ every 2 seconds:
 		cullMinions(loop-player)
 		
 		hasClass(loop-player, "wizard") is true:
+			level of loop-player >= 80
 			if hasResearch(loop-player, "power") is true:
 				add 3 experience to loop-player
 		hasClass(loop-player, "warrior") is true:
