@@ -225,6 +225,7 @@ command /rpgdebug <string> <boolean>:
 		command executor has permission "rpg.control"
 		set {rpgSkript::debug::%arg 1%} to arg 2
 		send "&3Debug logging changed" to command executor
+		scriptConsoleMessage("Debug logging changed: %arg 1% -> %arg 2%")
 
 command /rpgdebugged <integer=1>:
 	trigger:
@@ -243,6 +244,7 @@ command /rpgdebugreset:
 		command executor has permission "rpg.control"
 		delete {rpgSkript::debug::*}
 		send "&cEnabled debug types reset" to command executor
+		scriptConsoleMessage("Enabled debug types reset")
 
 function benchmark(type: string):
 	{@benchmark} is true
@@ -292,6 +294,7 @@ command /rpgflag <string> <boolean>:
 		set {_flag} to arg 1 in lowercase
 		set {rpgSkript::feature_flags::%{_flag}%} to arg 2
 		send "&3Flag set: %{_flag}% -> %arg 2%" to command executor
+		scriptConsoleMessage("Feature Flag set: %{_flag}% -> %arg 2%")
 
 command /rpgflags <integer=1>:
 	trigger:
@@ -310,6 +313,7 @@ command /rpgflagreset:
 		command executor has permission "rpg.control"
 		delete {rpgSkript::feature_flags::*}
 		send "&dFeature flags reset" to command executor
+		scriptConsoleMessage("Enabled feature flags reset")
 
 function featureEnabled(name: string) :: boolean:
 	replace all " " with "_" in {_name}
@@ -2186,6 +2190,7 @@ function takeResources(player: player, mana: number, items: items) :: boolean:
 	return false
 
 function arcaneSense(message: text):
+	scriptConsoleMessage("Arcane Sense: %{_message}%")
 	loop all players:
 		hasClass(loop-player, "wizard") is true:
 			send "&d%{_message}%" to loop-player
