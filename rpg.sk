@@ -221,11 +221,17 @@ command /rpgdebug <string> <boolean>:
 		set {rpgSkript::debug::%arg 1%} to arg 2
 		send "&3Debug logging changed" to command executor
 
-command /rpgdebugged:
+command /rpgdebugged <integer=1>:
 	trigger:
 		command executor has permission "rpg.control"
+
 		loop {rpgSkript::debug::*}:
-			send "&3%loop-index% -> %loop-value%" to command executor
+			add "&3%loop-index% -> %loop-value%" to {_debuggedLines::*}
+
+		set {_lines::*} to paginate({_debuggedLines::*}, arg 1)
+
+		loop {_lines::*}:
+			send loop-value to command executor
 
 command /rpgdebugreset:
 	trigger:
