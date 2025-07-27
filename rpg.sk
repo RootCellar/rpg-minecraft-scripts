@@ -12,7 +12,7 @@ Options:
 
 	drawRadius: 20
 
-	itemsOnPage: 5
+	itemsOnPage: 9
 
 on script load:
 	scriptBroadcast("Loading script...")
