@@ -732,10 +732,6 @@ function countEntities(mobs: entities) :: number:
 		set {_x} to {_x} + 1
 	return {_x}
 
-on heal:
-	entity is not alive:
-		cancel the event
-
 function fullHeal(entity: entity):
 	heal({_entity}, max health of {_entity})
 
@@ -3064,10 +3060,8 @@ on resurrect attempt:
 				stop
 
 on heal:
-	event-entity is a player:
-		hasClass(event-player, "cleric") is true:
-			set the heal amount to the heal amount * 2
-		scriptDebugBroadcastType("heal", "%player% heals for %heal amount%")
+	cancel the event
+	heal(event-entity, heal amount)
 
 command /pray <text>:
 	executable by: players
