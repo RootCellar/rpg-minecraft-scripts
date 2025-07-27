@@ -117,17 +117,20 @@ command /listclasses <integer=1>:
 		loop getClassList():
 			add "%getClassNamePlate(loop-value)% &b- &e%getClassDescription(loop-value)%" to {_nameplates::*}
 
-		set {_lines::*} to paginate({_nameplates::*}, arg 1)
+		set {_lines::*} to paginate({_nameplates::*}, arg 1, 8)
 
 		loop {_lines::*}:
 			send "%loop-value%" to command executor
 
-function paginate(lines: texts, page: integer) :: texts:
-	set {_count} to countLines({_lines::*})
-	set {_pages} to ceil( {_count} / {@itemsOnPage} )
+function paginate(lines: texts, page: integer, perPage: integer={_none}) :: texts:
+	{_perPage} is not set:
+		set {_perPage} to {@itemsOnPage}
 
-	set {_starting} to ({_page} - 1) * {@itemsOnPage}
-	set {_ending} to {_starting} + {@itemsOnPage} - 1
+	set {_count} to countLines({_lines::*})
+	set {_pages} to ceil( {_count} / {_perPage} )
+
+	set {_starting} to ({_page} - 1) * {_perPage}
+	set {_ending} to {_starting} + {_perPage} - 1
 	set {_index} to 0
 
 	add "&b --- Page %{_page}% / %{_pages}% ---" to {_toRet::*}
