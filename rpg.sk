@@ -362,8 +362,6 @@ function setMaxHealth(player: player):
 		set {_newMax} to 40
 	else if hasClass({_player}, "warrior") is true:
 		set {_newMax} to 20
-		if hasResearch({_player}, "durable") is true:
-			set {_newMax} to {_newMax} * 1.25
 	else if hasClass({_player}, "barbarian") is true:
 		set {_newMax} to 15
 	else if hasClass({_player}, "druid") is true:
@@ -376,6 +374,10 @@ function setMaxHealth(player: player):
 		set {_newMax} to 8
 	else:
 		set {_newMax} to 10
+
+	hasClass({_player}, "warrior") is true:
+		if hasResearch({_player}, "durable") is true:
+			set {_newMax} to {_newMax} * 1.25
 
 	hasClass({_player}, "druid") is true:
 		sun light level at {_player} is greater than 5:
