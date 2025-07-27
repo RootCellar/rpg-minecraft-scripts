@@ -745,6 +745,10 @@ function heal(entity: entity, amount: number) :: boolean:
 	scriptDebugBroadcastType("heal", "%{_entity}% heals for %{_amount}%")
 	return true
 
+on heal:
+	cancel the event
+	heal(event-entity, heal amount)
+
 on join:
 	setMaxHealth(the player)
 	set the player's health to the player's health
@@ -3058,10 +3062,6 @@ on resurrect attempt:
 				uncancel the event
 				send "&6You use your divine powers to escape death!" to the player
 				stop
-
-on heal:
-	cancel the event
-	heal(event-entity, heal amount)
 
 command /pray <text>:
 	executable by: players
