@@ -328,14 +328,17 @@ function giveItem(player: player, item: item) :: boolean:
 	return true
 
 function hasClass(player: player, class: text) :: boolean:
+	if featureEnabled("classes") is false:
+		return false
 	if featureEnabled("g_%{_class}%_class") is false:
 		return false
 	if {_class} is not in getClassList():
 		return false
 	if {_player} has permission "rpg.%{_class}%":
 		return true
-	if hasImbue({_player}, "%{_class}% class") is true:
-		return true
+	if featureEnabled("class_from_imbue") is true:
+		if hasImbue({_player}, "%{_class}% class") is true:
+			return true
 	return false
 
 function isMonster(entity: entity) :: boolean:
@@ -833,6 +836,8 @@ function applyEffect(entity: entity, name: string, duration: timespan):
 	set {-rpgSkript::effects::%{_index}%::%{_name}%::applied} to now
 
 function hasEffect(entity: entity, name: string) :: boolean:
+	if featureEnabled("effects") is false:
+		return false
 	if featureEnabled("g_%{_name}%_effect") is false:
 		return false
 
