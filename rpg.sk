@@ -2231,7 +2231,7 @@ command /send <player>:
 		if arg 1 hasn't enough space for {_senditem}:
 			message "&cThe recipient doesn't have enough inventory space!"
 			stop
-		if subMana(command executor, 10) is false:
+		if subMana(command executor, 75) is false:
 			message "&cYou do not have enough Mana!"
 			stop
 		set {_sendItemList::*} to ( {_senditem} )
