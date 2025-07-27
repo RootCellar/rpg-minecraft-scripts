@@ -138,7 +138,7 @@ function paginate(lines: texts, page: integer, perPage: integer={_none}) :: text
 	set {_ending} to {_starting} + {_perPage} - 1
 	set {_index} to 0
 
-	add "&b --- Page %{_page}% / %{_pages}% ---" to {_toRet::*}
+	add "&b ------- Page %{_page}% / %{_pages}% -------" to {_toRet::*}
 
 	{_page} < 1:
 		return {_toRet::*}
