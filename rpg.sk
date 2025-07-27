@@ -69,11 +69,11 @@ function getClassList() :: texts:
 	add "paladin" to {_classes::*}
 	add "cleric" to {_classes::*}
 	add "artificer" to {_classes::*}
+	add "necromancer" to {_classes::*}
 	add "druid" to {_classes::*}
 	add "sorceror" to {_classes::*}
-	add "necromancer" to {_classes::*}
-	add "barbarian" to {_classes::*}
 	add "endwarden" to {_classes::*}
+	add "barbarian" to {_classes::*}
 
 	add "herobrine" to {_classes::*}
 
