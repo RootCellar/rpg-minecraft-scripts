@@ -3,7 +3,7 @@
 Options:
 	prefix: &c[&eRPG Skript&c]&r
 	consolePrefix: &6[&8Console&6]&r
-	
+
 	debugPrefix: &e[&bDEBUG&e]&r
 	debug: true
 
@@ -17,13 +17,13 @@ Options:
 on script load:
 	scriptBroadcast("Loading script...")
 	scriptDebugBroadcast("Debug Output Enabled")
-	
+
 	scriptConsoleMessage("Test console message")
 	scriptDebugConsoleMessage("Test debug to console")
 
 on script unload:
 	broadcast "{@prefix} &3Unloading script..."
-	
+
 	delete {-rpgSkript::fireballs::*}
 	delete {-rpgSkript::cryoballs::*}
 
@@ -40,7 +40,7 @@ on join:
 	send "&l&eNew&r&e:" to player
 
 	# Example: send "&3 - <stuff>" to player
-	
+
 	send "&3 - New Class: Paladin. Evil falters in their presence!" to player
 	send "&3 - New Class: Necromancer. Command the undead to do your bidding" to player
 	send "&3 - New Class: Endwarden. Tap into the power of the void to massacre your enemies!" to player
@@ -48,14 +48,14 @@ on join:
 	send "&3 - New Class: Druid. Protect the Natural Order with your skills and a trusty companion!" to player
 	send "&3 - New Class: Cleric. Channel divine powers to smite your foes!" to player
 	send "&3 - New Class: Artificer. Manipulate magic and technology!" to player
-	
+
 	send "&3 - Items can now be imbued to grant classes while you are wearing/holding them" to player
 	send "&3 - Warrior no longer gets slowness when they take damage" to player
-	
+
 	#send "&3" to player
 
 	send "&c-------- &eMinecraft RPG &c--------" to player
-	
+
 
 on chat:
 	set the message to "&6[&8LVL %player's level%&6]&r %message%"
@@ -380,7 +380,7 @@ function setMaxHealth(player: player):
 	hasClass({_player}, "druid") is true:
 		sun light level at {_player} is greater than 5:
 			set {_newMax} to {_newMax} * 1.20
-	
+
 		if {rpgSkript::%{_player}%::batshape} is true:
 			set {_newMax} to 0.25 * {_newMax} 
 		else if {rpgSkript::%{_player}%::wolfshape} is true:
