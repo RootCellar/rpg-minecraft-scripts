@@ -330,6 +330,11 @@ function giveItem(player: player, item: item) :: boolean:
 function getPlayerLevel(player: player) :: integer:
 	return level of {_player}
 
+function giveExperience(player: player, amount: integer):
+	set {_experience} to "%{_amount}% experience" parsed as experience
+	scriptDebugBroadcastType("giveExperience", "Giving %{_experience}% to %{_player}%")
+	add {_experience} to {_player}
+
 function hasClass(player: player, class: text) :: boolean:
 	if featureEnabled("classes") is false:
 		return false
@@ -1024,7 +1029,7 @@ every 2 seconds:
 		hasClass(loop-player, "wizard") is true:
 			getPlayerLevel(loop-player) >= 80
 			if hasResearch(loop-player, "power") is true:
-				add 3 experience to loop-player
+				giveExperience(loop-player, 3)
 		hasClass(loop-player, "warrior") is true:
 			heal(loop-player, 1)
 			loop-player's knockback resistance attribute is not 0.7:
@@ -1163,7 +1168,7 @@ on experience change:
 		while true is true:
 			wait 10 ticks
 			chance of 60%:
-				add 1 experience to event-player
+				giveExperience(event-player, 1)
 			else:
 				exit 1 loop
 
@@ -1196,7 +1201,7 @@ on damage:
 					apply poison 1 without particles to the victim for 5 seconds replacing the existing effect
 
 		hasClass(getSummoner(uuid of attacker), "necromancer") is true:
-			add 1 experience to getSummoner(uuid of attacker)
+			giveExperience(getSummoner(uuid of attacker), 1)
 
 	attacker is a player:
 
@@ -1928,7 +1933,7 @@ on death of an animal:
 							add 2 feather to the drops
 						chance of 10%:
 							add 2 egg to the drops
-					add 5 experience to the attacker
+					giveExperience(attacker, 5)
 					
 	isMinion(attacker) is true:
 		set {_caster} to getSummoner(uuid of attacker)
@@ -2445,7 +2450,7 @@ function explodeFireball(index: string):
 		damage loop-entity by 60
 	create an explosion with force 3 at {_loc}
 	if {-rpgSkript::fireballs::%{_index}%::caster} is set:
-		add 5 experience to {-rpgSkript::fireballs::%{_index}%::caster}
+		giveExperience({-rpgSkript::fireballs::%{_index}%::caster}, 5)
 
 every tick:
 	loop {-rpgSkript::cryoballs::*}:
@@ -2513,7 +2518,7 @@ function explodeCryoball(index: string):
 		damage loop-entity by 3
 		apply slowness 3 to loop-entity for 8 seconds replacing the existing effect
 	if {-rpgSkript::cryoballs::%{_index}%::caster} is set:
-		add 3 experience to {-rpgSkript::cryoballs::%{_index}%::caster}
+		giveExperience({-rpgSkript::cryoballs::%{_index}%::caster}, 3)
 
 on inventory close:
 	if event-inventory's name is "&dSafe":
@@ -2530,7 +2535,7 @@ on right click with stick:
 	send "&dYou hurl a mote of fire!" to event-player
 	play sound "item.firecharge.use" at event-player
 	make player run command "/fireball" as op
-	add 2 experience to the player
+	giveExperience(player, 2)
 	show mob spawner flames at (the location 1 block above the player's location)
 
 on right click with gunpowder:
@@ -2543,9 +2548,9 @@ on right click with gunpowder:
 	loop all entities in radius 8 around (event-player's targeted block):
 		loop-entity is not a dropped item
 		damage loop-entity by 24
-		add 4 experience to the player
+		giveExperience(player, 4)
 	create an explosion with force 5 at the event-player's targeted block
-	add 10 experience to the player
+	giveExperience(player, 10)
 	show mob spawner flames at (the location 1 block above the player's location)
 
 on right click with nether quartz:
@@ -2562,8 +2567,8 @@ on right click with nether quartz:
 		loop-entity's health is greater than 0
 		create lightning effect at the loop-entity
 		damage loop-entity by 8
-		add 5 experience to the player
-	add 14 experience to the player
+		giveExperience(player, 5)
+	giveExperience(player, 14)
 	show mob spawner flames at (the location 1 block above the player's location)
 
 on right click with iron nugget:
@@ -2579,7 +2584,7 @@ on right click with iron nugget:
 			loop-block is not air
 			create an explosion with force 3 at the loop-block
 			wait 1 ticks
-	add 10 experience to the player
+	giveExperience(player, 10)
 	show mob spawner flames at (the location 1 block above the player's location)
 
 on right click with magma cream:
@@ -2598,8 +2603,8 @@ on right click with flint:
 		loop-entity is not player
 		ignite loop-entity for 10 seconds
 		show mob spawner flames at (the location 1 block above the loop-entity's location)
-		add 1 experience to the player
-	add 4 experience to the player
+		giveExperience(player, 1)
+	giveExperience(player, 4)
 	show mob spawner flames at (the location 1 block above the player's location)
 
 on right click with blaze rod:
@@ -2617,12 +2622,12 @@ on right click with blaze rod:
 		set {_vec} to normalized {_vec}
 		push loop-entity {_vec} with force 2
 		damage loop-entity by 200
-		add 16 experience to the player
+		giveExperience(player, 16)
 	create an explosion with force 0 at {_block}
 	explodeRadius({_block}, 13)
 	wait 5 ticks
 	create an explosion with force 38 at {_block}
-	add 32 experience to the player
+	giveExperience(player, 32)
 	show mob spawner flames at (the location 1 block above the player's location)
 	create a fake explosion at the player
 
@@ -2639,10 +2644,10 @@ on right click with diamond:
 		loop-entity is not a dropped item
 		loop-entity is not the player
 		damage loop-entity by 90
-		add 12 experience to the player
+		giveExperience(player, 12)
 	create lightning effect at the event-player's targeted block
 	create an explosion with force 12 at the event-player's targeted block
-	add 24 experience to the player
+	giveExperience(player, 24)
 	play sound "entity.player.breath" with pitch 0.7 at player
 
 on right click with feather:
@@ -2689,7 +2694,7 @@ on right click with amethyst shard:
 	send "&dYou blink to your target location!" to event-player
 	play sound "entity.enderman.teleport" at event-player
 	teleport event-player to {_loc}
-	add 1 experience to the event-player
+	giveExperience(event-player, 1)
 	wait 2 ticks
 	play sound "entity.enderman.teleport" at event-player
 
@@ -2704,8 +2709,8 @@ on right click with clay ball:
 		loop-entity is not a dropped item
 		loop-entity is not a player
 		teleport loop-entity to location 1 meter above {_loc}
-		add 1 experience to the player
-	add 2 experience to the player
+		giveExperience(player, 1)
+	giveExperience(player, 2)
 	play sound "entity.player.breath" with pitch 0.7 at player
 
 on right click with sugar:
@@ -2899,7 +2904,7 @@ on death:
 	else:
 		loop players in radius 50 of the victim:
 			hasClass(loop-player, "necromancer") is true:
-				add 1 experience to the loop-player
+				giveExperience(loop-player, 1)
 
 on explosion prime:
 	event-entity is a creeper:
