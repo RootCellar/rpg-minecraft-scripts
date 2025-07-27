@@ -282,11 +282,17 @@ command /rpgflag <string> <boolean>:
 		set {rpgSkript::feature_flags::%{_flag}%} to arg 2
 		send "&3Flag set: %{_flag}% -> %arg 2%" to command executor
 
-command /rpgflags:
+command /rpgflags <integer=1>:
 	trigger:
 		command executor has permission "rpg.control"
+
 		loop {rpgSkript::feature_flags::*}:
-			send "&3%loop-index% -> %loop-value%" to command executor
+			add "&3%loop-index% -> %loop-value%" to {_flagLines::*}
+
+		set {_lines::*} to paginate({_flagLines::*}, arg 1)
+
+		loop {_lines::*}:
+			send loop-value to command executor
 
 command /rpgflagreset:
 	trigger:
