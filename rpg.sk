@@ -327,6 +327,9 @@ function giveItem(player: player, item: item) :: boolean:
 	scriptConsoleMessage("Gave %{_item}% to %{_player}%")
 	return true
 
+function getPlayerLevel(player: player) :: integer:
+	return level of {_player}
+
 function hasClass(player: player, class: text) :: boolean:
 	if featureEnabled("classes") is false:
 		return false
@@ -1019,7 +1022,7 @@ every 2 seconds:
 		cullMinions(loop-player)
 		
 		hasClass(loop-player, "wizard") is true:
-			level of loop-player >= 80
+			getPlayerLevel(loop-player) >= 80
 			if hasResearch(loop-player, "power") is true:
 				add 3 experience to loop-player
 		hasClass(loop-player, "warrior") is true:
@@ -2031,25 +2034,25 @@ function setupMana(player: player):
 
 	set {_newMax} to 0
 	if hasClass({_player}, "herobrine") is true:
-		set {_newMax} to (level of {_player}) * 45
+		set {_newMax} to (getPlayerLevel({_player})) * 45
 	else if hasClass({_player}, "wizard") is true:
 		if isWearingLightOrLess({_player}) is true:
-			set {_newMax} to (level of {_player}) * 9
+			set {_newMax} to (getPlayerLevel({_player})) * 9
 		else if isWearingMediumOrLess({_player}) is true:
-			set {_newMax} to (level of {_player}) * 5
+			set {_newMax} to (getPlayerLevel({_player})) * 5
 		else:
-			set {_newMax} to (level of {_player}) * 1.5
+			set {_newMax} to (getPlayerLevel({_player})) * 1.5
 	else if hasClass({_player}, "necromancer") is true:
-		set {_newMax} to (level of {_player}) * 6 + 10
+		set {_newMax} to (getPlayerLevel({_player})) * 6 + 10
 	else if hasClass({_player}, "sorceror") is true:
 		set {_newMax} to 400
 	else if hasClass({_player}, "druid") is true:
-		set {_newMax} to (level of {_player}) * 6 + 10
+		set {_newMax} to (getPlayerLevel({_player})) * 6 + 10
 	else if hasClass({_player}, "endwarden") is true:
 		if {_player} is holding an ender pearl in offhand:
-			set {_newMax} to (level of {_player}) * 6 + 22
+			set {_newMax} to (getPlayerLevel({_player})) * 6 + 22
 		else:
-			set {_newMax} to (level of {_player}) * 5 + 15
+			set {_newMax} to (getPlayerLevel({_player})) * 5 + 15
 	else if hasClass({_player}, "cleric") is true:
 		set {_newMax} to 1000
 	else if hasClass({_player}, "artificer") is true:
@@ -3011,7 +3014,7 @@ function calculateMaxMinions(summoner: player) :: number:
 	set {_count} to 0
 	hasClass({_summoner}, "necromancer") is true:
 		set {_count} to 4
-		set {_count} to {_count} + level of {_summoner} / 3
+		set {_count} to {_count} + getPlayerLevel({_summoner}) / 3
 		{_count} is greater than 18:
 			set {_count} to 18
 		isWearingLightOrLess({_summoner}) is true:
@@ -3021,7 +3024,7 @@ function calculateMaxMinions(summoner: player) :: number:
 		set {_count} to 1
 	hasClass({_summoner}, "endwarden") is true:
 		set {_count} to 1
-		set {_count} to {_count} + level of {_summoner} / 10
+		set {_count} to {_count} + getPlayerLevel({_summoner}) / 10
 		{_count} is greater than 5:
 			set {_count} to 5
 		isWearingLightOrLess({_summoner}) is true:
@@ -3359,7 +3362,7 @@ function canUseEndwardenAbilities(player: player) :: boolean:
 on right click with end crystal:
 	hasClass(event-player, "endwarden") is true:
 		canUseEndwardenAbilities(event-player) is true:
-			if level of event-player is greater than 50:
+			if getPlayerLevel(event-player) is greater than 50:
 				if {rpgSkript::%event-player%::mana} > 0:
 					set {_emana} to {rpgSkript::%event-player%::mana}
 					subMana(player, {rpgSkript::%event-player%::mana}) is true:
@@ -3469,7 +3472,7 @@ on left click with shulker shell:
 							apply health boost 2 to the loop-entity for 20 seconds replacing the existing effect
 							
 on right click with shulker shell:
-	if level of event-player is greater than 25:
+	if getPlayerLevel(event-player) is greater than 25:
 		hasClass(event-player, "endwarden") is true:
 			canUseEndwardenAbilities(event-player) is true:
 				subMana(event-player, 150) is true:
