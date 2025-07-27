@@ -112,7 +112,7 @@ function getClassNamePlate(name: text) :: text:
 function getClassDescription(name: text) :: text:
 	return "No description has been written."
 
-command /listclasses <integer>:
+command /listclasses <integer=1>:
 	trigger:
 		loop getClassList():
 			add "%getClassNamePlate(loop-value)% &b- &e%getClassDescription(loop-value)%" to {_nameplates::*}
