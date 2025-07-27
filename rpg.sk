@@ -266,6 +266,8 @@ function giveItem(player: player, item: item) :: boolean:
 function hasClass(player: player, class: text) :: boolean:
 	if featureEnabled("g_%{_class}%_class") is false:
 		return false
+	if {_class} is not in getClassList():
+		return false
 	if {_player} has permission "rpg.%{_class}%":
 		return true
 	if hasImbue({_player}, "%{_class}% class") is true:
