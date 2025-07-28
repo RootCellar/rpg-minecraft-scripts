@@ -331,14 +331,6 @@ function giveItem(player: player, item: item) :: boolean:
 	scriptConsoleMessage("Gave %{_item}% to %{_player}%")
 	return true
 
-function getPlayerLevel(player: player) :: integer:
-	return level of {_player}
-
-function giveExperience(player: player, amount: integer):
-	set {_experience} to "%{_amount}% experience" parsed as experience
-	scriptDebugBroadcastType("giveExperience", "Giving %{_experience}% to %{_player}%")
-	add {_experience} to {_player}
-
 function hasClass(player: player, class: text) :: boolean:
 	if featureEnabled("classes") is false:
 		return false
@@ -757,6 +749,23 @@ on join:
 	setMaxHealth(the player)
 	set the player's health to the player's health
 
+function getPlayerLevel(player: player) :: integer:
+	return level of {_player}
+
+function giveExperience(player: player, amount: integer):
+	set {_experience} to "%{_amount}% experience" parsed as experience
+	scriptDebugBroadcastType("giveExperience", "Giving %{_experience}% to %{_player}%")
+	add {_experience} to {_player}
+
+on experience change:
+	hasImbue(event-player, "enlighten") is true:
+		while true is true:
+			wait 10 ticks
+			chance of 60%:
+				giveExperience(event-player, 1)
+			else:
+				exit 1 loop
+
 function createWorldEffect(loc: location, name: text, duration: time span, creator: entity={_none}):
 	set {_id} to a random UUID
 	set {-rpgSkript::worldeffects::%{_id}%} to 0
@@ -1166,15 +1175,6 @@ on death:
 			hasAnyImbue({_item}) is true:
 				scriptDebugBroadcastType("loot", "Added %{_item}% to mob loot")
 				# add {_item} to the drops
-
-on experience change:
-	hasImbue(event-player, "enlighten") is true:
-		while true is true:
-			wait 10 ticks
-			chance of 60%:
-				giveExperience(event-player, 1)
-			else:
-				exit 1 loop
 
 on damage:
 	damage cause is fall:
