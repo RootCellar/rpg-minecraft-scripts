@@ -448,7 +448,7 @@ function setMaxHealth(player: player):
 function canFly(player: player):: boolean:
 	if {rpgSkript::%{_player}%::batshape} is true:
 		return true
-	if {_player}'s gamemode is not survival:
+	if {_player}'s gamemode is (creative or spectator):
 		return true
 	if hasClass({_player}, "herobrine") is true:
 		return true
