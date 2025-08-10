@@ -452,6 +452,8 @@ function canFly(player: player):: boolean:
 		return true
 	if hasClass({_player}, "herobrine") is true:
 		return true
+	if hasEffect({_player}, "flight") is true:
+		return true
 	return false
 
 function getItemCostForImbue(imbue: text):: items:
