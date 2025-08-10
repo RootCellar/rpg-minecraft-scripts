@@ -83,30 +83,31 @@ function getClassList() :: texts:
 	return {_classes::*}
 
 function getClassNamePlate(name: text) :: text:
-	{_name} is "rogue":
-		return "&7[&2Rogue&7]&r"
-	{_name} is "warrior":
-		return "&e[&cWarrior&e]&r"
-	{_name} is "wizard":
-		return "&8[&3Wizard&8]&r"
-	{_name} is "paladin":
-		return "&6[&9Paladin&6]&r"
-	{_name} is "cleric":
-		return "&3[&eCleric&3]&r"
-	{_name} is "sorceror":
-		return "&e[&cSorceror&e]&r"
-	{_name} is "necromancer":
-		return "&c[&7Necromancer&c]&r"
-	{_name} is "herobrine":
-		return "&0[&4Herobrine&0]&r"
-	{_name} is "barbarian":
-		return "&c[&4Barbarian&c]&r"
-	{_name} is "endwarden":
-		return "&0[&9Endwarden&0]&r"
-	{_name} is "druid":
-		return "&6[&aDruid&6]&r"
-	{_name} is "artificer":
-		return "&7[&bArtificer&7]&r"
+	if featureEnabled("colored_class_nameplates") is true:
+		{_name} is "rogue":
+			return "&7[&2Rogue&7]&r"
+		{_name} is "warrior":
+			return "&e[&cWarrior&e]&r"
+		{_name} is "wizard":
+			return "&8[&3Wizard&8]&r"
+		{_name} is "paladin":
+			return "&6[&9Paladin&6]&r"
+		{_name} is "cleric":
+			return "&3[&eCleric&3]&r"
+		{_name} is "sorceror":
+			return "&e[&cSorceror&e]&r"
+		{_name} is "necromancer":
+			return "&c[&7Necromancer&c]&r"
+		{_name} is "herobrine":
+			return "&0[&4Herobrine&0]&r"
+		{_name} is "barbarian":
+			return "&c[&4Barbarian&c]&r"
+		{_name} is "endwarden":
+			return "&0[&9Endwarden&0]&r"
+		{_name} is "druid":
+			return "&6[&aDruid&6]&r"
+		{_name} is "artificer":
+			return "&7[&bArtificer&7]&r"
 
 	return "&r[%{_name} in lower case%]&r"
 
