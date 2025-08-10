@@ -288,13 +288,17 @@ command /rpgbenchreset:
 		delete {-rpgSkript::benchmark::*}
 		send "&cEnabled benchmark types reset" to command executor
 
-command /rpgflag <string> <boolean>:
+command /rpgflag <string> [<boolean>]:
 	trigger:
 		command executor has permission "rpg.control"
 		set {_flag} to arg 1 in lowercase
-		set {rpgSkript::feature_flags::%{_flag}%} to arg 2
-		send "&3Flag set: %{_flag}% -> %arg 2%" to command executor
-		scriptConsoleMessage("Feature Flag set: %{_flag}% -> %arg 2%")
+		arg 2 is set:
+			# Set Flag
+			set {rpgSkript::feature_flags::%{_flag}%} to arg 2
+			send "&3Flag set: %{_flag}% -> %arg 2%" to command executor
+		else:
+			# Print flag value
+			send "&3Flag %{_flag}%: %{rpgSkript::feature_flags::%{_flag}%}%" to command executor
 
 command /rpgflags <integer=1>:
 	trigger:
