@@ -906,6 +906,16 @@ function hasEffect(entity: entity, name: string) :: boolean:
 
 	return true
 
+function getActiveEffectsList(entity: entity) :: texts:
+	set {_index} to generateIndex({_entity})
+	loop {-rpgSkript::effects::%{_index}%::*}:
+		scriptDebugBroadcastType("getActiveEffectsList", "looped %loop-index%")
+		loop-value is set
+		hasEffect({_entity}, loop-index) is true
+		scriptDebugBroadcastType("getActiveEffectsList", "added %loop-index%")
+		add loop-index to {_effects::*}
+	return {_effects::*}
+
 function drawEffects(entity: entity):
 
 	# This shouldDraw is an optimization.
