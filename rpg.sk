@@ -60,9 +60,10 @@ on join:
 on chat:
 	set the message to "&6[&8LVL %player's level%&6]&r %message%"
 
-	loop getClassList():
-		hasClass(player, loop-value) is true:
-			set the message to "%getClassNamePlate(loop-value)% %message%"
+	if featureEnabled("class_nameplates_in_chat") is true:
+		loop getClassList():
+			hasClass(player, loop-value) is true:
+				set the message to "%getClassNamePlate(loop-value)% %message%"
 
 function getClassList() :: texts:
 	add "wizard" to {_classes::*}
