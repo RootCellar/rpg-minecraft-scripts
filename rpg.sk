@@ -983,7 +983,11 @@ function drawEffects(entity: entity):
 			set {_z} to a random number between -0.5 and 0.5
 			show blue dust at (location of {_entity} ~ vector {_x}, {_y}, {_z})
 
+#
+# MAIN LOOPS
+#
 
+# Scoreboard
 every 1 seconds:
 	loop all players:
 		clear loop-player's scoreboard
@@ -1019,6 +1023,7 @@ every 1 seconds:
 			set line 2 of loop-player's scoreboard to "Players: %countEntities(players within 50 meters of loop-player)%"
 			set line 1 of loop-player's scoreboard to "Items on Ground: %countEntities(dropped items within 30 meters of loop-player)%"
 
+# Effects drawing
 every 4 ticks:
 	set {_start} to now
 
@@ -1034,14 +1039,17 @@ every 4 ticks:
 	set {_seconds} to difference between {_end} and {_start}
 	scriptDebugConsoleMessageType("effects_loop_time", "Took %{_seconds}%")
 
+# World Effects Drawing
 every 5 ticks:
 	loop {-rpgSkript::worldeffects::*}:
 		drawWorldEffect(loop-index)
 
+# World Effects Handling
 every 10 ticks:
 	loop {-rpgSkript::worldeffects::*}:
 		handleWorldEffect(loop-index)
 
+# Minion Handling Loop
 every 2 seconds:
 
 	set {_start} to now
@@ -1081,6 +1089,7 @@ every 2 seconds:
 	set {_seconds} to difference between {_end} and {_start}
 	scriptDebugConsoleMessageType("minion_loop_time", "Took %{_seconds}%")
 
+# Damaging effect handles
 every 1 seconds:
 	loop all entities:
 		loop-entity is alive
@@ -1125,6 +1134,7 @@ every 1 seconds:
 			set {_reduction} to 1 - (0.15 * countImbue(loop-entity, "iron will") )
 			damage loop-entity by {_effectDamage} * {_reduction}
 
+# Main Loop
 every 2 seconds:
 
 	arcaneTide()
