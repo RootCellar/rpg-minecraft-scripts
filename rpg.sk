@@ -855,14 +855,6 @@ function handleWorldEffect(index: text):
 			chance of 60%:
 				damage loop-entity by 1
 
-every 5 ticks:
-	loop {-rpgSkript::worldeffects::*}:
-		drawWorldEffect(loop-index)
-
-every 10 ticks:
-	loop {-rpgSkript::worldeffects::*}:
-		handleWorldEffect(loop-index)
-
 function isImmuneToEffect(entity: entity, name: string) :: boolean:
 
 	{_name} is "disease":
@@ -1041,6 +1033,14 @@ every 4 ticks:
 	set {_end} to now
 	set {_seconds} to difference between {_end} and {_start}
 	scriptDebugConsoleMessageType("effects_loop_time", "Took %{_seconds}%")
+
+every 5 ticks:
+	loop {-rpgSkript::worldeffects::*}:
+		drawWorldEffect(loop-index)
+
+every 10 ticks:
+	loop {-rpgSkript::worldeffects::*}:
+		handleWorldEffect(loop-index)
 
 every 1 seconds:
 	loop all entities:
