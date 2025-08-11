@@ -940,6 +940,11 @@ function getActiveEffectsList(entity: entity) :: texts:
 		add loop-index to {_effects::*}
 	return {_effects::*}
 
+command /rpgeffect <player> <text> <timespan>:
+	trigger:
+		command executor has permission "rpg.control"
+		applyEffect(arg 1, arg 2, arg 3)
+
 function drawEffects(entity: entity):
 
 	# This shouldDraw is an optimization.
@@ -986,10 +991,6 @@ function drawEffects(entity: entity):
 			set {_z} to a random number between -0.5 and 0.5
 			show blue dust at (location of {_entity} ~ vector {_x}, {_y}, {_z})
 
-command /rpgeffect <player> <text> <timespan>:
-	trigger:
-		command executor has permission "rpg.control"
-		applyEffect(arg 1, arg 2, arg 3)
 
 every 1 seconds:
 	loop all players:
