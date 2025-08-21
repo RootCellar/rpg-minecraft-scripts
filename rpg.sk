@@ -990,38 +990,44 @@ function drawEffects(entity: entity):
 # Scoreboard
 every 1 seconds:
 	loop all players:
-		clear loop-player's scoreboard
+		delete {_lines::*}
 		set title of loop-player's scoreboard to "&eInformation"
-		set line 15 of loop-player's scoreboard to "&a"
-		set line 14 of loop-player's scoreboard to "&3&l   RPG"
-		set line 13 of loop-player's scoreboard to "&a"
-		set line 12 of loop-player's scoreboard to "&3 Mana: %{rpgSkript::mana::%loop-player%}% / %{rpgSkript::maxMana::%loop-player%}%"
+		set {_lines::15} to "&a"
+		set {_lines::14} to "&3&l   RPG"
+		set {_lines::13} to "&a"
+		set {_lines::12} to "&3 Mana: %{rpgSkript::mana::%loop-player%}% / %{rpgSkript::maxMana::%loop-player%}%"
 
 		calculateMaxMinions(loop-player) > 0:
-			set line 10 of loop-player's scoreboard to "&d Minions: %getMinionCount(loop-player)% / %calculateMaxMinions(loop-player)%"
+			set {_lines::10} to "&d Minions: %getMinionCount(loop-player)% / %calculateMaxMinions(loop-player)%"
 
 		hasClass(loop-player, "druid") is true:
-			set line 8 of loop-player's scoreboard to "&6 Wildshape: %{rpgSkript::%loop-player%::wildshape}% / %{rpgSkript::%loop-player%::maxWildshape}%"
+			set {_lines::8} to "&6 Wildshape: %{rpgSkript::%loop-player%::wildshape}% / %{rpgSkript::%loop-player%::maxWildshape}%"
 			if {rpgSkript::%loop-player%::batshape} is true:
-				set line 7 of loop-player's scoreboard to "&a Current Form: Bat"
+				set {_lines::7} to "&a Current Form: Bat"
 			if {rpgSkript::%loop-player%::wolfshape} is true:
-				set line 7 of loop-player's scoreboard to "&a Current Form: wolf"
+				set {_lines::7} to "&a Current Form: wolf"
 			if {rpgSkript::%loop-player%::spidershape} is true:
-				set line 7 of loop-player's scoreboard to "&a Current Form: Spider"
+				set {_lines::7} to "&a Current Form: Spider"
 			if {rpgSkript::%loop-player%::horseshape} is true:
-				set line 7 of loop-player's scoreboard to "&a Current Form: Horse"
+				set {_lines::7} to "&a Current Form: Horse"
 			if {rpgSkript::%loop-player%::bearshape} is true:
-				set line 7 of loop-player's scoreboard to "&a Current Form: Bear"
+				set {_lines::7} to "&a Current Form: Bear"
 			if {rpgSkript::%loop-player%::humanshape} is true:
-				set line 7 of loop-player's scoreboard to "&a Current Form: Human"
+				set {_lines::7} to "&a Current Form: Human"
 		hasClass(loop-player, "barbarian") is true:
-			set line 11 of loop-player's scoreboard to "&4 Rage: %{rpgSkript::%loop-player%::rage}% / %{rpgSkript::%loop-player%::maxRage}%"
+			set {_lines::11} to "&4 Rage: %{rpgSkript::%loop-player%::rage}% / %{rpgSkript::%loop-player%::maxRage}%"
 
 		hasClass(loop-player, "rogue") is true:
-			set line 4 of loop-player's scoreboard to "Monsters: %countEntities(monsters within 20 meters of loop-player)%"
-			set line 3 of loop-player's scoreboard to "Animals: %countEntities(animals within 30 meters of loop-player)%"
-			set line 2 of loop-player's scoreboard to "Players: %countEntities(players within 50 meters of loop-player)%"
-			set line 1 of loop-player's scoreboard to "Items on Ground: %countEntities(dropped items within 30 meters of loop-player)%"
+			set {_lines::4} to "Monsters: %countEntities(monsters within 20 meters of loop-player)%"
+			set {_lines::3} to "Animals: %countEntities(animals within 30 meters of loop-player)%"
+			set {_lines::2} to "Players: %countEntities(players within 50 meters of loop-player)%"
+			set {_lines::1} to "Items on Ground: %countEntities(dropped items within 30 meters of loop-player)%"
+
+		loop 15 times:
+			{_lines::%loop-number%} is set:
+				set line loop-number of the loop-player's scoreboard to {_lines::%loop-number%}
+			else:
+				delete line loop-number of the loop-player's scoreboard
 
 # Effects drawing
 every 4 ticks:
