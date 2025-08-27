@@ -15,14 +15,16 @@ Options:
 	itemsOnPage: 9
 
 on script load:
-	scriptBroadcast("Loading script...")
-	scriptDebugBroadcast("Debug Output Enabled")
+	scriptBroadcast("Initializing script...")
 
+	scriptDebugBroadcast("Debug Output Enabled")
 	scriptConsoleMessage("Test console message")
 	scriptDebugConsoleMessage("Test debug to console")
 
+	scriptBroadcast("Script Loaded!")
+
 on script unload:
-	broadcast "{@prefix} &3Unloading script..."
+	scriptBroadcast("Cleaning up...")
 
 	delete {-rpgSkript::fireballs::*}
 	delete {-rpgSkript::cryoballs::*}
@@ -33,6 +35,8 @@ on script unload:
 	delete {-rpgSkript::minions::*}
 	delete {-rpgSkript::effects::*}
 	delete {-rpgSkript::worldeffects::*}
+
+	scriptBroadcast("Unloading script...")
 
 on join:
 	wait 3 seconds
