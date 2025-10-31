@@ -751,6 +751,19 @@ function playSoundToPlayers(loc: location, sound: string, range: number, pitch: 
 	loop players in radius {_range} of {_loc}:
 		play sound "%{_sound}%" with pitch {_pitch} for loop-player
 
+function convertTimespanToSeconds(span: timespan) :: number:
+	set {_toRet} to 0
+	set {_jump} to 1000
+
+	while {_jump} is greater than or equal to 0.1:
+		add {_jump} to {_toRet}
+		set {_parse} to "%{_toRet}% seconds" parsed as timespan
+		if {_parse} is greater than {_span}:
+			subtract {_jump} from {_toRet}
+			set {_jump} to {_jump} / 10
+
+	return {_toRet}
+
 command /haslore <text>:
 	executable by: players
 	trigger:
