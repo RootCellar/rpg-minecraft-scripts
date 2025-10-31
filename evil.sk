@@ -1,5 +1,68 @@
 # Evil script
 
+Options:
+	prefix: &8[&7Evil Skript&8]&r
+	consolePrefix: &6[&8Console&6]&r
+
+	debugPrefix: &e[&bDEBUG&e]&r
+	debug: true
+
+local function evilLog(message: text):
+	log "%{_message}%" to "evil_script/main.log"
+
+local function evilScriptBroadcast(message: text):
+	broadcast "{@prefix} &3%{_message}%"
+
+local function evilScriptConsoleMessage(message: text):
+	send "{@consolePrefix} {@prefix} &3%{_message}%" to console
+
+local function shouldPrintDebugType(type: string) :: boolean:
+	if {evilSkript::debug::%{_type}%} is not set:
+		set {evilSkript::debug::%{_type}%} to false
+	return {evilSkript::debug::%{_type}%}
+
+local function evilScriptDebugBroadcast(message: text):
+	evilScriptDebugBroadcastType("main", {_message})
+
+local function evilScriptDebugBroadcastType(type: string, message: text):
+	{@debug} is true:
+		shouldPrintDebugType({_type}) is true:
+			broadcast "{@debugPrefix} {@prefix} &f%{_type}% &7%{_message}%"
+
+local function evilScriptDebugConsoleMessage(message: text):
+	evilScriptDebugConsoleMessageType("main", {_message})
+
+local function evilScriptDebugConsoleMessageType(type: string, message: text):
+	{@debug} is true:
+		shouldPrintDebugType({_type}) is true:
+			send "{@consolePrefix} {@debugPrefix} {@prefix} &f%{_type}% &7%{_message}%" to console
+
+command /evildebug <string> <boolean>:
+	trigger:
+		command executor has permission "evil.control"
+		set {evilSkript::debug::%arg 1%} to arg 2
+		send "&3Debug logging changed" to command executor
+		evilScriptConsoleMessage("Debug logging changed: %arg 1% -> %arg 2%")
+
+command /evildebugged <integer=1>:
+	trigger:
+		command executor has permission "evil.control"
+
+		loop {evilSkript::debug::*}:
+			add "&3%loop-index% -> %loop-value%" to {_debuggedLines::*}
+
+		set {_lines::*} to paginate({_debuggedLines::*}, arg 1)
+
+		loop {_lines::*}:
+			send loop-value to command executor
+
+command /evildebugreset:
+	trigger:
+		command executor has permission "evil.control"
+		delete {evilSkript::debug::*}
+		send "&cEnabled debug types reset" to command executor
+		evilScriptConsoleMessage("Enabled debug types reset")
+
 on spawn:
 	spawn reason is natural
 	entity is a monster
