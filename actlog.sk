@@ -10,40 +10,40 @@ on script load:
 on script unload:
 	actionConsoleMessage("Unloading...")
 
-function logAction(message: text):
+local function logAction(message: text):
 	{@logToFile} is true:
 		log "%{_message}%" to "action/main.log"
 
-function actionBroadcast(message: text):
+local function actionBroadcast(message: text):
 	broadcast "{@prefix} &e%{_message}%"
 
-function actionConsoleMessage(message: text):
+local function actionConsoleMessage(message: text):
 	send "{@consolePrefix} {@prefix} &e%{_message}%" to console
 
-function shouldPrintActionType(type: string) :: boolean:
+local function shouldPrintActionType(type: string) :: boolean:
 	if {actionLog::action::%{_type}%} is not set:
 		set {actionLog::action::%{_type}%} to true
 	return {actionLog::action::%{_type}%}
 
-function scriptActionBroadcast(message: text):
+local function scriptActionBroadcast(message: text):
 	scriptActionBroadcastType("main", {_message})
 
-function scriptActionBroadcastType(type: string, message: text):
+local function scriptActionBroadcastType(type: string, message: text):
 	{@logActions} is true:
 		shouldPrintActionType({_type}) is true:
 			broadcast "{@prefix} %{_type}% &e%{_message}%"
 
-function scriptActionConsoleMessage(message: text):
+local function scriptActionConsoleMessage(message: text):
 	scriptActionConsoleMessageType("main", {_message})
 
-function scriptActionConsoleMessageType(type: string, message: text):
+local function scriptActionConsoleMessageType(type: string, message: text):
 	{@logActions} is true:
 		shouldPrintActionType({_type}) is true:
 			send "{@consolePrefix} {@prefix} %{_type}% &e%{_message}%" to console
 	#scriptActionBroadcastType({_type}, {_message})
 	logAction("%{_type}% -> %{_message}%")
 
-function convertItemToString(item: item) :: text:
+local function convertItemToString(item: item) :: text:
 	set {_toRet} to "%{_item}%"
 	{_item} is enchanted:
 		set {_toRet} to "%{_toRet}% enchanted with %{_item}'s enchantments%"
