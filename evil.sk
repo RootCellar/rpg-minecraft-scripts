@@ -1,3 +1,5 @@
+# Evil script
+
 on spawn:
 	spawn reason is natural
 	entity is a monster
