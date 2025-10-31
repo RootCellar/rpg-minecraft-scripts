@@ -14,6 +14,11 @@ on script load:
 	evilScriptDebugBroadcast("Debug Output Enabled")
 	evilScriptDebugConsoleMessage("Test debug to console")
 
+	# Initialize variables and such as needed
+	set {_verified} to verifySpecialCreatureTypes()
+	if {_verified} is not true:
+		evilScriptBroadcast("Creatures failed validation!")
+
 	evilScriptBroadcast("Script Loaded!")
 
 on script unload:
@@ -78,6 +83,46 @@ command /evildebugreset:
 		delete {evilSkript::debug::*}
 		send "&cEnabled debug types reset" to command executor
 		evilScriptConsoleMessage("Enabled debug types reset")
+
+local function isValidEntityType(name: string) :: boolean:
+	set {_entity} to "%{_name}%" parsed as entity type
+	{_entity} is an entity:
+		evilScriptDebugConsoleMessageType("entityType", "'%{_name}%' is a valid entity")
+		return true
+	else:
+		evilScriptDebugConsoleMessageType("entityType", "'%{_name}%' is not a recognized entity")
+		return false
+
+local function listBosses() :: texts:
+	add "test" to {_bosses::*}
+
+	return {_bosses::*}
+
+local function getMobTypeForBoss(name: text) :: text:
+	return {_none}
+
+local function listSpecials() :: texts:
+	add "test" to {_specials::*}
+
+	return {_specials::*}
+
+local function getMobTypeForSpecial(name: text) :: text:
+	return {_none}
+
+local function verifySpecialCreatureTypes() :: boolean:
+	set {_toRet} to true
+
+	loop listBosses():
+		if isValidEntityType(getMobTypeForBoss(loop-value)) is false:
+			evilScriptDebugConsoleMessageType("boss", "Boss '%loop-value%' failed mob type validation!")
+			set {_toRet} to false
+
+	loop listSpecials():
+		if isValidEntityType(getMobTypeForSpecial(loop-value)) is false:
+			evilScriptDebugConsoleMessageType("special", "Special '%loop-value%' failed mob type validation!")
+			set {_toRet} to false
+
+	return {_toRet}
 
 on spawn:
 	spawn reason is natural
