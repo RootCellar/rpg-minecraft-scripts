@@ -1,44 +1,44 @@
 on spawn:
-  spawn reason is natural
-  entity is a monster
-  entity is a zombie:
-    entity is not a baby zombie
-    chance of 35%:
-      makeSpecial(entity)
-  else if entity is a skeleton:
-    chance of 35%:
-      makeSpecial(entity)
-  else if entity is a spider:
-    chance of 25%:
-      makeSpecial(entity)
+	spawn reason is natural
+	entity is a monster
+	entity is a zombie:
+		entity is not a baby zombie
+		chance of 35%:
+			makeSpecial(entity)
+	else if entity is a skeleton:
+		chance of 35%:
+			makeSpecial(entity)
+	else if entity is a spider:
+		chance of 25%:
+			makeSpecial(entity)
 
 function makeSpecial(entity: entity):
-  {_entity} is a zombie:
-    {_entity} is not a baby zombie
-    #set name of {_entity} to "&cHerobrine's Chosen"
-    set attack damage attribute of {_entity} to 1.8 * attack damage attribute of {_entity}
-    set movement speed attribute of {_entity} to 1.2 * movement speed attribute of {_entity}
-    set maximum health of {_entity} to 2.2 * maximum health of {_entity}
-    heal {_entity}
-    equip {_entity} with iron helmet
-    equip {_entity} with iron chestplate
-    equip {_entity} with iron leggings
-    equip {_entity} with iron boots
-    set {_entity}'s held item to iron sword
-    loop 2 times:
-      spawn a skeleton at {_entity}
-  else if {_entity} is a skeleton:
-    #set name of {_entity} to "&cHerobrine's Chosen"
-    set attack damage attribute of {_entity} to 2.0 * attack damage attribute of {_entity}
-    set movement speed attribute of {_entity} to 1.3 * movement speed attribute of {_entity}
-    set maximum health of {_entity} to 1.7 * maximum health of {_entity}
-    equip {_entity} with chain helmet
-    equip {_entity} with chain chestplate
-    equip {_entity} with chain leggings
-    equip {_entity} with chain boots
-    set {_entity}'s held item to iron sword
-    loop 2 times:
-      spawn a zombie at {_entity}
-  else if {_entity} is a spider:
-    loop 3 times:
-      spawn a cave spider at {_entity}
+	{_entity} is a zombie:
+		{_entity} is not a baby zombie
+		#set name of {_entity} to "&cHerobrine's Chosen"
+		set attack damage attribute of {_entity} to 1.8 * attack damage attribute of {_entity}
+		set movement speed attribute of {_entity} to 1.2 * movement speed attribute of {_entity}
+		set maximum health of {_entity} to 2.2 * maximum health of {_entity}
+		heal {_entity}
+		equip {_entity} with iron helmet
+		equip {_entity} with iron chestplate
+		equip {_entity} with iron leggings
+		equip {_entity} with iron boots
+		set {_entity}'s held item to iron sword
+		loop 2 times:
+			spawn a skeleton at {_entity}
+	else if {_entity} is a skeleton:
+		#set name of {_entity} to "&cHerobrine's Chosen"
+		set attack damage attribute of {_entity} to 2.0 * attack damage attribute of {_entity}
+		set movement speed attribute of {_entity} to 1.3 * movement speed attribute of {_entity}
+		set maximum health of {_entity} to 1.7 * maximum health of {_entity}
+		equip {_entity} with chain helmet
+		equip {_entity} with chain chestplate
+		equip {_entity} with chain leggings
+		equip {_entity} with chain boots
+		set {_entity}'s held item to iron sword
+		loop 2 times:
+			spawn a zombie at {_entity}
+	else if {_entity} is a spider:
+		loop 3 times:
+			spawn a cave spider at {_entity}
