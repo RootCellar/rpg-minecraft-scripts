@@ -7,6 +7,22 @@ Options:
 	debugPrefix: &e[&bDEBUG&e]&r
 	debug: true
 
+on script load:
+	evilScriptBroadcast("Initializing script...")
+
+	evilScriptConsoleMessage("Test console message")
+	evilScriptDebugBroadcast("Debug Output Enabled")
+	evilScriptDebugConsoleMessage("Test debug to console")
+
+	evilScriptBroadcast("Script Loaded!")
+
+on script unload:
+	evilScriptBroadcast("Cleaning up...")
+
+	# Clean up variables and entities and such as needed
+
+	evilScriptBroadcast("Unloading script...")
+
 local function evilLog(message: text):
 	log "%{_message}%" to "evil_script/main.log"
 
