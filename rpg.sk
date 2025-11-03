@@ -1094,7 +1094,7 @@ every 2 seconds:
 			killMinion({_uuid})
 			continue loop
 
-		target of {_entity} is not set:
+		target of {_entity} is not alive:
 			loop living entities in radius 10 of {_entity}:
 				if isMonster(loop-entity) is true:
 					loop-entity is not {_summoner}:
