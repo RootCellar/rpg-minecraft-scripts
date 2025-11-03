@@ -852,6 +852,7 @@ function isMinion(entity: entity) :: boolean:
 function getByUUID(uuid: text) :: entity:
 	set {_cacheResult} to {-rpgSkript::cache::entityByUUID::%{_uuid}%::entity}
 	{_cacheResult} is set:
+		{_cacheResult} is alive
 		return {_cacheResult}
 	loop all living entities:
 		uuid of loop-entity contains {_uuid}:
