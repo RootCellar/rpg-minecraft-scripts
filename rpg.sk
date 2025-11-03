@@ -21,10 +21,14 @@ on script load:
 	scriptConsoleMessage("Test console message")
 	scriptDebugConsoleMessage("Test debug to console")
 
+	# Initialize variables and such as needed
+
 	scriptBroadcast("Script Loaded!")
 
 on script unload:
 	scriptBroadcast("Cleaning up...")
+
+	# Clean up variables and entities and such as needed
 
 	delete {-rpgSkript::fireballs::*}
 	delete {-rpgSkript::cryoballs::*}
