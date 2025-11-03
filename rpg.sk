@@ -30,6 +30,8 @@ on script unload:
 
 	# Clean up variables and entities and such as needed
 
+	delete {-rpgSkript::cache::*}
+
 	delete {-rpgSkript::fireballs::*}
 	delete {-rpgSkript::cryoballs::*}
 
@@ -848,15 +850,15 @@ function isMinion(entity: entity) :: boolean:
 	return false
 
 function getByUUID(uuid: text) :: entity:
+	set {_cacheResult} to {-rpgSkript::cache::entityByUUID::%{_uuid}%::entity}
+	{_cacheResult} is set:
+		return {_cacheResult}
 	loop all living entities:
 		uuid of loop-entity contains {_uuid}:
-			return loop-entity
-
-function getMinionByUUID(uuid: text) :: entity:
-	{-rpgSkript::minions::%{_uuid}%::entity} is set:
-		return {-rpgSkript::minions::%{_uuid}%::entity}
-	loop all living entities:
-		uuid of loop-entity contains {_uuid}:
+			# This gets rid of a warning saying that you can't save entities.
+			# The cache is cleared on script load. It doesn't matter.
+			set {_entity} to loop-entity
+			set {-rpgSkript::cache::entityByUUID::%{_uuid}%::entity} to {_entity}
 			return loop-entity
 
 function deleteMinion(uuid: text):
@@ -874,7 +876,6 @@ function killMinion(uuid: text):
 function setupMinion(entity: entity, summoner: player):
 	set {-rpgSkript::minions::%uuid of {_entity}%} to 1
 	set {-rpgSkript::minions::%uuid of {_entity}%::summoner} to {_summoner}
-	set {-rpgSkript::minions::%uuid of {_entity}%::entity} to {_entity}
 	set {_entity}'s helmet to leather helmet
 	dye {_entity}'s helmet blue
 	enchant {_entity}'s helmet with protection 1
@@ -1231,7 +1232,7 @@ every 2 seconds:
 	loop {-rpgSkript::minions::*}:
 
 		set {_uuid} to loop-index
-		set {_entity} to getMinionByUUID({_uuid})
+		set {_entity} to getByUUID({_uuid})
 		{_entity} is not set:
 			deleteMinion({_uuid})
 			continue loop
