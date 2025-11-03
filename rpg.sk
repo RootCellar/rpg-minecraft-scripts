@@ -1816,7 +1816,6 @@ on spawn:
 		hasClass({_caster}, "endwarden") is true:
 			event-entity is an enderman:
 				set maximum health of event-entity to 10
-				fullHeal(event-entity)
 		hasClass({_caster}, "druid") is true:
 			event-entity is a wolf:
 				set maximum health of event-entity to 10
@@ -1830,7 +1829,13 @@ on spawn:
 				set maximum health of event-entity to 16
 				set movement speed attribute of event-entity to 1.2 * movement speed attribute of event-entity
 				set armor attribute of event-entity to 5
-			fullHeal(event-entity)
+		hasClass({_caster}, "necromancer") is true:
+			event-entity is a skeleton:
+				set {_bonus} to computeNecromancerMinionStatBonus({_caster})
+				scriptDebugBroadcastType("minion", "Necromancer bonus: %{_bonus}%")
+				set attack damage attribute of entity to {_bonus} * attack damage attribute of entity
+				set maximum health of entity to {_bonus} * maximum health of entity
+		fullHeal(event-entity)
 
 
 
@@ -3026,6 +3031,9 @@ function deleteMinion(uuid: text):
 function killMinion(uuid: text):
 	kill getByUUID({_uuid})
 	deleteMinion({_uuid})
+
+function computeNecromancerMinionStatBonus(caster: player) :: number:
+	return (1.2^(level of {_caster} / 10))
 
 command /raise <text>:
 	description: Raise a minion
