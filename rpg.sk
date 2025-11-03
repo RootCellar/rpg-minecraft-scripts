@@ -800,6 +800,96 @@ function countEntities(mobs: entities) :: number:
 		set {_x} to {_x} + 1
 	return {_x}
 
+function isMinion(entity: entity) :: boolean:
+	{_entity} is a player:
+		return false
+	{-rpgSkript::minions::%uuid of {_entity}%} is set:
+		return true
+	return false
+
+function getByUUID(uuid: text) :: entity:
+	loop all living entities:
+		uuid of loop-entity contains {_uuid}:
+			return loop-entity
+
+function deleteMinion(uuid: text):
+	delete {-rpgSkript::minions::%{_uuid}%}
+	delete {-rpgSkript::minions::%{_uuid}%::*}
+
+	set {_entity} to getByUUID({_uuid})
+	{_entity} is set:
+		reset target of {_entity}
+
+function killMinion(uuid: text):
+	kill getByUUID({_uuid})
+	deleteMinion({_uuid})
+
+function setupMinion(entity: entity, summoner: player):
+	set {-rpgSkript::minions::%uuid of {_entity}%} to 1
+	set {-rpgSkript::minions::%uuid of {_entity}%::summoner} to {_summoner}
+	set {_entity}'s helmet to leather helmet
+	dye {_entity}'s helmet blue
+	enchant {_entity}'s helmet with protection 1
+	reset target of {_entity}
+
+function hasSameSummoner(entity: entity, entity2: entity) :: boolean:
+	{-rpgSkript::minions::%uuid of {_entity}%::summoner} is {-rpgSkript::minions::%uuid of {_entity2}%::summoner}:
+		return true
+	return false
+
+function getSummoner(uuid: text) :: player:
+	{-rpgSkript::minions::%{_uuid}%::summoner} is set:
+		return {-rpgSkript::minions::%{_uuid}%::summoner}
+
+function getMinionCount(summoner: player) :: number:
+	set {_count} to 0
+	loop {-rpgSkript::minions::*}:
+		getSummoner(loop-index) is {_summoner}:
+			set {_count} to {_count} + 1
+	return {_count}
+
+function getMinionUUIDs(summoner: player) :: texts:
+	loop {-rpgSkript::minions::*}:
+		getSummoner(loop-index) is {_summoner}:
+			add loop-index to {_list::*}
+	return {_list::*}
+
+function getMinions(summoner: player) :: entities:
+	set {_uuids::*} to getMinionUUIDs({_summoner})
+	loop {_uuids::*}:
+		add getByUUID({_uuids::%loop-index%}) to {_list::*}
+	return {_list::*}
+
+function calculateMaxMinions(summoner: player) :: number:
+	set {_count} to 0
+	hasClass({_summoner}, "necromancer") is true:
+		set {_count} to 4
+		set {_count} to {_count} + getPlayerLevel({_summoner}) / 3
+		{_count} is greater than 18:
+			set {_count} to 18
+		isWearingLightOrLess({_summoner}) is true:
+			set {_count} to {_count} * 1.5
+		return floor({_count})
+	hasClass({_summoner}, "druid") is true:
+		set {_count} to 1
+	hasClass({_summoner}, "endwarden") is true:
+		set {_count} to 1
+		set {_count} to {_count} + getPlayerLevel({_summoner}) / 10
+		{_count} is greater than 5:
+			set {_count} to 5
+		isWearingLightOrLess({_summoner}) is true:
+			set {_count} to {_count} * 2.0
+
+	return floor({_count})
+
+function cullMinions(summoner: player):
+	set {_toRemove} to getMinionCount({_summoner}) - calculateMaxMinions({_summoner})
+	loop {-rpgSkript::minions::*}:
+		{_toRemove} > 0:
+			getSummoner(loop-index) is {_summoner}:
+				killMinion(loop-index)
+				set {_toRemove} to {_toRemove} - 1
+
 function fullHeal(entity: entity):
 	heal({_entity}, max health of {_entity})
 
@@ -2992,18 +3082,6 @@ on right click with lapis lazuli:
 
 
 
-function isMinion(entity: entity) :: boolean:
-	{_entity} is a player:
-		return false
-	{-rpgSkript::minions::%uuid of {_entity}%} is set:
-		return true
-	return false
-
-function getByUUID(uuid: text) :: entity:
-	loop all living entities:
-		uuid of loop-entity contains {_uuid}:
-			return loop-entity
-
 on death:
 	the victim is not a player
 	isMinion(the victim) is true:
@@ -3019,18 +3097,6 @@ on explosion prime:
 	event-entity is a creeper:
 		isMinion(target of event-entity) is true:
 			cancel the event
-
-function deleteMinion(uuid: text):
-	delete {-rpgSkript::minions::%{_uuid}%}
-	delete {-rpgSkript::minions::%{_uuid}%::*}
-
-	set {_entity} to getByUUID({_uuid})
-	{_entity} is set:
-		reset target of {_entity}
-
-function killMinion(uuid: text):
-	kill getByUUID({_uuid})
-	deleteMinion({_uuid})
 
 function computeNecromancerMinionStatBonus(caster: player) :: number:
 	return (1.2^(level of {_caster} / 10))
@@ -3090,72 +3156,6 @@ on left click with bone:
 				make loop-value pathfind to event-player's targeted block at speed 1.4
 			event-player's targeted entity is set:
 				set target of loop-value to event-player's targeted entity
-
-function setupMinion(entity: entity, summoner: player):
-	set {-rpgSkript::minions::%uuid of {_entity}%} to 1
-	set {-rpgSkript::minions::%uuid of {_entity}%::summoner} to {_summoner}
-	set {_entity}'s helmet to leather helmet
-	dye {_entity}'s helmet blue
-	enchant {_entity}'s helmet with protection 1
-	reset target of {_entity}
-
-function hasSameSummoner(entity: entity, entity2: entity) :: boolean:
-	{-rpgSkript::minions::%uuid of {_entity}%::summoner} is {-rpgSkript::minions::%uuid of {_entity2}%::summoner}:
-		return true
-	return false
-
-function getSummoner(uuid: text) :: player:
-	{-rpgSkript::minions::%{_uuid}%::summoner} is set:
-		return {-rpgSkript::minions::%{_uuid}%::summoner}
-
-function getMinionCount(summoner: player) :: number:
-	set {_count} to 0
-	loop {-rpgSkript::minions::*}:
-		getSummoner(loop-index) is {_summoner}:
-			set {_count} to {_count} + 1
-	return {_count}
-
-function getMinionUUIDs(summoner: player) :: texts:
-	loop {-rpgSkript::minions::*}:
-		getSummoner(loop-index) is {_summoner}:
-			add loop-index to {_list::*}
-	return {_list::*}
-
-function getMinions(summoner: player) :: entities:
-	set {_uuids::*} to getMinionUUIDs({_summoner})
-	loop {_uuids::*}:
-		add getByUUID({_uuids::%loop-index%}) to {_list::*}
-	return {_list::*}
-
-function calculateMaxMinions(summoner: player) :: number:
-	set {_count} to 0
-	hasClass({_summoner}, "necromancer") is true:
-		set {_count} to 4
-		set {_count} to {_count} + getPlayerLevel({_summoner}) / 3
-		{_count} is greater than 18:
-			set {_count} to 18
-		isWearingLightOrLess({_summoner}) is true:
-			set {_count} to {_count} * 1.5
-		return floor({_count})
-	hasClass({_summoner}, "druid") is true:
-		set {_count} to 1
-	hasClass({_summoner}, "endwarden") is true:
-		set {_count} to 1
-		set {_count} to {_count} + getPlayerLevel({_summoner}) / 10
-		{_count} is greater than 5:
-			set {_count} to 5
-		isWearingLightOrLess({_summoner}) is true:
-			set {_count} to {_count} * 2.0
-
-	return floor({_count})
-
-function cullMinions(summoner: player):
-	set {_toRemove} to getMinionCount({_summoner}) - calculateMaxMinions({_summoner})
-	loop {-rpgSkript::minions::*}:
-		{_toRemove} > 0:
-			getSummoner(loop-index) is {_summoner}:
-				killMinion(loop-index)
-				set {_toRemove} to {_toRemove} - 1
 
 
 
