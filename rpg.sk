@@ -966,24 +966,6 @@ function handleWorldEffect(index: text):
 			chance of 60%:
 				damage loop-entity by 1
 
-function isImmuneToEffect(entity: entity, name: string) :: boolean:
-
-	{_name} is "disease":
-		{_entity} is a player:
-			hasClass({_entity}, "paladin") is true:
-				return true
-			hasImbue({_entity}, "iron will") is true:
-				return true
-		{_entity} is a zombie or skeleton:
-			return true
-
-	{_name} is "hallowed":
-		{_entity} is a player:
-			hasClass({_entity}, "paladin") is true:
-				return true
-
-	return false
-
 function generateIndex(entity: entity) :: text:
 	{_entity} is a player:
 		set {_index} to name of {_entity}
@@ -1032,6 +1014,24 @@ function hasEffect(entity: entity, name: string) :: boolean:
 		return false
 
 	return true
+
+function isImmuneToEffect(entity: entity, name: string) :: boolean:
+
+	{_name} is "disease":
+		{_entity} is a player:
+			hasClass({_entity}, "paladin") is true:
+				return true
+			hasImbue({_entity}, "iron will") is true:
+				return true
+		{_entity} is a zombie or skeleton:
+			return true
+
+	{_name} is "hallowed":
+		{_entity} is a player:
+			hasClass({_entity}, "paladin") is true:
+				return true
+
+	return false
 
 function getActiveEffectsList(entity: entity) :: texts:
 	set {_index} to generateIndex({_entity})
