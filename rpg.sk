@@ -898,6 +898,15 @@ function cullMinions(summoner: player):
 				killMinion(loop-index)
 				set {_toRemove} to {_toRemove} - 1
 
+function softDamage(entity: entity, amount: number) :: boolean:
+	if {_entity} is a player:
+		if featureEnabled("soft_damage_players") is false:
+			damage {_entity} by {_amount}
+			return false
+
+	set health of {_entity} to health of {_entity} - {_amount}
+	return true
+
 function fullHeal(entity: entity):
 	heal({_entity}, max health of {_entity})
 
