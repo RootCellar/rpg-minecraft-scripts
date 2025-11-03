@@ -812,6 +812,13 @@ function getByUUID(uuid: text) :: entity:
 		uuid of loop-entity contains {_uuid}:
 			return loop-entity
 
+function getMinionByUUID(uuid: text) :: entity:
+	{-rpgSkript::minions::%{_uuid}%::entity} is set:
+		return {-rpgSkript::minions::%{_uuid}%::entity}
+	loop all living entities:
+		uuid of loop-entity contains {_uuid}:
+			return loop-entity
+
 function deleteMinion(uuid: text):
 	delete {-rpgSkript::minions::%{_uuid}%}
 	delete {-rpgSkript::minions::%{_uuid}%::*}
@@ -827,6 +834,7 @@ function killMinion(uuid: text):
 function setupMinion(entity: entity, summoner: player):
 	set {-rpgSkript::minions::%uuid of {_entity}%} to 1
 	set {-rpgSkript::minions::%uuid of {_entity}%::summoner} to {_summoner}
+	set {-rpgSkript::minions::%uuid of {_entity}%::entity} to {_entity}
 	set {_entity}'s helmet to leather helmet
 	dye {_entity}'s helmet blue
 	enchant {_entity}'s helmet with protection 1
@@ -1174,7 +1182,7 @@ every 2 seconds:
 	loop {-rpgSkript::minions::*}:
 
 		set {_uuid} to loop-index
-		set {_entity} to getByUUID({_uuid})
+		set {_entity} to getMinionByUUID({_uuid})
 		{_entity} is not set:
 			deleteMinion({_uuid})
 			continue loop
