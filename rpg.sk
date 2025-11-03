@@ -299,6 +299,46 @@ command /rpgdebugreset:
 		send "&cEnabled debug types reset" to command executor
 		scriptConsoleMessage("Enabled debug types reset")
 
+function benchmarkStart(type: string):
+	{@benchmark} is true
+	{-rpgSkript::benchmark::%{_type}%} is not set:
+		set {-rpgSkript::benchmark::%{_type}%} to false
+
+	{-rpgSkript::benchmark::%{_type}%} is true
+
+	set {-rpgSkript::benchmark::%{_type}%::start} to now
+	{-rpgSkript::benchmark::%{_type}%::runs} is not set:
+		set {-rpgSkript::benchmark::%{_type}%::runs} to 0
+
+	add 1 to {-rpgSkript::benchmark::%{_type}%::runs}
+
+function benchmarkEnd(type: string):
+	{@benchmark} is true
+	{-rpgSkript::benchmark::%{_type}%} is not set:
+		set {-rpgSkript::benchmark::%{_type}%} to false
+
+	{-rpgSkript::benchmark::%{_type}%} is true
+
+	set {-rpgSkript::benchmark::%{_type}%::end} to now
+	{-rpgSkript::benchmark::%{_type}%::last} is not set:
+		set {-rpgSkript::benchmark::%{_type}%::last} to now
+	{-rpgSkript::benchmark::%{_type}%::runs} is not set:
+		set {-rpgSkript::benchmark::%{_type}%::runs} to 0
+
+	set {_runDifference} to difference between {-rpgSkript::benchmark::%{_type}%::start} and now
+
+	{-rpgSkript::benchmark::%{_type}%::runTotal} is not set:
+		set {-rpgSkript::benchmark::%{_type}%::runTotal} to 0 seconds
+	add {_runDifference} to {-rpgSkript::benchmark::%{_type}%::runTotal}
+
+	set {_difference} to difference between {-rpgSkript::benchmark::%{_type}%::last} and now
+
+	{_difference} is more than {@benchmarkSpan}:
+		scriptBroadcast("%{_type}% - %{-rpgSkript::benchmark::%{_type}%::runs}% runs over %{_difference}% (%{-rpgSkript::benchmark::%{_type}%::runTotal}% total time taken)")
+		set {-rpgSkript::benchmark::%{_type}%::last} to now
+		set {-rpgSkript::benchmark::%{_type}%::runs} to 0
+		set {-rpgSkript::benchmark::%{_type}%::runTotal} to 0 seconds
+
 function benchmark(type: string):
 	{@benchmark} is true
 	{-rpgSkript::benchmark::%{_type}%} is not set:
