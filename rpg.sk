@@ -857,7 +857,7 @@ function getByUUID(uuid: text) :: entity:
 	loop all living entities:
 		uuid of loop-entity contains {_uuid}:
 			# This gets rid of a warning saying that you can't save entities.
-			# The cache is cleared on script load. It doesn't matter.
+			# The cache is cleared on script unload. It doesn't matter.
 			set {_entity} to loop-entity
 			set {-rpgSkript::cache::entityByUUID::%{_uuid}%::entity} to {_entity}
 			return loop-entity
