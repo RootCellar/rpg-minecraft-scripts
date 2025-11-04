@@ -1239,8 +1239,6 @@ every 1 seconds:
 
 # Effects drawing
 every 4 ticks:
-	set {_start} to now
-
 	loop all players:
 		drawEffects(loop-player)
 		loop all mobs in radius {@drawRadius} of loop-player:
@@ -1248,10 +1246,6 @@ every 4 ticks:
 			{_drawn::%uuid of loop-entity-2%} is not set:
 				drawEffects(loop-entity-2)
 				set {_drawn::%uuid of loop-entity-2%} to 0
-
-	set {_end} to now
-	set {_seconds} to difference between {_end} and {_start}
-	scriptDebugConsoleMessageType("effects_loop_time", "Took %{_seconds}%")
 
 # World Effects Drawing
 every 5 ticks:
