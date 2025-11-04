@@ -309,10 +309,6 @@ function benchmarkStart(type: string):
 	{-rpgSkript::benchmark::%{_type}%} is true
 
 	set {-rpgSkript::benchmark::%{_type}%::start} to now
-	{-rpgSkript::benchmark::%{_type}%::runs} is not set:
-		set {-rpgSkript::benchmark::%{_type}%::runs} to 0
-
-	add 1 to {-rpgSkript::benchmark::%{_type}%::runs}
 
 function benchmarkEnd(type: string):
 	{@benchmark} is true
@@ -327,6 +323,7 @@ function benchmarkEnd(type: string):
 	{-rpgSkript::benchmark::%{_type}%::runs} is not set:
 		set {-rpgSkript::benchmark::%{_type}%::runs} to 0
 
+	add 1 to {-rpgSkript::benchmark::%{_type}%::runs}
 	set {_runDifference} to difference between {-rpgSkript::benchmark::%{_type}%::start} and now
 
 	{-rpgSkript::benchmark::%{_type}%::runTotal} is not set:
