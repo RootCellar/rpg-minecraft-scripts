@@ -1150,9 +1150,50 @@ function drawEffects(entity: entity):
 			set {_z} to a random number between -0.5 and 0.5
 			show blue dust at (location of {_entity} ~ vector {_x}, {_y}, {_z})
 
+
+#
+# SPECIAL ITEMS
+#
+
+
+function getTag(item: item, name: text) :: text:
+	set {_value} to tag {_name} of nbt of {_item}
+	scriptDebugBroadcastType("tag", "%{_item}% tag %{_name}%: %{_value}%")
+	return {_value}
+
+on right click with glass bottle:
+	hasLore(event-player's held item, "holding") is true
+	cancel the event
+	set {_id} to getTag(event-player's held item, "holdingId")
+	scriptDebugBroadcastType("holding", "ID: %{_id}%")
+	if {_id} is not set:
+		scriptDebugBroadcastType("holding", "ID not set, creating new holding inventory")
+		set {_id} to a random UUID
+		{rpgSkript::holding::%{_id}%} is not set:
+			scriptDebugBroadcastType("holding", "New ID: %{_id}%")
+			set {rpgSkript::holding::%{_id}%} to 1
+			set tag "holdingId" of nbt of event-player's held item to {_id}
+		else:
+			stop
+	set {_inv} to chest inventory with 6 rows named "&eBottle of Holding"
+	loop 6*9 times:
+		set slot (loop-value)-1 of {_inv} to {rpgSkript::holding::%{_id}%::%loop-value%}
+	open {_inv} to player
+
+on inventory close:
+	if event-inventory's name is "&eBottle of Holding":
+		set {_id} to getTag(player's held item, "holdingId")
+		{_id} is not set:
+			scriptDebugBroadcastType("holding", "ID not set, cannot save inventory")
+			stop
+		loop 6*9 times:
+			set {rpgSkript::holding::%{_id}%::%loop-value%} to slot (loop-value)-1 of event-inventory
+
+
 #
 # MAIN LOOPS
 #
+
 
 # Scoreboard
 every 1 seconds:
@@ -1416,39 +1457,6 @@ every 2 seconds:
 				time in world of loop-player is not between 19:00 and 5:00:
 					set {_add} to 0.25 * countImbue(loop-player, "photosynthesis")
 					heal(loop-player, {_add})
-
-function getTag(item: item, name: text) :: text:
-	set {_value} to tag {_name} of nbt of {_item}
-	scriptDebugBroadcastType("tag", "%{_item}% tag %{_name}%: %{_value}%")
-	return {_value}
-
-on right click with glass bottle:
-	hasLore(event-player's held item, "holding") is true
-	cancel the event
-	set {_id} to getTag(event-player's held item, "holdingId")
-	scriptDebugBroadcastType("holding", "ID: %{_id}%")
-	if {_id} is not set:
-		scriptDebugBroadcastType("holding", "ID not set, creating new holding inventory")
-		set {_id} to a random UUID
-		{rpgSkript::holding::%{_id}%} is not set:
-			scriptDebugBroadcastType("holding", "New ID: %{_id}%")
-			set {rpgSkript::holding::%{_id}%} to 1
-			set tag "holdingId" of nbt of event-player's held item to {_id}
-		else:
-			stop
-	set {_inv} to chest inventory with 6 rows named "&eBottle of Holding"
-	loop 6*9 times:
-		set slot (loop-value)-1 of {_inv} to {rpgSkript::holding::%{_id}%::%loop-value%}
-	open {_inv} to player
-
-on inventory close:
-	if event-inventory's name is "&eBottle of Holding":
-		set {_id} to getTag(player's held item, "holdingId")
-		{_id} is not set:
-			scriptDebugBroadcastType("holding", "ID not set, cannot save inventory")
-			stop
-		loop 6*9 times:
-			set {rpgSkript::holding::%{_id}%::%loop-value%} to slot (loop-value)-1 of event-inventory
 
 on death:
 	removeAllEffects(victim)
