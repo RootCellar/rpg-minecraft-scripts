@@ -11,6 +11,7 @@ Options:
 	benchmarkSpan: 10 seconds
 
 	drawRadius: 20
+	maxEffectDraws: 30
 
 	itemsOnPage: 9
 
@@ -1231,13 +1232,18 @@ every 1 seconds:
 
 # Effects drawing
 every 4 ticks:
+	set {_draws} to 0
 	loop all players:
 		drawEffects(loop-player)
+		{_draws} is less than {@maxEffectDraws}
 		loop all mobs in radius {@drawRadius} of loop-player:
-			loop-mob is alive
-			{_drawn::%uuid of loop-entity-2%} is not set:
-				drawEffects(loop-entity-2)
-				set {_drawn::%uuid of loop-entity-2%} to 0
+			{_draws} is greater than or equal to {@maxEffectDraws}:
+				exit 1 loop
+			loop-value-2 is alive
+			{_drawn::%uuid of loop-value-2%} is not set:
+				drawEffects(loop-value-2)
+				add 1 to {_draws}
+				set {_drawn::%uuid of loop-value-2%} to 0
 
 # World Effects Drawing
 every 5 ticks:
