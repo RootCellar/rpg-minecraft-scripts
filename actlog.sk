@@ -127,9 +127,11 @@ on respawn:
 	scriptActionConsoleMessageType("combat", "%event-player% revives")
 
 on smelt:
+	event is not cancelled
 	scriptActionConsoleMessageType("smelt", "a furnace smelts %plain ore slot of event-block%")
 
 on fuel burn:
+	event is not cancelled
 	scriptActionConsoleMessageType("smelt", "a furnace burns %plain fuel slot of event-block%")
 
 on enchant:
