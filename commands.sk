@@ -9,7 +9,3 @@ command /list-attributes:
 		loop all attribute types:
 			message "%loop-value%" 
 
-command /formula <number>:
-	trigger:
-		set {_ret} to 10*1.1^arg 1
-		broadcast "&eResult: %{_ret}%" 
