@@ -13,8 +13,6 @@ Options:
 	drawRadius: 20
 	maxEffectDraws: 30
 
-	itemsOnPage: 9
-
 on script load:
 	scriptBroadcast("Initializing script...")
 
@@ -182,32 +180,6 @@ command /vieweffects [<player>] [<integer=1>]:
 
 		loop {_lines::*}:
 			send "%loop-value%" to command executor
-
-function paginate(lines: texts, page: integer, perPage: integer={_none}) :: texts:
-	{_perPage} is not set:
-		set {_perPage} to {@itemsOnPage}
-
-	set {_count} to countLines({_lines::*})
-	set {_pages} to ceil( {_count} / {_perPage} )
-
-	set {_starting} to ({_page} - 1) * {_perPage}
-	set {_ending} to {_starting} + {_perPage} - 1
-	set {_index} to 0
-
-	add "&b ------- Page %{_page}% / %{_pages}% -------" to {_toRet::*}
-
-	{_page} < 1:
-		return {_toRet::*}
-	{_page} > {_pages}:
-		return {_toRet::*}
-
-	loop {_lines::*}:
-		if {_index} >= {_starting}:
-			if {_index} <= {_ending}:
-				add loop-value to {_toRet::*}
-		add 1 to {_index}
-
-	return {_toRet::*}
 
 function countLines(lines: texts) :: number:
 	set {_toRet} to 0

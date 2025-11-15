@@ -1,6 +1,7 @@
 Options:
 	prefix: &f[&8Utilities Script&f]&r
 	consolePrefix: &6[&8Console&6]&r
+	itemsOnPage: 9
 	span: 30
 
 on script load:
@@ -14,6 +15,32 @@ local function consoleMessage(message: text):
 
 local function broadcastMessage(message: text):
 	broadcast "{@prefix} &e%{_message}%"
+
+function paginate(lines: texts, page: integer, perPage: integer={_none}) :: texts:
+	{_perPage} is not set:
+		set {_perPage} to {@itemsOnPage}
+
+	set {_count} to countLines({_lines::*})
+	set {_pages} to ceil( {_count} / {_perPage} )
+
+	set {_starting} to ({_page} - 1) * {_perPage}
+	set {_ending} to {_starting} + {_perPage} - 1
+	set {_index} to 0
+
+	add "&b ------- Page %{_page}% / %{_pages}% -------" to {_toRet::*}
+
+	{_page} < 1:
+		return {_toRet::*}
+	{_page} > {_pages}:
+		return {_toRet::*}
+
+	loop {_lines::*}:
+		if {_index} >= {_starting}:
+			if {_index} <= {_ending}:
+				add loop-value to {_toRet::*}
+		add 1 to {_index}
+
+	return {_toRet::*}
 
 function concatStringList(list: texts, delim: string=" ") :: text:
 	set {_toRet} to ""
