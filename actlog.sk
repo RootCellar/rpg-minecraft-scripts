@@ -55,11 +55,17 @@ command /logaction <string> <boolean>:
 		set {actionLog::action::%arg 1%} to arg 2
 		send "&eAction logging changed" to command executor
 
-command /loggedactions:
+command /loggedactions <integer=1>:
 	trigger:
 		command executor has permission "actionLog.control"
+
 		loop {actionLog::action::*}:
-			send "&e%loop-index% -> %loop-value%" to command executor
+			add "&e%loop-index% -> %loop-value%" to {_allLines::*}
+
+		set {_lines::*} to paginate({_allLines::*}, arg 1)
+
+		loop {_lines::*}:
+			send loop-value to command executor
 
 command /logactionreset:
 	trigger:
