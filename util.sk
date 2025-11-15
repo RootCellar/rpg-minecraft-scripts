@@ -2,7 +2,6 @@ Options:
 	prefix: &f[&8Utilities Script&f]&r
 	consolePrefix: &6[&8Console&6]&r
 	itemsOnPage: 9
-	span: 30
 
 on script load:
 	broadcastMessage("Loaded!")
