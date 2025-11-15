@@ -1,3 +1,16 @@
+Options:
+	prefix: &d[&aGeneral Script&d]&r
+	consolePrefix: &6[&8Console&6]&r
+
+on script load:
+	consoleMessage("Loaded!")
+
+on script unload:
+	consoleMessage("Unloading...")
+
+local function consoleMessage(message: text):
+	send "{@consolePrefix} {@prefix} &e%{_message}%" to console
+
 command /cbcast <boolean>:
 	trigger:
 		command executor is console
