@@ -6,13 +6,16 @@ Options:
 on script load:
 	delete {-chunkScript::*}
 
-	consoleMessage("Loaded!")
+	broadcastMessage("Loaded!")
 
 on script unload:
-	consoleMessage("Unloading...")
+	broadcastMessage("Unloading...")
 
 local function consoleMessage(message: text):
 	send "{@consolePrefix} {@prefix} &e%{_message}%" to console
+
+local function broadcastMessage(message: text):
+	broadcast "{@prefix} &e%{_message}%"
 
 every {@span} seconds:
 	{-chunkScript::loads} is greater than 0:
