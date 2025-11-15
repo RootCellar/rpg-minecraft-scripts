@@ -1,0 +1,46 @@
+Options:
+	prefix: &2[&3Chunk&2]&r
+	consolePrefix: &6[&8Console&6]&r
+	span: 30
+
+on script load:
+	delete {-chunkScript::*}
+
+	consoleMessage("Loaded!")
+
+on script unload:
+	consoleMessage("Unloading...")
+
+local function consoleMessage(message: text):
+	send "{@consolePrefix} {@prefix} &e%{_message}%" to console
+
+every {@span} seconds:
+	{-chunkScript::loads} is greater than 0:
+		consoleMessage("Loaded %{-chunkScript::loads}% chunks in the last {@span} seconds")
+		set {-chunkScript::loads} to 0
+
+	{-chunkScript::unloads} is greater than 0:
+		consoleMessage("Unloaded %{-chunkScript::unloads}% chunks in the last {@span} seconds")
+		set {-chunkScript::unloads} to 0
+
+	{-chunkScript::generates} is greater than 0:
+		consoleMessage("Generated %{-chunkScript::generates}% chunks in the last {@span} seconds")
+		set {-chunkScript::generates} to 0
+
+on chunk load:
+	{-chunkScript::loads} is not set:
+		set {-chunkScript::loads} to 0
+
+	add 1 to {-chunkScript::loads}
+
+on chunk unload:
+	{-chunkScript::unloads} is not set:
+		set {-chunkScript::unloads} to 0
+
+	add 1 to {-chunkScript::unloads}
+
+on chunk generate:
+	{-chunkScript::generates} is not set:
+		set {-chunkScript::generates} to 0
+
+	add 1 to {-chunkScript::generates}
