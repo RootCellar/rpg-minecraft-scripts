@@ -39,16 +39,3 @@ on join:
 	wait 5 seconds
 	send "&bUse '/feedback' to send feedback or ideas to be filed and viewed by the server administrator" to the player
 
-local function concatStringList(list: texts, delim: string=" ") :: text:
-	set {_toRet} to ""
-	set {_first} to true
-
-	loop {_list::*}:
-		if {_first} is true:
-			set {_toRet} to "%loop-value%"
-			set {_first} to false
-		else:
-			set {_toRet} to "%{_toRet}%%{_delim}%%loop-value%"
-
-	return {_toRet}
-

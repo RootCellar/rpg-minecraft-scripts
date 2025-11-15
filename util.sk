@@ -1,0 +1,30 @@
+Options:
+	prefix: &f[&8Utilities Script&f]&r
+	consolePrefix: &6[&8Console&6]&r
+	span: 30
+
+on script load:
+	broadcastMessage("Loaded!")
+
+on script unload:
+	broadcastMessage("Unloading...")
+
+local function consoleMessage(message: text):
+	send "{@consolePrefix} {@prefix} &e%{_message}%" to console
+
+local function broadcastMessage(message: text):
+	broadcast "{@prefix} &e%{_message}%"
+
+function concatStringList(list: texts, delim: string=" ") :: text:
+	set {_toRet} to ""
+	set {_first} to true
+
+	loop {_list::*}:
+		if {_first} is true:
+			set {_toRet} to "%loop-value%"
+			set {_first} to false
+		else:
+			set {_toRet} to "%{_toRet}%%{_delim}%%loop-value%"
+
+	return {_toRet}
+
