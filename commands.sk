@@ -1,5 +1,5 @@
 Options:
-	prefix: &6[&eCommands Script&6]&r
+	prefix: &6[&eCommands Skript&6]&r
 	consolePrefix: &6[&8Console&6]&r
 
 on script load:

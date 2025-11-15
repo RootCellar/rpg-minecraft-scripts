@@ -1,5 +1,5 @@
 Options:
-	prefix: &f[&8Utilities Script&f]&r
+	prefix: &f[&8Utilities Skript&f]&r
 	consolePrefix: &6[&8Console&6]&r
 	itemsOnPage: 9
 

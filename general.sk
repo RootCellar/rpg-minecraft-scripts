@@ -1,5 +1,5 @@
 Options:
-	prefix: &d[&aGeneral Script&d]&r
+	prefix: &d[&aGeneral Skript&d]&r
 	consolePrefix: &6[&8Console&6]&r
 
 on script load:
