@@ -181,12 +181,6 @@ command /vieweffects [<player>] [<integer=1>]:
 		loop {_lines::*}:
 			send "%loop-value%" to command executor
 
-function countLines(lines: texts) :: number:
-	set {_toRet} to 0
-	loop {_lines::*}:
-		add 1 to {_toRet}
-	return {_toRet}
-
 command /view <player> <string>:
 	trigger:
 		command executor is a player:

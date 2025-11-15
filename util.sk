@@ -41,6 +41,12 @@ function paginate(lines: texts, page: integer, perPage: integer={_none}) :: text
 
 	return {_toRet::*}
 
+function countLines(lines: texts) :: number:
+	set {_toRet} to 0
+	loop {_lines::*}:
+		add 1 to {_toRet}
+	return {_toRet}
+
 function concatStringList(list: texts, delim: string=" ") :: text:
 	set {_toRet} to ""
 	set {_first} to true
