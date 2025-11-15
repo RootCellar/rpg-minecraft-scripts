@@ -3,13 +3,16 @@ Options:
 	consolePrefix: &6[&8Console&6]&r
 
 on script load:
-	consoleMessage("Loaded!")
+	broadcastMessage("Loaded!")
 
 on script unload:
-	consoleMessage("Unloading...")
+	broadcastMessage("Unloading...")
 
 local function consoleMessage(message: text):
 	send "{@consolePrefix} {@prefix} &e%{_message}%" to console
+
+local function broadcastMessage(message: text):
+	broadcast "{@prefix} &e%{_message}%"
 
 command /cbcast <boolean>:
 	trigger:
