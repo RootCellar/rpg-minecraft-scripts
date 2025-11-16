@@ -8,11 +8,22 @@ on script load:
 on script unload:
 	consoleMessage("Unloading...")
 
+	delete {-chatFun::rateLimiting::*}
+
 local function consoleMessage(message: text):
 	send "{@consolePrefix} {@prefix} &e%{_message}%" to console
 
 local function broadcastMessage(message: text):
 	broadcast "{@prefix} &e%{_message}%"
+
+local function chatRateLimit(name: text, span: timespan) :: boolean:
+	if {-chatFun::rateLimiting::%{_name}%::last} is not set:
+		set {-chatFun::rateLimiting::%{_name}%::last} to {_span} ago
+
+	if difference between {-chatFun::rateLimiting::%{_name}%::last} and now is greater than {_span}:
+		set {-chatFun::rateLimiting::%{_name}%::last} to now
+		return true
+	return false
 
 local function fakeJoinName(name: text):
 	broadcast "&e%{_name}% joined the game"
