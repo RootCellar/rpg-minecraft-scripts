@@ -26,3 +26,14 @@ on chat:
 	wait 5 ticks
 	the message contains "god":
 		godSay("Huh?")
+
+on death:
+	wait 5 ticks
+	victim is not a player:
+		victim is a zombie:
+			chance of 2%:
+				godSay("You should've seen what that zombie did while he was alive")
+		victim is a chicken:
+			attacker is a player
+			chance of 2%:
+				godSay("Who's *really* the chicken here?")
