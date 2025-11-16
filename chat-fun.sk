@@ -76,11 +76,21 @@ on chat:
 		godSay("Huh?")
 
 on join:
-	wait 25 ticks
+	wait 50 ticks
 	godSay("Hey, %event-player%! Welcome to the game!")
+	wait 35 ticks
+	chance of 40%:
+		wait 5 ticks
+		botSay("Welcome, %event-player%!")
+	chance of 10%:
+		wait 5 ticks
+		skripterSay("Howdy, %event-player%!")
+	chance of 10%:
+		wait 5 ticks
+		linuxUserSay("Hey, %event-player%!")
 
 on quit:
-	wait 25 ticks
+	wait 50 ticks
 	godSay("Bye, %event-player%!")
 
 on death:
