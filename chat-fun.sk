@@ -28,6 +28,14 @@ command /godsay <text>:
 		command executor has permission "chatfun.god"
 		godSay(arg 1)
 
+local function botSay(line: text):
+	broadcast "&7[&9Bot&7] &c%{_line}%"
+
+command /botsay <text>:
+	trigger:
+		command executor has permission "chatfun.bot"
+		botSay(arg 1)
+
 command /fakejoin <text>:
 	trigger:
 		command executor has permission "chatfun.fake"
