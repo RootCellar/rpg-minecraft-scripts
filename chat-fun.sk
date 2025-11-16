@@ -70,6 +70,9 @@ command /fakeleave <text>:
 on chat:
 	wait 5 ticks
 	the message contains "god":
+		chance of 30%:
+			fakeJoinName("God")
+			wait 10 ticks
 		godSay("Huh?")
 
 on join:
