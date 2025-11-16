@@ -30,6 +30,11 @@ command /godsay <text>:
 
 local function botSay(line: text):
 	broadcast "&7[&9Bot&7] &c%{_line}%"
+	chance of 10%:
+		wait 30 ticks
+		skripterSay("Hmm...seems buggy")
+		wait 20 ticks
+		fakeLeaveName("Bot")
 
 command /botsay <text>:
 	trigger:
