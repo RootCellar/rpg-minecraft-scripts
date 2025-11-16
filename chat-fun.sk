@@ -78,6 +78,14 @@ command /linuxusersay <text>:
 		command executor has permission "chatfun.linuxuser"
 		linuxUserSay(arg 1)
 
+local function windowsUserSay(line: text):
+	broadcast "&b[&3Windows User&b] &b%{_line}%"
+
+command /windowsusersay <text>:
+	trigger:
+		command executor has permission "chatfun.windowsuser"
+		windowsUserSay(arg 1)
+
 command /fakejoin <text>:
 	trigger:
 		command executor has permission "chatfun.fake"
