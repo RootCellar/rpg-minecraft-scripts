@@ -17,6 +17,11 @@ local function broadcastMessage(message: text):
 local function godSay(line: text):
 	broadcast "&a[&cGod&a] %{_line}%"
 
+command /godsay <text>:
+	trigger:
+		command executor has permission "chatfun.god"
+		godSay(arg 1)
+
 on chat:
 	wait 5 ticks
 	the message contains "god":
