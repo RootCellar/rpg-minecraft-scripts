@@ -22,6 +22,7 @@ command /cbcast <boolean>:
 		
 on command:
 	command executor is console
+	the command is not "cbcast"
 	{console.broadcast} is true
 	broadcast "&7Server Console executing command: /%command% %concatStringList(arguments)%"
 	send "&4Warning: &cConsole Broadcasting is on!" to console
