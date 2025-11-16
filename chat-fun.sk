@@ -14,6 +14,12 @@ local function consoleMessage(message: text):
 local function broadcastMessage(message: text):
 	broadcast "{@prefix} &e%{_message}%"
 
+local function fakeJoinName(name: text):
+	broadcast "&e%{_name}% joined the game"
+
+local function fakeLeaveName(name: text):
+	broadcast "&e%{_name}% left the game"
+
 local function godSay(line: text):
 	broadcast "&a[&cGod&a] %{_line}%"
 
@@ -21,6 +27,16 @@ command /godsay <text>:
 	trigger:
 		command executor has permission "chatfun.god"
 		godSay(arg 1)
+
+command /fakejoin <text>:
+	trigger:
+		command executor has permission "chatfun.fake"
+		fakeJoinName(arg 1)
+
+command /fakeleave <text>:
+	trigger:
+		command executor has permission "chatfun.fake"
+		fakeLeaveName(arg 1)
 
 on chat:
 	wait 5 ticks
