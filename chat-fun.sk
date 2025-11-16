@@ -36,6 +36,14 @@ command /botsay <text>:
 		command executor has permission "chatfun.bot"
 		botSay(arg 1)
 
+local function skripterSay(line: text):
+	broadcast "&c[&7Skripter&c] &f%{_line}%"
+
+command /skriptersay <text>:
+	trigger:
+		command executor has permission "chatfun.skripter"
+		skripterSay(arg 1)
+
 command /fakejoin <text>:
 	trigger:
 		command executor has permission "chatfun.fake"
