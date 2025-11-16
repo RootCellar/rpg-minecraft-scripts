@@ -28,8 +28,10 @@ command /godsay <text>:
 		command executor has permission "chatfun.god"
 		godSay(arg 1)
 
-local function botSay(line: text):
+local function botSay(line: text, extra: boolean=true):
 	broadcast "&7[&9Bot&7] &c%{_line}%"
+
+	{_extra} is true
 	chance of 10%:
 		wait 30 ticks
 		skripterSay("Hmm...seems buggy")
@@ -39,7 +41,7 @@ local function botSay(line: text):
 command /botsay <text>:
 	trigger:
 		command executor has permission "chatfun.bot"
-		botSay(arg 1)
+		botSay(arg 1, false)
 
 local function skripterSay(line: text):
 	broadcast "&c[&7Skripter&c] &f%{_line}%"
