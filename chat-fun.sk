@@ -27,8 +27,18 @@ on chat:
 	the message contains "god":
 		godSay("Huh?")
 
+on join:
+	wait 25 ticks
+	godSay("Hey, %event-player%! Welcome to the game!")
+
+on quit:
+	wait 25 ticks
+	godSay("Bye, %event-player%!")
+
 on death:
 	wait 5 ticks
+	victim is a player:
+		godSay("RIP")
 	victim is not a player:
 		victim is a zombie:
 			chance of 2%:
@@ -37,3 +47,9 @@ on death:
 			attacker is a player
 			chance of 2%:
 				godSay("Who's *really* the chicken here?")
+
+on target:
+	target is a player
+	chance of 5%:
+		godSay("Watch out, %target%!")
+
