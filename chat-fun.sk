@@ -49,6 +49,14 @@ command /skriptersay <text>:
 		command executor has permission "chatfun.skripter"
 		skripterSay(arg 1)
 
+local function linuxUserSay(line: text):
+	broadcast "&3[&7Linux User&3] &b%{_line}%"
+
+command /linuxusersay <text>:
+	trigger:
+		command executor has permission "chatfun.linuxuser"
+		linuxUserSay(arg 1)
+
 command /fakejoin <text>:
 	trigger:
 		command executor has permission "chatfun.fake"
