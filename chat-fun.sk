@@ -39,6 +39,14 @@ command /godsay <text>:
 		command executor has permission "chatfun.god"
 		godSay(arg 1)
 
+local function herobrineSay(line: text):
+	broadcast "&8[&4Herobrine&8] &d%{_line}%"
+
+command /herobrinesay <text>:
+	trigger:
+		command executor has permission "chatfun.herobrine"
+		herobrineSay(arg 1)
+
 local function botSay(line: text, extra: boolean=true):
 	broadcast "&7[&9Bot&7] &c%{_line}%"
 
