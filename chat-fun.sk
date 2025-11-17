@@ -47,6 +47,14 @@ command /herobrinesay <text>:
 		command executor has permission "chatfun.herobrine"
 		herobrineSay(arg 1)
 
+local function butcherSay(line: text):
+	broadcast "&4[&cThe Butcher&4] &6%{_line}%"
+
+command /butchersay <text>:
+	trigger:
+		command executor has permission "chatfun.butcher"
+		butcherSay(arg 1)
+
 local function botSay(line: text, extra: boolean=true):
 	broadcast "&7[&9Bot&7] &c%{_line}%"
 
