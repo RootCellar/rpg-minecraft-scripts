@@ -111,7 +111,9 @@ command /fakeleave <text>:
 
 on chat:
 	wait 5 ticks
-	the message contains "god":
+	if matchesRegularExpression(the message, ".*\bthanks?,? god\b.*") is true:
+		godSay("You're welcome, %event-player%!")
+	else if the message contains "god":
 		chance of 30%:
 			fakeJoinName("God")
 			wait 10 ticks
