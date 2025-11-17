@@ -16,6 +16,11 @@ local function consoleMessage(message: text):
 local function broadcastMessage(message: text):
 	broadcast "{@prefix} &e%{_message}%"
 
+local function matchesRegularExpression(line: text, expr: text) :: boolean:
+	if {_line} in lowercase matches {_expr}:
+		return true
+	return false
+
 local function chatRateLimit(name: text, span: timespan) :: boolean:
 	if {-chatFun::rateLimiting::%{_name}%::last} is not set:
 		set {-chatFun::rateLimiting::%{_name}%::last} to {_span} ago
