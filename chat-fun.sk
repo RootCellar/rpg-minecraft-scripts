@@ -21,6 +21,11 @@ local function matchesRegularExpression(line: text, expr: text) :: boolean:
 		return true
 	return false
 
+local function containsPhraseMatchingExpression(line: text, expr: text) :: boolean:
+	if matchesRegularExpression({_line}, ".*\b%{_expr}%\b.*") is true:
+		return true
+	return false
+
 local function chatRateLimit(name: text, span: timespan) :: boolean:
 	if {-chatFun::rateLimiting::%{_name}%::last} is not set:
 		set {-chatFun::rateLimiting::%{_name}%::last} to {_span} ago
@@ -111,7 +116,7 @@ command /fakeleave <text>:
 
 on chat:
 	wait 5 ticks
-	if matchesRegularExpression(the message, ".*\bthanks?,? god\b.*") is true:
+	if containsPhraseMatchingExpression(the message, "thanks?,? god") is true:
 		godSay("You're welcome, %event-player%!")
 	else if the message contains "god":
 		chance of 30%:
