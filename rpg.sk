@@ -977,10 +977,7 @@ function handleWorldEffect(index: text):
 				damage loop-entity by 1
 
 function generateIndex(entity: entity) :: text:
-	{_entity} is a player:
-		set {_index} to name of {_entity}
-	else:
-		set {_index} to "entity-%uuid of {_entity}%"
+	set {_index} to uuid of {_entity}
 	scriptDebugBroadcastType("generateIndex", "%{_index}%")
 	return {_index}
 
@@ -998,6 +995,7 @@ function removeEffect(entity: entity, name: string):
 function applyEffect(entity: entity, name: string, duration: timespan):
 	scriptDebugBroadcastType("effect", "Applying Effect %{_name}% to %{_entity}% for %{_duration}%")
 	set {_index} to generateIndex({_entity})
+	set {-rpgSkript::effects::%{_index}%} to 0
 	set {-rpgSkript::effects::%{_index}%::%{_name}%} to 0
 	set {-rpgSkript::effects::%{_index}%::%{_name}%::duration} to {_duration}
 	set {-rpgSkript::effects::%{_index}%::%{_name}%::applied} to now
@@ -1250,48 +1248,54 @@ every 2 seconds:
 
 # Damaging effect handles
 every 1 seconds:
-	loop all entities:
-		loop-entity is alive
+	loop {-rpgSkript::effects::*}:
+		set {_entity} to getByUUID(loop-index)
+		if at least one of:
+			{_entity} is not set
+			false is true # placeholder
+		then:
+			delete {-rpgSkript::effects::%loop-index%}
+			delete {-rpgSkript::effects::%loop-index%::*}
 		set {_effectDamage} to 0
-		hasEffect(loop-entity, "hallowed") is true:
-			if isMonster(loop-entity) is true:
+		hasEffect({_entity}, "hallowed") is true:
+			if isMonster({_entity}) is true:
 				set {_effectDamage} to {_effectDamage} + 1
 			else:
 				set {_effectDamage} to {_effectDamage} + 0.5
-		hasEffect(loop-entity, "bleeding") is true:
-			if hasClass(loop-entity, "warrior") is false:
-				set {_effectDamage} to {_effectDamage} + 0.05 * maximum health of loop-entity 
-		hasEffect(loop-entity, "mana_leak") is true:
-			loop-entity is a player
-			set {_loss} to ({rpgSkript::maxMana::%loop-entity%} / 40) / 2
-			subMana(loop-entity, {_loss}, false)
-		hasEffect(loop-entity, "shocking") is true:
-			apply slowness 255 without particles to the loop-entity for 2 seconds replacing the existing effect
-			loop all entities in radius 5 around loop-entity:
-				loop-entity-2 is not loop-entity-1
-				hasEffect(loop-entity-2, "shocking") is false
+		hasEffect({_entity}, "bleeding") is true:
+			if hasClass({_entity}, "warrior") is false:
+				set {_effectDamage} to {_effectDamage} + 0.05 * maximum health of {_entity}
+		hasEffect({_entity}, "mana_leak") is true:
+			{_entity} is a player
+			set {_loss} to ({rpgSkript::maxMana::%{_entity}%} / 40) / 2
+			subMana({_entity}, {_loss}, false)
+		hasEffect({_entity}, "shocking") is true:
+			apply slowness 255 without particles to {_entity} for 2 seconds replacing the existing effect
+			loop all entities in radius 5 around {_entity}:
+				loop-entity is not {_entity}
+				hasEffect(loop-entity, "shocking") is false
 				set {_effectDamage} to {_effectDamage} + 1
-				applyEffect(loop-entity-2, "shocking", 0.1 seconds)
-				set {_vec} to vector between loop-entity-1 and loop-entity-2
+				applyEffect(loop-entity, "shocking", 0.1 seconds)
+				set {_vec} to vector between {_entity} and loop-entity
 				set y component of {_vec} to 0
 				set {_vec} to normalized {_vec}
-				push loop-entity-2 {_vec} with force 1.4
-				push loop-entity-2 upwards with force 0.8
+				push loop-entity {_vec} with force 1.4
+				push loop-entity upwards with force 0.8
 				chance of 30%:
-					hasEffect(loop-entity-2, "shocking") is false:
-						applyEffect(loop-entity-2, "shocking", 2 seconds)
-		hasEffect(loop-entity, "disease") is true:
+					hasEffect(loop-entity, "shocking") is false:
+						applyEffect(loop-entity, "shocking", 2 seconds)
+		hasEffect({_entity}, "disease") is true:
 			chance of 10%:
 				set {_effectDamage} to {_effectDamage} + 1.5
-			loop all entities in radius 5 around loop-entity:
-				loop-entity-2 is not loop-entity-1
-				loop-entity-2 is alive
+			loop all entities in radius 5 around {_entity}:
+				loop-entity is not {_entity}
+				loop-entity is alive
 				chance of 30%:
-					applyEffect(loop-entity-2, "disease", 30 seconds)
+					applyEffect(loop-entity, "disease", 30 seconds)
 
 		if {_effectDamage} is not 0:
-			set {_reduction} to 1 - (0.15 * countImbue(loop-entity, "iron will") )
-			damage loop-entity by {_effectDamage} * {_reduction}
+			set {_reduction} to 1 - (0.15 * countImbue({_entity}, "iron will") )
+			damage {_entity} by {_effectDamage} * {_reduction}
 
 # Main Loop
 every 2 seconds:
