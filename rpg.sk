@@ -1003,6 +1003,8 @@ function applyEffect(entity: entity, name: string, duration: timespan):
 	set {-rpgSkript::effects::%{_index}%::%{_name}%} to 0
 	set {-rpgSkript::effects::%{_index}%::%{_name}%::duration} to {_duration}
 	set {-rpgSkript::effects::%{_index}%::%{_name}%::applied} to now
+	# Also populate entityByUUID cache
+	set {-rpgSkript::cache::entityByUUID::%{_index}%::entity} to {_entity}
 
 function hasEffect(entity: entity, name: string) :: boolean:
 	if featureEnabled("effects") is false:
