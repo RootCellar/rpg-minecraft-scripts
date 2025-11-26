@@ -1252,14 +1252,18 @@ every 2 seconds:
 
 # Damaging effect handles
 every 1 seconds:
-	loop {-rpgSkript::effects::*}:
-		set {_entity} to getByUUID(loop-index)
+	set {_uuids::*} to the indices of {-rpgSkript::effects::*}
+	loop all players:
+		{_uuids::*} does not contain uuid of loop-entity
+		add uuid of loop-entity to {_uuids::*}
+	loop {_uuids::*}:
+		set {_entity} to getByUUID(loop-value)
 		if at least one of:
 			{_entity} is not set
 			false is true # placeholder
 		then:
-			delete {-rpgSkript::effects::%loop-index%}
-			delete {-rpgSkript::effects::%loop-index%::*}
+			delete {-rpgSkript::effects::%loop-value%}
+			delete {-rpgSkript::effects::%loop-value%::*}
 		set {_effectDamage} to 0
 		hasEffect({_entity}, "hallowed") is true:
 			if isMonster({_entity}) is true:
