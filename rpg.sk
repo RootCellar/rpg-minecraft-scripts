@@ -801,18 +801,21 @@ function isMinion(entity: entity) :: boolean:
 	return false
 
 function getByUUID(uuid: text) :: entity:
-	set {_cacheResult} to {-rpgSkript::cache::entityByUUID::%{_uuid}%::entity}
+	set {_cacheResult} to getEntityByUUIDCache({_uuid})
 	{_cacheResult} is set:
 		{_cacheResult} is not alive:
 			return {_none}
 		return {_cacheResult}
 	loop all living entities:
 		uuid of loop-entity contains {_uuid}:
-			# This gets rid of a warning saying that you can't save entities.
-			# The cache is cleared on script unload. It doesn't matter.
-			set {_entity} to loop-entity
-			set {-rpgSkript::cache::entityByUUID::%{_uuid}%::entity} to {_entity}
+			putEntityByUUIDCache({_uuid}, loop-entity)
 			return loop-entity
+
+local function getEntityByUUIDCache(index: text) :: entity:
+	return {-rpgSkript::cache::entityByUUID::%{_index}%::entity}
+
+local function putEntityByUUIDCache(index: text, entity: entity):
+	set {-rpgSkript::cache::entityByUUID::%{_index}%::entity} to {_entity}
 
 function deleteMinion(uuid: text):
 	delete {-rpgSkript::minions::%{_uuid}%}
@@ -1004,7 +1007,7 @@ function applyEffect(entity: entity, name: string, duration: timespan):
 	set {-rpgSkript::effects::%{_index}%::%{_name}%::duration} to {_duration}
 	set {-rpgSkript::effects::%{_index}%::%{_name}%::applied} to now
 	# Also populate entityByUUID cache
-	set {-rpgSkript::cache::entityByUUID::%{_index}%::entity} to {_entity}
+	putEntityByUUIDCache({_index}, {_entity})
 
 function hasEffect(entity: entity, name: string) :: boolean:
 	if featureEnabled("effects") is false:
