@@ -2901,7 +2901,7 @@ on right click with diamond:
 	if subMana(event-player, 300) is false:
 		send "&cYou do not have enough Mana to cast the lightning spell!" to event-player
 		stop
-	send "&dYou conjure an enormous bolt of lighting from the heavens!" to event-player
+	send "&dYou conjure an enormous bolt of lightning from the heavens!" to event-player
 	if isLightningRodWithinRangeOf(location of event-player's targeted block, 150, true) is true:
 		send "&dYou sense that your lightning as been absorbed by a lightning rod!"
 		stop
