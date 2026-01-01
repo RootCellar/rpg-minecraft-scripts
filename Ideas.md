@@ -1,6 +1,5 @@
 # Ideas
 
-- Put names on Minions
 - Refactor armor class handling to compute *per piece* and then come back together for overall rating
 - Refactor on damage event to pass attacker, victim, and cause to a function
   - spells can then call this same damage function and manually set the attacker,
