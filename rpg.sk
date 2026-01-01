@@ -832,9 +832,14 @@ function killMinion(uuid: text):
 function setupMinion(entity: entity, summoner: player):
 	set {-rpgSkript::minions::%uuid of {_entity}%} to 1
 	set {-rpgSkript::minions::%uuid of {_entity}%::summoner} to {_summoner}
-	set {_entity}'s helmet to leather helmet
-	dye {_entity}'s helmet blue
-	enchant {_entity}'s helmet with protection 1
+
+	set {_entity}'s helmet to air
+	set {_entity}'s chestplate to air
+	set {_entity}'s leggings to air
+	set {_entity}'s boots to air
+	set {_entity}'s held item to air
+	set {_entity}'s offhand item to air
+
 	set {_entity}'s display name to "&a%{_summoner}%'s Minion"
 	reset target of {_entity}
 
