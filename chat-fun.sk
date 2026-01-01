@@ -158,6 +158,6 @@ on death:
 on target:
 	target is a player
 	chance of 5%:
-		chatRateLimit("god_watch_out", 15 seconds) is true
+		chatRateLimit("god_watch_out", 300 seconds) is true
 		godSay("Watch out, %target%!")
 
