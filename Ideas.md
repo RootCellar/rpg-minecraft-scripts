@@ -1,5 +1,6 @@
 # Ideas
 
+- Refactor armor class handlin to compute *per piece* and then come back together for overall rating
 - Refactor on damage event to pass attacker, victim, and cause to a function
   - spells can then call this same damage function and manually set the attacker,
   so that the attacker can be known in cases where external code can't determine the attacker
