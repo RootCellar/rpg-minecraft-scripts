@@ -1,5 +1,7 @@
 # Ideas
 
+- Make systems more generic where possible
+  - for example, place debug system into own script and just have other scripts call it
 - Implement a pet system
   - A player may have a configurable number of pets
   - The Pet is handled sort of like a minion, except they cannot deal damage or take damage
