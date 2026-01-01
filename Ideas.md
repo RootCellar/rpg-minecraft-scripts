@@ -1,5 +1,9 @@
 # Ideas
 
+- Implement a pet system
+  - A player may have a configurable number of pets
+  - The Pet is handled sort of like a minion, except they cannot deal damage or take damage
+  - They simply follow the player around
 - Refactor armor class handling to compute *per piece* and then come back together for overall rating
 - Refactor on damage event to pass attacker, victim, and cause to a function
   - spells can then call this same damage function and manually set the attacker,
