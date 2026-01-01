@@ -835,6 +835,7 @@ function setupMinion(entity: entity, summoner: player):
 	set {_entity}'s helmet to leather helmet
 	dye {_entity}'s helmet blue
 	enchant {_entity}'s helmet with protection 1
+	set {_entity}'s display name to "&a%{_summoner}%'s Minion"
 	reset target of {_entity}
 
 function hasSameSummoner(entity: entity, entity2: entity) :: boolean:
