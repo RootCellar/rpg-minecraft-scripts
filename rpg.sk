@@ -1428,6 +1428,40 @@ every 2 seconds:
 					heal(loop-player, {_add})
 
 on death:
+	victim is a player:
+		set {_doEthereal} to true
+		hasClass(victim, "cleric") is true:
+			chance of 30%:
+				cancel the event
+				play sound "entity.elder_guardian.curse" with pitch 2 at victim
+				fullHeal(victim)
+				send "&6The gods save you from death!" to the victim
+				stop
+			subMana(victim, 500) is true:
+				cancel the event
+				play sound "entity.elder_guardian.curse" with pitch 2 at victim
+				fullHeal(victim)
+				send "&6You use your divine powers to escape death!" to the victim
+				stop
+
+		hasClass(victim, "rogue") is true:
+			keep the items
+			clear drops
+			send "&aYou may have died, but they'll never get your items!" to the victim
+			set {_doEthereal} to false
+		hasClass(victim, "herobrine") is true:
+			keep the items and experience
+			clear drops
+			send "&7Using your dark powers, you vanish!" to the victim
+			play sound "entity.ender_dragon.death" with pitch 0.5 at victim
+			set {_doEthereal} to false
+
+		if {_doEthereal} is true:
+			loop the drops:
+				hasLore(loop-item, "ethereal") is true:
+					remove loop-item from the drops
+					add loop-item to {rpgSkript::onRespawn::%victim%::*}
+
 	removeAllEffects(victim)
 	
 	isMonster(victim) is true:
@@ -2227,17 +2261,6 @@ on death of an animal:
 				if victim is a chicken:
 					add 2 raw chicken to the drops
 
-on death of a player:
-	hasClass(victim, "rogue") is true:
-		keep the items
-		clear drops
-		send "&aYou may have died, but they'll never get your items!" to the victim
-		stop
-	loop the drops:
-		hasLore(loop-item, "ethereal") is true:
-			remove loop-item from the drops
-			add loop-item to {rpgSkript::onRespawn::%victim%::*}
-
 on respawn:
 	loop {rpgSkript::onRespawn::%player%::*}:
 		give loop-value to the player
@@ -2247,13 +2270,6 @@ on respawn:
 # Herobrine?
 
 
-
-on death of a player:
-	hasClass(victim, "herobrine") is true:
-		keep the items and experience
-		clear drops
-		send "&7Using your dark powers, you vanish!" to the victim
-		play sound "entity.ender_dragon.death" with pitch 0.5 at victim
 
 every 1 seconds:
 	loop all players:
@@ -3210,18 +3226,6 @@ on left click with bone:
 # Cleric
 
 
-
-on resurrect attempt:
-	entity is a player:
-		hasClass(player, "cleric") is true:
-			chance of 30%:
-				uncancel the event
-				send "&6The gods save you from death!" to the player
-				stop
-			subMana(player, 500) is true:
-				uncancel the event
-				send "&6You use your divine powers to escape death!" to the player
-				stop
 
 command /pray <text>:
 	executable by: players
