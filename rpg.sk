@@ -1676,7 +1676,7 @@ on pick up with priority highest:
 	isMinion(event-entity) is true:
 		cancel the event
 
-on target:
+on target with priority highest:
 	isMinion(event-entity) is true:
 		target is a player:
 			cancel the event
