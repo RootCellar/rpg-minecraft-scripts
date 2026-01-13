@@ -1672,6 +1672,9 @@ on damage:
 				set {_reduction} to 1 - (0.15 * countImbue(victim, "iron will") )
 				set the damage to the damage * {_reduction}
 
+on pick up with priority highest:
+	isMinion(event-entity) is true:
+		cancel the event
 
 on target:
 	isMinion(event-entity) is true:
